@@ -17,8 +17,7 @@ window.Widgets = (function () {
     const out = el('div', 'bits-out');
     const update = () => {
       const n = state.reduce((s, b, i) => s + b * values[i], 0);
-      const letter = n >= 32 && n < 127 ? '« ' + String.fromCharCode(n) + ' »' : '—';
-      out.innerHTML = 'Nombre : <b>' + n + '</b> &nbsp;·&nbsp; Lettre ASCII : <b>' + letter + '</b>';
+      out.innerHTML = 'Nombre : <b>' + n + '</b>';
     };
     values.forEach((v, i) => {
       const b = el('button', 'bit', '<span class="bit-val">' + v + '</span><span class="bit-num">0</span>');

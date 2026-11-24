@@ -31,7 +31,7 @@
   const normalize = (s) =>
     s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const dayData = (n) => (window.DAYS || []).find((d) => d.day === n);
-  const isCorrect = (day, input) => sha256(day.day + ':' + normalize(input)) === day.h;
+  const isCorrect = (day, input) => [].concat(day.h).indexOf(sha256(day.day + ':' + normalize(input))) !== -1;
 
   let toastTimer;
   function toast(msg) {

@@ -5,20 +5,20 @@
 | Jour | Titre | Réponse |
 |---|---|---|
 | 1 | Le message des lutins | **LUTIN** |
-| 2 | Le code de César | **renne** |
+| 2 | Le code de César | **rudolph** ou **rudolphe** |
 | 3 | La hotte déborde | **45** |
 
 ## Jour 1 — Le message des lutins
 
-- Indice 1 : Un octet se lit de droite à gauche : les positions valent 1, 2, 4, 8, 16, 32, 64 et 128. Ajoute les valeurs là où il y a un « 1 ».
-- Indice 2 : Utilise la calculette : allume les bits du premier groupe. Tu dois obtenir un nombre entre 65 et 90, ce sont les lettres majuscules.
-- Indice 3 : Le premier octet vaut 76. Dans l'alphabet, 65 = A, donc 76 = A + 11, c'est la 12ᵉ lettre : « L ». Continue avec les 4 autres !
+- Indice 1 : Il y a 40 octets : à la main, c'est très long. Le labo Python lit les octets un par un dans une boucle : il te manque seulement deux morceaux.
+- Indice 2 : Trou 1 : le binaire s'écrit avec deux chiffres (0 et 1), donc c'est la base… 2. Trou 2 : ord() va de la lettre vers le nombre ; la fonction inverse, qui va du nombre vers la lettre, s'appelle chr().
+- Indice 3 : Remplace le premier ___ par 2 et le second par chr, puis clique sur Exécuter. Le programme affiche la phrase du pirate : cherche le nom du dossier.
 
 ## Jour 2 — Le code de César
 
-- Indice 1 : Dans une phrase en français, il y a souvent le petit mot « LE ». Ici, que vaut « QJ » ? Quel décalage transforme QJ en LE ?
-- Indice 2 : Avec la roue ou le curseur, essaie les décalages un par un jusqu'à ce qu'une phrase lisible apparaisse. Il n'y a que 25 possibilités !
-- Indice 3 : Le décalage est 5. Le message se termine par le mot de passe, en un seul mot.
+- Indice 1 : Le pirate a décalé toutes les lettres du même nombre de crans, mais tu ne sais pas lequel : l'ordinateur va tous les essayer. Dans la fonction, il manque l'endroit où l'on utilise l'entrée « decalage ».
+- Indice 2 : Pour reculer de « decalage » crans, on soustrait le paramètre de la fonction. Dans la ligne avec le trou, il faut écrire le nom de ce paramètre.
+- Indice 3 : Remplace ___ par decalage, puis exécute. Parmi les 25 lignes, une seule est lisible. Elle te demande le nom d'un animal célèbre : celui du Père Noël qui a le nez rouge.
 
 ## Jour 3 — La hotte déborde
 

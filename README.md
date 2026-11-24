@@ -10,8 +10,8 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 
 | Jours | Statut |
 |---|---|
-| 1 — Binaire & ASCII | ✅ prêt |
-| 2 — Chiffre de César | ✅ prêt |
+| 1 — Binaire, ASCII & premier programme Python | ✅ prêt |
+| 2 — César, fonctions & force brute | ✅ prêt |
 | 3 — Variables en Python | ✅ prêt |
 | 4 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
 
