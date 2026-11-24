@@ -42,10 +42,11 @@ const DAYS = [
     concept: 'Binaire & ASCII',
     device: 'both',
     minutes: 10,
-    story: `<p><b>Pixel, lutin informaticien :</b> « Au secours ! Le serveur central du Pôle Nord est tombé en panne, et le Père Noël ne peut plus lire ses propres listes. Tout ce qui nous reste, c'est un message arrivé par la porte n°1. Les ordinateurs ne parlent qu'une langue : des <b>0</b> et des <b>1</b>. Peux-tu m'aider à la comprendre ? »</p>`,
+    story: `<p class="alert">🚨 ALERTE CYBERATTAQUE — Pôle Nord, 1er décembre, 6 h 12</p>
+<p><b>Pixel, lutin informaticien :</b> « Ce matin, tous les écrans de l'atelier se sont éteints ! Quelqu'un est entré dans le serveur du Père Noël : la liste des enfants sages, la carte du traîneau… tout est verrouillé. Le pirate n'a laissé qu'une seule trace dans les journaux du système, écrite en <b>0</b> et en <b>1</b>, la seule langue que comprennent les ordinateurs. Aide-moi à la lire, détective ! »</p>`,
     puzzle: `<p>Chaque groupe de 8 chiffres (un <b>octet</b>) est un nombre écrit en <b>binaire</b>, et chaque nombre correspond à une lettre (table ASCII : A = 65, B = 66, C = 67…).</p>
 <pre class="code">${bin(MOT1)}</pre>
-<p><b>Quel est le mot caché ?</b></p>`,
+<p><b>Quel est le mot caché ?</b> (C'est le nom du dossier où le pirate range ses outils.)</p>`,
     widget: { type: 'bits', label: 'Calculette binaire — clique sur les bits pour les allumer' },
     python: {
       label: 'Labo Python (💻 Chromebook) — facultatif mais malin',
@@ -62,6 +63,7 @@ const DAYS = [
     ],
     answer: MOT1,
     explain: `<p><b>Bravo !</b> Ton ordinateur stocke <em>tout</em> sous forme de nombres : les lettres, les images, la musique… Pour les lettres, il utilise un tableau de correspondance appelé <b>ASCII</b> (inventé dans les années 1960). Aujourd'hui, le standard <b>Unicode</b> va beaucoup plus loin : l'émoji 🎄 est le nombre 127 876 !</p>
+<p class="clue">🕵️ <b>Piste n°1 :</b> le pirate se cache dans un dossier nommé « sapin ». Demain, on y entre.</p>
 <p><b>Le saviez-vous ?</b> Un octet peut prendre 2⁸ = 256 valeurs. Ton téléphone manipule des milliards de ces octets, sans jamais se tromper.</p>`,
   },
   {
@@ -70,10 +72,10 @@ const DAYS = [
     concept: 'Cryptographie & boucles',
     device: 'both',
     minutes: 15,
-    story: `<p><b>Pixel :</b> « Bien joué pour le binaire ! Mais j'ai un nouveau problème : le Grinch espionne nos messages. Alors on les chiffre, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. Voici le dernier message de la hotte… »</p>`,
+    story: `<p><b>Pixel :</b> « Le dossier « sapin » existait bien ! Il contient un seul fichier : un message que le pirate envoie à un complice. Mais il l'a <b>chiffré</b>, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. À toi de le casser ! »</p>`,
     puzzle: `<p>Chaque lettre a été décalée de la même quantité dans l'alphabet (A→F, B→G, etc. pour un décalage de 5, par exemple). Retrouve le décalage et lis le message.</p>
 <pre class="code">${CHIFFRE2}</pre>
-<p><b>Quel est le mot de passe (le dernier mot de la phrase) ?</b></p>`,
+<p><b>Quel est le mot de passe du pirate (le dernier mot de la phrase) ?</b></p>`,
     widget: { type: 'cesar', text: CHIFFRE2 },
     python: {
       label: 'Labo Python (💻) — le même déchiffrement, par un programme',
@@ -101,7 +103,8 @@ const DAYS = [
     answer: 'renne',
     explain: `<p><b>Message déchiffré :</b> « ${CLAIR2} ».</p>
 <p>Le chiffre de César n'a que <b>25 clés possibles</b> : un ordinateur les teste toutes en une fraction de seconde. C'est ce qu'on appelle une attaque par <b>force brute</b>. Les chiffres modernes (ceux qui protègent ta banque ou tes messages) ont des clés tellement grandes qu'il faudrait des milliards d'années pour les essayer toutes.</p>
-<p><b>Le saviez-vous ?</b> Au IXᵉ siècle, le savant arabe Al-Kindi a trouvé une méthode plus maligne : compter les lettres. Dans un texte français, le « E » est la lettre la plus fréquente. Si ton message chiffré a beaucoup de « J », il y a de bonnes chances que « J » représente « E » !</p>`,
+<p><b>Le saviez-vous ?</b> Au IXᵉ siècle, le savant arabe Al-Kindi a trouvé une méthode plus maligne : compter les lettres. Dans un texte français, le « E » est la lettre la plus fréquente. Si ton message chiffré a beaucoup de « J », il y a de bonnes chances que « J » représente « E » !</p>
+<p class="clue">🕵️ <b>Piste n°2 :</b> le mot de passe du pirate est « renne ». Il va nous ouvrir le programme qu'il a lancé sur la hotte…</p>`,
   },
   {
     day: 3,
@@ -109,7 +112,7 @@ const DAYS = [
     concept: 'Variables & calculs en Python',
     device: 'laptop',
     minutes: 15,
-    story: `<p><b>Pixel :</b> « Le compteur de cadeaux de la hotte est complètement détraqué. Voici le programme qui le pilote. Avant de l'exécuter, <b>réfléchis</b> : quelle valeur va-t-il afficher ? C'est exactement ce que doit faire un programmeur : prévoir ce que fera son code. »</p>`,
+    story: `<p><b>Pixel :</b> « Grâce au mot de passe « renne », on a pu ouvrir le programme que le pirate a lancé sur la hotte du traîneau ! C'est un <b>script de sabotage</b>. Un bon enquêteur ne l'exécute jamais à l'aveugle : il le <b>lit</b> et il prévoit ce qu'il va faire. Combien de cadeaux ce script va-t-il faire disparaître ? »</p>`,
     puzzle: `<p>Voici un petit programme Python. Une <b>variable</b> est une boîte qui porte un nom et qui contient une valeur ; on peut la modifier au fil du programme.</p>
 <pre class="code">lutins = 12
 par_lutin = 7
@@ -119,7 +122,7 @@ cadeaux = cadeaux // 5
 defauts = cadeaux % 4
 cadeaux = cadeaux + defauts * 10
 print(cadeaux)</pre>
-<p><b>Quel nombre ce programme affiche-t-il ?</b> Fais le calcul ligne par ligne, puis vérifie dans le labo si tu veux.</p>
+<p><b>Quel nombre ce programme affiche-t-il ?</b> C'est le nombre de cadeaux volés. Fais le calcul ligne par ligne, puis vérifie dans le labo si tu veux.</p>
 <p class="note">Deux symboles nouveaux : <code>//</code> est la <b>division entière</b> (on garde seulement la partie entière du résultat) et <code>%</code> est le <b>modulo</b> (le reste de la division).</p>`,
     python: {
       label: 'Labo Python — comprends « // » et « % » avant de résoudre',
@@ -142,7 +145,8 @@ print(cadeaux)</pre>
     answer: REP3,
     explain: `<p><b>Réponse : ${REP3}.</b> Tu viens de faire ce que fait un ordinateur : exécuter des instructions <em>dans l'ordre</em>, en gardant en mémoire des variables.</p>
 <p>Le modulo <code>%</code> est partout : pour savoir si un nombre est pair (<code>n % 2 == 0</code>), pour faire tourner une horloge (<code>heure % 24</code>), et même… dans le chiffre de César que tu as utilisé hier !</p>
-<p><b>Le saviez-vous ?</b> Python porte le nom de la troupe comique des <em>Monty Python</em>, pas du serpent. Son créateur, Guido van Rossum, adorait leurs sketchs.</p>`,
+<p><b>Le saviez-vous ?</b> Python porte le nom de la troupe comique des <em>Monty Python</em>, pas du serpent. Son créateur, Guido van Rossum, adorait leurs sketchs.</p>
+<p class="clue">🕵️ <b>Piste n°3 :</b> le pirate fait disparaître ${REP3} cadeaux. Il prépare quelque chose de bien plus gros… Demain, on commence à réparer !</p>`,
   },
 ];
 

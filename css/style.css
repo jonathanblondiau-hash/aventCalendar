@@ -131,3 +131,6 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
   .bit { min-height: 56px; }
 }
 @media (prefers-reduced-motion: reduce) { .door.ready, .shake { animation: none; } }
+
+.puzzle p.alert, .bubble p.alert { background: var(--red); color: #fff; font-weight: 800; letter-spacing: .03em; border-radius: 8px; padding: 6px 12px; margin: 10px 0; }
+.clue { background: rgba(94, 194, 255, .12); border-left: 4px solid #5ec2ff; border-radius: 6px; padding: 8px 12px; }
