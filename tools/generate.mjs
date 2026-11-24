@@ -40,6 +40,77 @@ const defauts = cadeaux % 4;
 cadeaux = cadeaux + defauts * 10;
 const REP3 = String(cadeaux); // 45
 
+// =====================================================================
+// RÉCOMPENSES RÉELLES — à personnaliser par les parents !
+// La cachette est chiffrée (César) et déchiffrée par les enfants avec du Python.
+// Écrire en MAJUSCULES, sans accents ni ponctuation. Puis : node tools/generate.mjs
+// =====================================================================
+const REWARDS = {
+  1: { cachette: 'SOUS LE SAPIN', cadeau: 'une tablette de chocolat' },
+};
+const SHIFT_REWARD = 7; // même décalage que le pirate au jour 2
+
+// ---------- Jour 4 : journal de connexions (boucle + condition + compteur) ----------
+const JOURNAL4 = [
+  ['21:14', 'lutin_cuisine'], ['21:40', 'pere_noel'], ['22:03', 'renne_gps'], ['22:37', 'pixel'], ['23:05', 'mere_noel'], ['23:48', 'pere_noel_2'],
+  ['00:12', 'pixel'], ['00:55', 'pere_noel'], ['01:08', 'renne_gps'], ['01:59', 'pere_noel'], ['02:00', 'pere_noel'], ['02:17', 'lutin_cuisine'],
+  ['02:41', 'pere_noel'], ['02:42', 'pere_noel_2'], ['03:03', 'pere_noel'], ['03:19', 'pixel'], ['03:20', 'pere_noel'], ['03:47', 'pere_noel'],
+  ['04:06', 'mere_noel'], ['04:32', 'pere_noel'], ['04:59', 'pere_noel'], ['05:00', 'pere_noel'], ['05:21', 'renne_gps'], ['05:44', 'pere_noel_2'],
+  ['06:10', 'pixel'], ['06:45', 'pere_noel'],
+];
+const REP4 = String(
+  JOURNAL4.filter(([t, c]) => c === 'pere_noel' && +t.slice(0, 2) >= 2 && +t.slice(0, 2) <= 4).length,
+); // 7
+const JOURNAL4_PY = 'journal = [\n' + JOURNAL4.map(([t, c]) => `    ("${t}", "${c}"),`).join('\n') + '\n]';
+const JOURNAL4_TXT = JOURNAL4.map(([t, c]) => `${t}  ${c}`).join('\n');
+
+// ---------- Jour 5 : coffre logique (booléens) ----------
+const RULES5 = [
+  (A, B, C, D) => A + B === 1,
+  (A, B, C, D) => !C || D,
+  (A, B, C, D) => !(A && D),
+  (A, B, C, D) => A || C,
+  (A, B, C, D) => !B || C,
+  (A, B, C, D) => A + B + C + D >= 2,
+];
+const SOLS5 = [];
+for (let n = 0; n < 16; n++) {
+  const v = [(n >> 3) & 1, (n >> 2) & 1, (n >> 1) & 1, n & 1];
+  if (RULES5.every((r) => r(...v))) SOLS5.push(v.join(''));
+}
+if (SOLS5.length !== 1) throw new Error('Jour 5 : le coffre doit avoir une seule solution, trouvé : ' + SOLS5);
+const REP5 = SOLS5[0]; // 0111
+
+// ---------- Jour 6 : couleurs hexadécimales ----------
+const CLAIR6 = 'PAR LA CHEMINEE';
+const COULEURS6 = [];
+for (let i = 0; i < CLAIR6.length; i += 3) {
+  COULEURS6.push('#' + [...CLAIR6.slice(i, i + 3)].map((c) => c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join(''));
+}
+
+// ---------- Jour 7 : boss de la semaine (hexadécimal puis César) ----------
+const SHIFT7 = 11;
+const CLAIR7 = 'LA CLE EST CACHEE DANS L ETOILE DU SAPIN';
+const HEX7 = [...caesar(CLAIR7, SHIFT7)].map((c) => c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')).join('');
+const HEX7_CHUNKS = HEX7.match(/.{1,32}/g);
+const HEX7_PY = 'secret = (' + HEX7_CHUNKS.map((c) => `"${c}"`).join('\n          ') + ')';
+const CACHETTE1 = REWARDS[1].cachette;
+if (!/^[A-Z ]+$/.test(CACHETTE1)) throw new Error('REWARDS[1].cachette : majuscules et espaces uniquement');
+const CACHETTE1_CHIFFREE = caesar(CACHETTE1, SHIFT_REWARD);
+
+const DECHIFFRER_PY = [
+  'def dechiffrer(texte, decalage):',
+  '    resultat = ""',
+  '    for lettre in texte:',
+  '        if lettre == " ":',
+  '            resultat = resultat + " "',
+  '        else:',
+  '            numero = ord(lettre) - 65',
+  '            nouveau = (numero - decalage) % 26',
+  '            resultat = resultat + chr(nouveau + 65)',
+  '    return resultat',
+].join('\n');
+
 const DAYS = [
   {
     day: 1,
@@ -169,6 +240,192 @@ print(cadeaux)</pre>
 <p><b>Le saviez-vous ?</b> Python porte le nom de la troupe comique des <em>Monty Python</em>, pas du serpent. Son créateur, Guido van Rossum, adorait leurs sketchs.</p>
 <p class="clue">🕵️ <b>Piste n°3 :</b> le pirate fait disparaître ${REP3} cadeaux. Il prépare quelque chose de bien plus gros… Demain, on commence à réparer !</p>`,
   },
+  {
+    day: 4,
+    title: 'Les traces du pirate',
+    concept: 'Boucles, conditions & compteurs',
+    device: 'laptop',
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « Le sabotage de la hotte nous a donné une idée : le serveur garde un <b>journal de connexions</b>. Chaque ligne dit <em>à quelle heure</em> et <em>quel compte</em> s'est connecté. Or le vrai Père Noël dort la nuit… Si quelqu'un utilise son compte « pere_noel » entre <b>2 h et 4 h du matin</b>, ce n'est pas lui ! »</p>`,
+    puzzle: `<p>Voici le journal de la nuit (heure, compte) :</p>
+<pre class="code">${JOURNAL4_TXT}</pre>
+<p><b>Combien de fois le compte exact « pere_noel » s'est-il connecté entre 2 h 00 et 4 h 59 (inclus) ?</b></p>
+<p class="note">Attention aux pièges : « pere_noel_2 » est un autre compte (celui d'un lutin), et les heures pile comptent. Tu peux compter à la main… ou apprendre à l'ordinateur à le faire.</p>`,
+    python: {
+      open: true,
+      label: 'Labo Python — le compteur de connexions suspectes (2 trous à remplir)',
+      code: [
+        JOURNAL4_PY,
+        '',
+        'compteur = 0',
+        'for heure, compte in journal:',
+        '    h = int(heure[:2])                         # les 2 premiers caractères : "02:41" -> 2',
+        '    if compte == ___ and 2 <= h <= 4:          # trou 1 : le nom du compte, entre guillemets',
+        '        compteur = ___                         # trou 2 : on ajoute 1 au compteur',
+        '',
+        'print(compteur)',
+      ].join('\n'),
+    },
+    hints: [
+      'Une boucle <code>for</code> lit les lignes du journal une par une. Le « compteur » est une variable qui part de 0 et grandit à chaque ligne qui répond aux critères.',
+      'Trou 1 : le texte exact du compte, avec des guillemets : <code>"pere_noel"</code>. Trou 2 : on veut augmenter le compteur de 1, donc <code>compteur + 1</code>.',
+      'Dans le journal, ne compte que les lignes « pere_noel » dont l\'heure est 2, 3 ou 4. Il y en a plus de 5 et moins de 10.',
+    ],
+    answer: REP4,
+    explain: `<p><b>Réponse : ${REP4} connexions suspectes.</b> Tu viens d'écrire un programme très classique : une boucle, une <b>condition</b> (<code>if</code>) qui combine deux tests avec <code>and</code>, et un <b>compteur</b>. C'est la base de l'analyse de données : les experts en cybersécurité font exactement ça sur des millions de lignes de journaux.</p>
+<p><b>Le saviez-vous ?</b> « <code>==</code> » compare deux valeurs (« est-ce égal ? ») alors que « <code>=</code> » range une valeur dans une variable. Mélanger les deux est l'une des erreurs les plus fréquentes… même chez les pros !</p>
+<p class="clue">🕵️ <b>Piste n°4 :</b> ${REP4} connexions en pleine nuit avec le compte du Père Noël, alors qu'il dormait. Le pirate connaît donc son mot de passe. Il l'a volé… ou deviné.</p>`,
+  },
+  {
+    day: 5,
+    title: 'Le coffre du pirate',
+    concept: 'Logique booléenne (ET, OU, NON)',
+    device: 'both',
+    minutes: 15,
+    story: `<p><b>Pixel :</b> « Grâce au mot de passe volé, on a trouvé la planque du pirate : un <b>coffre</b> à 4 interrupteurs, A, B, C et D. Chacun est levé (1) ou baissé (0). À l'intérieur, sûrement des preuves ! Il n'y a qu'une seule combinaison qui respecte toutes les règles gravées sur la porte… »</p>`,
+    puzzle: `<p>Le coffre s'ouvre uniquement si les <b>6 règles</b> sont toutes vraies :</p>
+<ol>
+<li>Exactement <b>un</b> des deux interrupteurs A et B est levé (ni les deux, ni aucun).</li>
+<li><b>Si</b> C est levé, <b>alors</b> D doit l'être aussi.</li>
+<li>A et D ne sont <b>jamais</b> levés en même temps.</li>
+<li>Au moins l'un des deux, A <b>ou</b> C, est levé.</li>
+<li><b>Si</b> B est levé, <b>alors</b> C doit l'être aussi.</li>
+<li>Au moins <b>deux</b> interrupteurs sont levés.</li>
+</ol>
+<p><b>Quelle est la combinaison ?</b> Réponds avec 4 chiffres dans l'ordre A, B, C, D (1 = levé, 0 = baissé).</p>`,
+    widget: { type: 'switches', label: 'Le panneau du coffre — note ta combinaison (aucune aide : à toi de raisonner !)' },
+    python: {
+      label: 'Labo Python (💻, facultatif) — laisser l\'ordinateur tester les 16 combinaisons',
+      code: [
+        'for A in (0, 1):',
+        '    for B in (0, 1):',
+        '        for C in (0, 1):',
+        '            for D in (0, 1):',
+        '                regle1 = (A + B) == 1',
+        '                regle2 = (C == 0) or (D == 1)       # "si C alors D"',
+        '                regle3 = not (A == 1 and D == 1)',
+        '                regle4 = ___                        # trou : "A ou C est levé"',
+        '                regle5 = (B == 0) or (C == 1)',
+        '                regle6 = (A + B + C + D) >= 2',
+        '                if regle1 and regle2 and regle3 and regle4 and regle5 and regle6:',
+        '                    print(A, B, C, D)',
+      ].join('\n'),
+    },
+    hints: [
+      'Commence par les règles qui t\'imposent le plus de choses. La règle 1 te dit : soit A est levé et B baissé, soit l\'inverse. Étudie ces deux cas séparément.',
+      'Cas « A levé » : la règle 3 force D à 0, puis la règle 2 force C à 0 (car si C était levé, D devrait l\'être). Combien d\'interrupteurs sont alors levés ? La règle 6 est-elle respectée ?',
+      'Le cas « A levé » est impossible. Donc A = 0 et B = 1. Ensuite la règle 5 force C, puis la règle 2 force D. Combinaison : 0, 1, 1, 1.',
+    ],
+    answer: REP5,
+    explain: `<p><b>Combinaison : ${REP5.split('').join(' · ')}</b>. Tu viens de faire de la <b>logique booléenne</b>, le langage de base de tous les ordinateurs : <code>and</code> (ET), <code>or</code> (OU), <code>not</code> (NON). « Si C alors D » s'écrit <code>(not C) or D</code> : une règle qui n'est violée que si C est vrai et D faux.</p>
+<p><b>Le saviez-vous ?</b> Le processeur de ton téléphone contient des milliards de minuscules circuits (« portes logiques ») qui font exactement ça : ET, OU, NON. Tout le reste, les jeux, les vidéos, l'IA, est construit par-dessus.</p>
+<p class="clue">🕵️ <b>Piste n°5 :</b> à l'intérieur du coffre, une feuille avec 5 carrés de couleur étranges et une inscription : « mon accès… ». Le reste est effacé. Ces couleurs cachent quelque chose !</p>`,
+  },
+  {
+    day: 6,
+    title: 'Les couleurs du pirate',
+    concept: 'Hexadécimal & couleurs RVB',
+    device: 'laptop',
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « Ces 5 carrés de couleur ne sont pas là pour décorer ! Sur un écran, une couleur est décrite par trois nombres (rouge, vert, bleu) écrits en <b>hexadécimal</b>, un système en base 16 qui utilise les chiffres 0 à 9 puis les lettres A à F. Le pirate y a caché des lettres : chaque nombre est le code ASCII d'une lettre, comme au jour 1. »</p>`,
+    puzzle: `<p>Chaque couleur s'écrit <code>#RRVVBB</code> : trois nombres hexadécimaux de 2 chiffres. Ici, chacun est le code ASCII d'une lettre (l'espace est 20 en hexadécimal, soit 32). Lis les couleurs dans l'ordre :</p>
+<pre class="code">${COULEURS6.join('  ')}</pre>
+<p><b>Par où le pirate est-il entré ?</b> (Le message se termine par le nom de l'endroit.)</p>`,
+    widget: { type: 'swatches', colors: COULEURS6, label: 'Les cinq carrés de couleur trouvés dans le coffre' },
+    python: {
+      open: true,
+      label: 'Labo Python — le traducteur de couleurs (2 trous à remplir)',
+      code: [
+        `couleurs = [${COULEURS6.map((c) => `"${c}"`).join(', ')}]`,
+        '',
+        'message = ""',
+        'for couleur in couleurs:',
+        '    for i in range(1, 7, ___):                      # trou 1 : on lit 2 caractères à la fois, donc on avance de ... en ...',
+        '        canal = couleur[i:i + 2]                    # par ex. "50" (on saute le # du début)',
+        '        message = message + chr(int(canal, ___))    # trou 2 : l\'hexadécimal est en base ... ?',
+        '',
+        'print(message)',
+      ].join('\n'),
+    },
+    hints: [
+      'Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres. La boucle interne doit les lire un par un : après le premier nombre, elle doit sauter de 2 caractères pour arriver au suivant.',
+      'Trou 1 : on avance de 2 en 2. Trou 2 : l\'hexadécimal, c\'est « base 16 » (comme « base 2 » pour le binaire au jour 1).',
+      'Remplace le premier ___ par 2 et le second par 16, puis exécute. Le programme affiche une phrase : il te demande l\'endroit par où il est passé.',
+    ],
+    answer: ['cheminee', 'lacheminee'],
+    explain: `<p><b>Message décodé :</b> « ${CLAIR6} ». Le pirate est entré par la <b>cheminée</b>… la cheminée-serveur, par où passent tous les câbles de l'atelier !</p>
+<p>Pourquoi l'hexadécimal ? Parce qu'un octet (8 bits) s'écrit toujours avec exactement 2 chiffres hexadécimaux (de 00 à FF), alors qu'il en faut 8 en binaire. C'est plus court et plus lisible : les programmeurs et les designers l'utilisent partout (couleurs, adresses mémoire…). Le rouge pur est <code>#FF0000</code> : 255 de rouge, 0 de vert, 0 de bleu.</p>
+<p><b>Le saviez-vous ?</b> Un écran affiche environ 16,7 millions de couleurs : 256 × 256 × 256. Ton cerveau n'en distingue qu'une partie !</p>
+<p class="clue">🕵️ <b>Piste n°6 :</b> le pirate est entré par la cheminée-serveur. Il a laissé un dernier fichier, protégé à double tour. Demain, c'est le grand décryptage !</p>`,
+  },
+  {
+    day: 7,
+    title: 'Le coffre-fort de la semaine',
+    concept: 'Boss : hexadécimal + César + fonctions',
+    device: 'laptop',
+    minutes: 25,
+    story: `<p><b>Pixel :</b> « On y est presque ! Dans la cheminée-serveur, un dernier fichier : le <b>journal secret</b> du pirate. Il l'a protégé en deux couches : d'abord il a décalé les lettres (son chiffre de César préféré, avec un décalage qu'on ne connaît pas), puis il a écrit le résultat en <b>hexadécimal</b>. Tout ce que tu as appris cette semaine va servir. Si tu le déchiffres, je pourrai réparer le premier système du Père Noël. »</p>`,
+    puzzle: `<p>Voici le contenu du fichier : chaque paire de chiffres hexadécimaux est le code ASCII d'un caractère (jour 6), et le texte obtenu est chiffré avec un décalage de César (jour 2) de valeur inconnue.</p>
+<pre class="code">${HEX7_CHUNKS.join('\n')}</pre>
+<p><b>Où le pirate a-t-il caché la clé du système ?</b> (Un seul mot.)</p>
+<p class="note">Cette fois, pas de mode d'emploi : les deux outils que tu connais sont déjà dans le labo, il te reste à les <b>enchaîner</b>.</p>`,
+    python: {
+      open: true,
+      label: 'Labo Python — la chaîne de décryptage (3 trous à remplir)',
+      code: [
+        HEX7_PY,
+        '',
+        '# Étape 1 : de l\'hexadécimal vers le texte (comme au jour 6)',
+        'def hex_vers_texte(h):',
+        '    texte = ""',
+        '    for i in range(0, len(h), 2):',
+        '        texte = texte + chr(int(h[i:i + 2], ___))     # trou 1',
+        '    return texte',
+        '',
+        '# Étape 2 : le déchiffrement de César (comme au jour 2) — déjà écrit pour toi',
+        DECHIFFRER_PY,
+        '',
+        'texte = hex_vers_texte(secret)',
+        '',
+        '# Étape 3 : on essaie tous les décalages',
+        'for essai in range(1, ___):                           # trou 2 : jusqu\'à 25 inclus, donc on s\'arrête avant...',
+        '    print(essai, ___)                                 # trou 3 : le texte déchiffré avec ce décalage',
+      ].join('\n'),
+    },
+    hints: [
+      'Deux étapes enchaînées : d\'abord transformer l\'hexadécimal en texte (c\'est le travail de <code>hex_vers_texte</code>), puis casser le César sur ce texte (la fonction <code>dechiffrer</code>, déjà écrite).',
+      'Trou 1 : l\'hexadécimal, c\'est la base 16. Trou 2 : <code>range(1, 26)</code> va de 1 à 25. Trou 3 : un appel à la fonction : <code>dechiffrer(texte, essai)</code>.',
+      'Lance le programme : 25 lignes s\'affichent, une seule est une vraie phrase. La clé est cachée dans une partie du sapin qui brille en haut.',
+    ],
+    answer: ['etoile', 'letoile'],
+    key: { n: 1, value: 'ETOILE' },
+    explain: `<p><b>Journal décodé :</b> « ${CLAIR7} » (hexadécimal, puis César de décalage ${SHIFT7}).</p>
+<p>Bravo, c'est le <b>boss de la semaine 1</b> : tu as enchaîné deux transformations (hexadécimal → texte → César), chacune dans sa propre <b>fonction</b>. C'est comme ça que les programmeurs construisent de grands programmes : en assemblant de petits morceaux qui font chacun une seule chose.</p>
+<div class="reward">
+<h3>🔑 Clé n°1 obtenue : <span class="key">ETOILE</span></h3>
+<p>Garde-la précieusement : elle servira pour le <b>grand décryptage final</b> du 24 décembre !</p>
+</div>
+<div class="reward">
+<h3>🎁 Ta récompense de la semaine 1</h3>
+<p>Pixel a mis en sécurité ${REWARDS[1].cadeau} pour vous deux, mais il a chiffré l'endroit avec le chiffre préféré du pirate (le <b>même décalage que celui du jour 2</b>) :</p>
+<pre class="code">${CACHETTE1_CHIFFREE}</pre>
+<p>Déchiffre-le avec le labo ci-dessous pour savoir où chercher !</p>
+</div>
+<p class="clue">🕵️ <b>Piste n°7 :</b> le pirate a caché la clé dans l'étoile du sapin. Elle ouvre le premier verrou du système. La semaine prochaine, on répare avec du Python plus costaud !</p>`,
+    after: {
+      python: {
+        open: true,
+        label: 'Labo Python — où est cachée ta récompense ? (1 trou à remplir)',
+        code: [
+          DECHIFFRER_PY,
+          '',
+          `message = "${CACHETTE1_CHIFFREE}"`,
+          'decalage = ___        # le même décalage que le pirate au jour 2 !',
+          'print(dechiffrer(message, decalage))',
+        ].join('\n'),
+      },
+    },
+  },
 ];
 
 // ---------- Sorties ----------
@@ -190,6 +447,8 @@ const md = [
   '# Solutions (réservé aux parents 🤫)',
   '',
   '> Ne publiez pas ce dossier `parents/` si les enfants ont accès au dépôt.',
+  '',
+  `**Récompense semaine 1** : cachette « ${REWARDS[1].cachette} » (${REWARDS[1].cadeau}). À modifier dans \`tools/generate.mjs\` (REWARDS), puis \`node tools/generate.mjs\`.`,
   '',
   '| Jour | Titre | Réponse |',
   '|---|---|---|',

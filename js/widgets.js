@@ -98,5 +98,43 @@ window.Widgets = (function () {
     box.appendChild(wrap);
   }
 
-  return { bits, cesar, python };
+  // --- Panneau de coffre : 4 interrupteurs, aucune aide (juste un bloc-notes) ---
+  function switches(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🔐 ' + (cfg.label || 'Panneau')));
+    const row = el('div', 'switches');
+    const state = [0, 0, 0, 0];
+    const out = el('div', 'bits-out');
+    const update = () => { out.innerHTML = 'Ta combinaison : <b>' + state.join(' ') + '</b>'; };
+    ['A', 'B', 'C', 'D'].forEach((name, i) => {
+      const b = el('button', 'switch', '<span class="switch-name">' + name + '</span><span class="switch-knob"></span><span class="switch-val">0</span>');
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        state[i] = 1 - state[i];
+        b.classList.toggle('on', !!state[i]);
+        b.querySelector('.switch-val').textContent = state[i];
+        update();
+      });
+      row.appendChild(b);
+    });
+    wrap.append(row, out);
+    box.appendChild(wrap);
+    update();
+  }
+
+  // --- Carrés de couleur ---
+  function swatches(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🎨 ' + (cfg.label || 'Couleurs')));
+    const row = el('div', 'swatches');
+    cfg.colors.forEach((c) => {
+      const s = el('div', 'swatch');
+      s.innerHTML = '<span class="swatch-color" style="background:' + c + '"></span><code>' + c + '</code>';
+      row.appendChild(s);
+    });
+    wrap.appendChild(row);
+    box.appendChild(wrap);
+  }
+
+  return { bits, cesar, python, switches, swatches };
 })();

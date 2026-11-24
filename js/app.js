@@ -64,8 +64,26 @@
       b.addEventListener('click', () => onDoor(n));
       grid.appendChild(b);
     }
+    renderKeys();
     $('#progress-text').textContent = solvedCount + ' / ' + TOTAL + ' énigmes résolues';
     $('#progress-bar').style.width = (solvedCount / TOTAL) * 100 + '%';
+  }
+
+  // Trousseau : une clé par semaine (jours 7, 14, 21, 24), révélée quand l'énigme est résolue.
+  const KEY_DAYS = [7, 14, 21, 24];
+  function renderKeys() {
+    const box = $('#keys');
+    if (!box) return;
+    box.innerHTML = '';
+    KEY_DAYS.forEach((n, i) => {
+      const d = dayData(n);
+      const got = d && d.key && state.solved[n];
+      const s = document.createElement('div');
+      s.className = 'key-slot' + (got ? ' got' : '');
+      s.innerHTML = '<span class="key-ico">' + (got ? '🔑' : '🔒') + '</span><span class="key-txt">' + (got ? d.key.value : 'Clé ' + (i + 1)) + '</span>';
+      s.title = got ? 'Clé n°' + (i + 1) : 'Clé n°' + (i + 1) + ' : résous l\'énigme du jour ' + n;
+      box.appendChild(s);
+    });
   }
 
   function onDoor(n) {
@@ -145,6 +163,7 @@
       reveal.innerHTML =
         '<div class="success">✅ Bravo, énigme résolue !</div>' +
         '<div class="explain">' + d.explain + '</div>';
+      if (d.after && d.after.python) Widgets.python(reveal, d.after.python);
     };
     if (state.solved[d.day]) showSolved();
 

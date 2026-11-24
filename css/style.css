@@ -134,3 +134,21 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 
 .puzzle p.alert, .bubble p.alert { background: var(--red); color: #fff; font-weight: 800; letter-spacing: .03em; border-radius: 8px; padding: 6px 12px; margin: 10px 0; }
 .clue { background: rgba(94, 194, 255, .12); border-left: 4px solid #5ec2ff; border-radius: 6px; padding: 8px 12px; }
+
+.keys { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.key-slot { display: flex; align-items: center; gap: 6px; border: 2px dashed rgba(255, 255, 255, .25); border-radius: 12px; padding: 4px 12px; color: var(--muted); font-size: .9rem; }
+.key-slot.got { border: 2px solid var(--gold); background: rgba(255, 207, 74, .15); color: var(--gold); font-weight: 800; letter-spacing: .05em; }
+.reward { background: linear-gradient(160deg, rgba(255, 207, 74, .18), rgba(230, 57, 70, .15)); border: 2px solid var(--gold); border-radius: 14px; padding: 4px 16px 10px; margin: 14px 0; }
+.reward h3 { margin: 10px 0 6px; }
+.reward .key { color: var(--gold); letter-spacing: .08em; }
+.switches { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.switch { width: 70px; border: 2px solid rgba(255, 255, 255, .25); background: #0a1124; color: var(--muted); border-radius: 14px; padding: 8px 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; font: inherit; }
+.switch-name { font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+.switch-knob { width: 22px; height: 44px; border-radius: 12px; background: #36466f; position: relative; }
+.switch-knob::after { content: ""; position: absolute; left: 3px; bottom: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .15s; }
+.switch.on .switch-knob { background: var(--green); }
+.switch.on .switch-knob::after { bottom: 25px; }
+.switch.on { border-color: var(--green); }
+.swatches { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.swatch { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.swatch-color { width: 72px; height: 72px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, .4); }

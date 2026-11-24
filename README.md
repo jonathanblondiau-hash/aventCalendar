@@ -13,7 +13,18 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 | 1 — Binaire, ASCII & premier programme Python | ✅ prêt |
 | 2 — César, fonctions & force brute | ✅ prêt |
 | 3 — Variables en Python | ✅ prêt |
-| 4 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
+| 4 — Boucles, conditions & compteurs (journal de connexions) | ✅ prêt |
+| 5 — Logique booléenne (coffre à 4 interrupteurs, 📱 possible) | ✅ prêt |
+| 6 — Hexadécimal & couleurs | ✅ prêt |
+| 7 — Boss de la semaine 1 + **clé n°1** + **récompense** | ✅ prêt |
+| 8 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
+
+## Récompenses
+
+Chaque semaine (jours 7, 14, 21, 24), l'énigme finale donne une **clé** (collectée dans le trousseau en haut de page, elle servira
+au décryptage final) et une **récompense réelle** dont la cachette est chiffrée.
+**À personnaliser par les parents :** `REWARDS` en haut de `tools/generate.mjs` (cachette en MAJUSCULES sans accents, puis
+`node tools/generate.mjs`). Par défaut : « SOUS LE SAPIN ».
 
 ## Tester avant décembre
 
@@ -43,8 +54,8 @@ est arrêtée au bout de 8 secondes sans figer la page.
 1. Éditer `tools/generate.mjs` (le contenu et la réponse en clair de chaque jour y sont définis).
 2. `node tools/generate.mjs` → régénère `js/days.js` (réponses hachées) et `parents/SOLUTIONS.md`.
 
-Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' }` et `python: { label, code }`
-(utiliser `___` pour les trous à remplir).
+Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' }`, `python: { label, code, open }`
+(utiliser `___` pour les trous à remplir), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
 
 ## Fichiers
 
