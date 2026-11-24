@@ -22,11 +22,14 @@ Les portes s'ouvrent selon la date réelle (1er au 24 décembre). Pour tester :
 - `index.html?jour=3` : simule le 3 décembre
 - `index.html?tout` : débloque toutes les portes
 
-## Mettre en ligne (GitHub Pages)
+## Mise en ligne (déploiement automatique)
 
-*Settings → Pages → Deploy from a branch → `main` / racine.* Le site sera sur `https://<compte>.github.io/<dépôt>/`.
+Chaque `push` sur `main` redéploie le site via `.github/workflows/pages.yml`.
+**Réglage à faire une seule fois :** *Settings → Pages → Build and deployment → Source : GitHub Actions.*
+Adresse : `https://<compte>.github.io/<dépôt>/`.
 
-⚠️ Le dossier `parents/` contient les solutions : si les enfants peuvent parcourir le dépôt, ne le publiez pas (ou supprimez-le).
+Seuls `index.html`, `css/` et `js/` sont publiés : le dossier `parents/` (solutions) et `tools/` restent dans le dépôt
+mais ne sont **pas** accessibles sur le site. (Si le dépôt est public, ils restent lisibles sur GitHub.)
 Les réponses dans le site sont **hachées** (SHA-256) : on ne peut pas les lire en regardant le code source.
 
 ## Python dans le navigateur
