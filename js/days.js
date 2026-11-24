@@ -7,22 +7,22 @@ window.DAYS = [
   "device": "both",
   "minutes": 10,
   "story": "<p class=\"alert\">🚨 ALERTE CYBERATTAQUE — Pôle Nord, 1er décembre, 6 h 12</p>\n<p><b>Pixel, lutin informaticien :</b> « Ce matin, tous les écrans de l'atelier se sont éteints ! Quelqu'un est entré dans le serveur du Père Noël : la liste des enfants sages, la carte du traîneau… tout est verrouillé. Le pirate n'a laissé qu'une seule trace dans les journaux du système, écrite en <b>0</b> et en <b>1</b>, la seule langue que comprennent les ordinateurs. Aide-moi à la lire, détective ! »</p>",
-  "puzzle": "<p>Chaque groupe de 8 chiffres (un <b>octet</b>) est un nombre écrit en <b>binaire</b>, et chaque nombre correspond à une lettre (table ASCII : A = 65, B = 66, C = 67…).</p>\n<pre class=\"code\">01010011 01000001 01010000 01001001 01001110</pre>\n<p><b>Quel est le mot caché ?</b> (C'est le nom du dossier où le pirate range ses outils.)</p>",
+  "puzzle": "<p>Chaque groupe de 8 chiffres (un <b>octet</b>) est un nombre écrit en <b>binaire</b>, et chaque nombre correspond à une lettre (table ASCII : A = 65, B = 66, C = 67…).</p>\n<pre class=\"code\">01001100 01010101 01010100 01001001 01001110</pre>\n<p><b>Quel est le mot caché ?</b> (C'est le nom du dossier où le pirate range ses outils.)</p>",
   "widget": {
    "type": "bits",
    "label": "Calculette binaire — clique sur les bits pour les allumer"
   },
   "python": {
    "label": "Labo Python (💻 Chromebook) — facultatif mais malin",
-   "code": "print(ord(\"A\"))      # le nombre caché derrière la lettre A\nprint(bin(65))       # ce nombre écrit en binaire\nprint(chr(___))      # remplace ___ par 83 : quelle lettre obtiens-tu ?"
+   "code": "print(ord(\"A\"))      # le nombre caché derrière la lettre A\nprint(bin(65))       # ce nombre écrit en binaire\nprint(chr(___))      # remplace ___ par 76 : quelle lettre obtiens-tu ?"
   },
   "hints": [
    "Un octet se lit de droite à gauche : les positions valent 1, 2, 4, 8, 16, 32, 64 et 128. Ajoute les valeurs là où il y a un « 1 ».",
    "Utilise la calculette : allume les bits du premier groupe. Tu dois obtenir un nombre entre 65 et 90, ce sont les lettres majuscules.",
-   "Le premier octet vaut 83. Dans l'alphabet, 65 = A, donc 83 = A + 18, c'est la 19ᵉ lettre : « S ». Continue avec les 4 autres !"
+   "Le premier octet vaut 76. Dans l'alphabet, 65 = A, donc 76 = A + 11, c'est la 12ᵉ lettre : « L ». Continue avec les 4 autres !"
   ],
-  "explain": "<p><b>Bravo !</b> Ton ordinateur stocke <em>tout</em> sous forme de nombres : les lettres, les images, la musique… Pour les lettres, il utilise un tableau de correspondance appelé <b>ASCII</b> (inventé dans les années 1960). Aujourd'hui, le standard <b>Unicode</b> va beaucoup plus loin : l'émoji 🎄 est le nombre 127 876 !</p>\n<p class=\"clue\">🕵️ <b>Piste n°1 :</b> le pirate se cache dans un dossier nommé « sapin ». Demain, on y entre.</p>\n<p><b>Le saviez-vous ?</b> Un octet peut prendre 2⁸ = 256 valeurs. Ton téléphone manipule des milliards de ces octets, sans jamais se tromper.</p>",
-  "h": "82e8714d5d7e8cae6d3886d6f45a44083427098973b1cac8a687b6ff7a109b21"
+  "explain": "<p><b>Bravo !</b> Ton ordinateur stocke <em>tout</em> sous forme de nombres : les lettres, les images, la musique… Pour les lettres, il utilise un tableau de correspondance appelé <b>ASCII</b> (inventé dans les années 1960). Aujourd'hui, le standard <b>Unicode</b> va beaucoup plus loin : l'émoji 🎄 est le nombre 127 876 !</p>\n<p class=\"clue\">🕵️ <b>Piste n°1 :</b> le pirate se cache dans un dossier nommé « lutin ». Demain, on y entre.</p>\n<p><b>Le saviez-vous ?</b> Un octet peut prendre 2⁸ = 256 valeurs. Ton téléphone manipule des milliards de ces octets, sans jamais se tromper.</p>",
+  "h": "c0bdcf278de59a5b05153a1374a4bc65bb5504679e152f27c02ee89c3887d181"
  },
  {
   "day": 2,
@@ -30,7 +30,7 @@ window.DAYS = [
   "concept": "Cryptographie & boucles",
   "device": "both",
   "minutes": 15,
-  "story": "<p><b>Pixel :</b> « Le dossier « sapin » existait bien ! Il contient un seul fichier : un message que le pirate envoie à un complice. Mais il l'a <b>chiffré</b>, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. À toi de le casser ! »</p>",
+  "story": "<p><b>Pixel :</b> « Le dossier « lutin » existait bien ! Il contient un seul fichier : un message que le pirate envoie à un complice. Mais il l'a <b>chiffré</b>, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. À toi de le casser ! »</p>",
   "puzzle": "<p>Chaque lettre a été décalée de la même quantité dans l'alphabet (A→F, B→G, etc. pour un décalage de 5, par exemple). Retrouve le décalage et lis le message.</p>\n<pre class=\"code\">QJ RTY IJ UFXXJ JXY WJSSJ</pre>\n<p><b>Quel est le mot de passe du pirate (le dernier mot de la phrase) ?</b></p>",
   "widget": {
    "type": "cesar",

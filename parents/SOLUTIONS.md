@@ -4,7 +4,7 @@
 
 | Jour | Titre | Réponse |
 |---|---|---|
-| 1 | Le message des lutins | **SAPIN** |
+| 1 | Le message des lutins | **LUTIN** |
 | 2 | Le code de César | **renne** |
 | 3 | La hotte déborde | **45** |
 
@@ -12,7 +12,7 @@
 
 - Indice 1 : Un octet se lit de droite à gauche : les positions valent 1, 2, 4, 8, 16, 32, 64 et 128. Ajoute les valeurs là où il y a un « 1 ».
 - Indice 2 : Utilise la calculette : allume les bits du premier groupe. Tu dois obtenir un nombre entre 65 et 90, ce sont les lettres majuscules.
-- Indice 3 : Le premier octet vaut 83. Dans l'alphabet, 65 = A, donc 83 = A + 18, c'est la 19ᵉ lettre : « S ». Continue avec les 4 autres !
+- Indice 3 : Le premier octet vaut 76. Dans l'alphabet, 65 = A, donc 76 = A + 11, c'est la 12ᵉ lettre : « L ». Continue avec les 4 autres !
 
 ## Jour 2 — Le code de César
 

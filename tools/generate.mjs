@@ -19,7 +19,7 @@ const caesar = (s, k) =>
   [...s].map((c) => (/[A-Z]/.test(c) ? String.fromCharCode(((c.charCodeAt(0) - 65 + k) % 26) + 65) : c)).join('');
 
 // ---------- Jour 1 : binaire ----------
-const MOT1 = 'SAPIN';
+const MOT1 = 'LUTIN';
 
 // ---------- Jour 2 : César ----------
 const DECALAGE = 5;
@@ -53,17 +53,17 @@ const DAYS = [
       code: [
         'print(ord("A"))      # le nombre caché derrière la lettre A',
         'print(bin(65))       # ce nombre écrit en binaire',
-        'print(chr(___))      # remplace ___ par 83 : quelle lettre obtiens-tu ?',
+        'print(chr(___))      # remplace ___ par 76 : quelle lettre obtiens-tu ?',
       ].join('\n'),
     },
     hints: [
       'Un octet se lit de droite à gauche : les positions valent 1, 2, 4, 8, 16, 32, 64 et 128. Ajoute les valeurs là où il y a un « 1 ».',
       'Utilise la calculette : allume les bits du premier groupe. Tu dois obtenir un nombre entre 65 et 90, ce sont les lettres majuscules.',
-      'Le premier octet vaut 83. Dans l\'alphabet, 65 = A, donc 83 = A + 18, c\'est la 19ᵉ lettre : « S ». Continue avec les 4 autres !',
+      'Le premier octet vaut 76. Dans l\'alphabet, 65 = A, donc 76 = A + 11, c\'est la 12ᵉ lettre : « L ». Continue avec les 4 autres !',
     ],
     answer: MOT1,
     explain: `<p><b>Bravo !</b> Ton ordinateur stocke <em>tout</em> sous forme de nombres : les lettres, les images, la musique… Pour les lettres, il utilise un tableau de correspondance appelé <b>ASCII</b> (inventé dans les années 1960). Aujourd'hui, le standard <b>Unicode</b> va beaucoup plus loin : l'émoji 🎄 est le nombre 127 876 !</p>
-<p class="clue">🕵️ <b>Piste n°1 :</b> le pirate se cache dans un dossier nommé « sapin ». Demain, on y entre.</p>
+<p class="clue">🕵️ <b>Piste n°1 :</b> le pirate se cache dans un dossier nommé « lutin ». Demain, on y entre.</p>
 <p><b>Le saviez-vous ?</b> Un octet peut prendre 2⁸ = 256 valeurs. Ton téléphone manipule des milliards de ces octets, sans jamais se tromper.</p>`,
   },
   {
@@ -72,7 +72,7 @@ const DAYS = [
     concept: 'Cryptographie & boucles',
     device: 'both',
     minutes: 15,
-    story: `<p><b>Pixel :</b> « Le dossier « sapin » existait bien ! Il contient un seul fichier : un message que le pirate envoie à un complice. Mais il l'a <b>chiffré</b>, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. À toi de le casser ! »</p>`,
+    story: `<p><b>Pixel :</b> « Le dossier « lutin » existait bien ! Il contient un seul fichier : un message que le pirate envoie à un complice. Mais il l'a <b>chiffré</b>, comme le faisait déjà Jules César il y a 2 000 ans : chaque lettre est <b>décalée</b> dans l'alphabet. À toi de le casser ! »</p>`,
     puzzle: `<p>Chaque lettre a été décalée de la même quantité dans l'alphabet (A→F, B→G, etc. pour un décalage de 5, par exemple). Retrouve le décalage et lis le message.</p>
 <pre class="code">${CHIFFRE2}</pre>
 <p><b>Quel est le mot de passe du pirate (le dernier mot de la phrase) ?</b></p>`,
