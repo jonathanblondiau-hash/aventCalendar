@@ -1,15 +1,16 @@
 # Solutions (réservé aux parents 🤫)
 
 > Ne publiez pas ce dossier `parents/` si les enfants ont accès au dépôt.
+> Le site n'affiche que l'**indice 1** de chaque jour ; les indices 2 et 3 (plus révélateurs) sont réservés aux parents, ci-dessous.
 
-**Récompense semaine 1** : cachette « SOUS LE SAPIN » (une tablette de chocolat). À modifier dans `tools/generate.mjs` (REWARDS), puis `node tools/generate.mjs`.
+**Récompense semaine 1** : cachette « DANS LE FRIGO » (une surprise). À modifier dans `tools/generate.mjs` (REWARDS), puis `node tools/generate.mjs`.
 
 | Jour | Titre | Réponse |
 |---|---|---|
 | 1 | Le message des lutins | **LUTIN** |
 | 2 | Le code de César | **rudolph** ou **rudolphe** |
 | 3 | La hotte déborde | **45** |
-| 4 | Les traces du pirate | **7** |
+| 4 | Les traces du pirate | **67** |
 | 5 | Le coffre du pirate | **0111** |
 | 6 | Les couleurs du pirate | **cheminee** ou **lacheminee** |
 | 7 | Le coffre-fort de la semaine | **etoile** ou **letoile** |
@@ -34,9 +35,9 @@
 
 ## Jour 4 — Les traces du pirate
 
-- Indice 1 : Une boucle <code>for</code> lit les lignes du journal une par une. Le « compteur » est une variable qui part de 0 et grandit à chaque ligne qui répond aux critères.
-- Indice 2 : Trou 1 : le texte exact du compte, avec des guillemets : <code>"pere_noel"</code>. Trou 2 : on veut augmenter le compteur de 1, donc <code>compteur + 1</code>.
-- Indice 3 : Dans le journal, ne compte que les lignes « pere_noel » dont l'heure est 2, 3 ou 4. Il y en a plus de 5 et moins de 10.
+- Indice 1 : Le journal est bien trop long pour être lu à la main : une boucle <code>for</code> le parcourt ligne par ligne. Chaque ligne est coupée en trois morceaux (heure, compte, résultat). Il te manque les deux valeurs à comparer : ce sont des textes, donc entre guillemets.
+- Indice 2 : Trou 1 : <code>"pere_noel"</code> (le nom exact du compte). Trou 2 : <code>"SUCCES"</code> (en majuscules, comme dans le fichier).
+- Indice 3 : Le résultat est un nombre entre 40 et 80. Si ton programme affiche un nombre très différent, vérifie l'orthographe des deux textes entre guillemets.
 
 ## Jour 5 — Le coffre du pirate
 
@@ -46,7 +47,7 @@
 
 ## Jour 6 — Les couleurs du pirate
 
-- Indice 1 : Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres. La boucle interne doit les lire un par un : après le premier nombre, elle doit sauter de 2 caractères pour arriver au suivant.
+- Indice 1 : Le labo ne contient que 2 couleurs : recopie les autres depuis l'énoncé. Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois.
 - Indice 2 : Trou 1 : on avance de 2 en 2. Trou 2 : l'hexadécimal, c'est « base 16 » (comme « base 2 » pour le binaire au jour 1).
 - Indice 3 : Remplace le premier ___ par 2 et le second par 16, puis exécute. Le programme affiche une phrase : il te demande l'endroit par où il est passé.
 

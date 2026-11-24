@@ -46,23 +46,56 @@ const REP3 = String(cadeaux); // 45
 // Écrire en MAJUSCULES, sans accents ni ponctuation. Puis : node tools/generate.mjs
 // =====================================================================
 const REWARDS = {
-  1: { cachette: 'SOUS LE SAPIN', cadeau: 'une tablette de chocolat' },
+  1: { cachette: 'DANS LE FRIGO', cadeau: 'une surprise' },
 };
 const SHIFT_REWARD = 7; // même décalage que le pirate au jour 2
 
-// ---------- Jour 4 : journal de connexions (boucle + condition + compteur) ----------
-const JOURNAL4 = [
-  ['21:14', 'lutin_cuisine'], ['21:40', 'pere_noel'], ['22:03', 'renne_gps'], ['22:37', 'pixel'], ['23:05', 'mere_noel'], ['23:48', 'pere_noel_2'],
-  ['00:12', 'pixel'], ['00:55', 'pere_noel'], ['01:08', 'renne_gps'], ['01:59', 'pere_noel'], ['02:00', 'pere_noel'], ['02:17', 'lutin_cuisine'],
-  ['02:41', 'pere_noel'], ['02:42', 'pere_noel_2'], ['03:03', 'pere_noel'], ['03:19', 'pixel'], ['03:20', 'pere_noel'], ['03:47', 'pere_noel'],
-  ['04:06', 'mere_noel'], ['04:32', 'pere_noel'], ['04:59', 'pere_noel'], ['05:00', 'pere_noel'], ['05:21', 'renne_gps'], ['05:44', 'pere_noel_2'],
-  ['06:10', 'pixel'], ['06:45', 'pere_noel'],
-];
+// ---------- Jour 4 : gros journal de connexions (3000 lignes générées, impossible à compter à la main) ----------
+const NB_LIGNES4 = 3000;
+const COMPTES4 = ['pere_noel', 'pere_noel', 'pixel', 'mere_noel', 'lutin_cuisine', 'renne_gps', 'pere_noel_2', 'pere_noel_old', 'lutin_emballage', 'admin'];
+const lcg = (g) => (g * 1103515245n + 12345n) % 2147483648n; // même générateur que dans le code Python
+const JOURNAL4 = [];
+{
+  let g = 12345n;
+  for (let i = 0; i < NB_LIGNES4; i++) {
+    g = lcg(g); const h = Number(g >> 16n) % 24;
+    g = lcg(g); const m = Number(g >> 16n) % 60;
+    g = lcg(g); const sec = Number(g >> 16n) % 60;
+    g = lcg(g); const compte = COMPTES4[Number(g >> 16n) % COMPTES4.length];
+    g = lcg(g); const statut = Number(g >> 16n) % 4 !== 0 ? 'SUCCES' : 'ECHEC';
+    const pad = (n) => String(n).padStart(2, '0');
+    JOURNAL4.push(`${pad(h)}:${pad(m)}:${pad(sec)} ${compte} ${statut}`);
+  }
+  JOURNAL4.sort();
+}
 const REP4 = String(
-  JOURNAL4.filter(([t, c]) => c === 'pere_noel' && +t.slice(0, 2) >= 2 && +t.slice(0, 2) <= 4).length,
-); // 7
-const JOURNAL4_PY = 'journal = [\n' + JOURNAL4.map(([t, c]) => `    ("${t}", "${c}"),`).join('\n') + '\n]';
-const JOURNAL4_TXT = JOURNAL4.map(([t, c]) => `${t}  ${c}`).join('\n');
+  JOURNAL4.filter((l) => {
+    const [t, c, st] = l.split(' ');
+    return c === 'pere_noel' && st === 'SUCCES' && +t.slice(0, 2) >= 2 && +t.slice(0, 2) <= 4;
+  }).length,
+);
+const JOURNAL4_APERCU = JOURNAL4.slice(0, 6).join('\n');
+const JOURNAL4_PY = [
+  '# ===== Ne modifie pas ce bloc : il fabrique le gros fichier de journal (comme si on le lisait sur le disque) =====',
+  'def suivant(graine):',
+  '    return (graine * 1103515245 + 12345) % 2147483648',
+  '',
+  'def lire_journal():',
+  '    comptes = ["pere_noel", "pere_noel", "pixel", "mere_noel", "lutin_cuisine",',
+  '               "renne_gps", "pere_noel_2", "pere_noel_old", "lutin_emballage", "admin"]',
+  '    lignes = []',
+  '    graine = 12345',
+  `    for i in range(${NB_LIGNES4}):`,
+  '        graine = suivant(graine); h = (graine >> 16) % 24',
+  '        graine = suivant(graine); m = (graine >> 16) % 60',
+  '        graine = suivant(graine); s = (graine >> 16) % 60',
+  '        graine = suivant(graine); compte = comptes[(graine >> 16) % len(comptes)]',
+  '        graine = suivant(graine); statut = "SUCCES" if (graine >> 16) % 4 != 0 else "ECHEC"',
+  '        lignes.append(f"{h:02d}:{m:02d}:{s:02d} {compte} {statut}")',
+  '    lignes.sort()',
+  '    return lignes',
+  '# ==================================================================================================================',
+].join('\n');
 
 // ---------- Jour 5 : coffre logique (booléens) ----------
 const RULES5 = [
@@ -225,8 +258,6 @@ print(cadeaux)</pre>
         '',
         'reste = 23 ___ 4  # remplace ___ pour que reste vaille 3',
         'print(reste)',
-        '',
-        '# Ton tour : recopie ici le programme de l\'énoncé et regarde ce qu\'il affiche !',
       ].join('\n'),
     },
     hints: [
@@ -243,38 +274,44 @@ print(cadeaux)</pre>
   {
     day: 4,
     title: 'Les traces du pirate',
-    concept: 'Boucles, conditions & compteurs',
+    concept: 'Boucles, conditions & analyse de fichier',
     device: 'laptop',
     minutes: 20,
-    story: `<p><b>Pixel :</b> « Le sabotage de la hotte nous a donné une idée : le serveur garde un <b>journal de connexions</b>. Chaque ligne dit <em>à quelle heure</em> et <em>quel compte</em> s'est connecté. Or le vrai Père Noël dort la nuit… Si quelqu'un utilise son compte « pere_noel » entre <b>2 h et 4 h du matin</b>, ce n'est pas lui ! »</p>`,
-    puzzle: `<p>Voici le journal de la nuit (heure, compte) :</p>
-<pre class="code">${JOURNAL4_TXT}</pre>
-<p><b>Combien de fois le compte exact « pere_noel » s'est-il connecté entre 2 h 00 et 4 h 59 (inclus) ?</b></p>
-<p class="note">Attention aux pièges : « pere_noel_2 » est un autre compte (celui d'un lutin), et les heures pile comptent. Tu peux compter à la main… ou apprendre à l'ordinateur à le faire.</p>`,
+    story: `<p><b>Pixel :</b> « Le sabotage de la hotte nous a donné une idée : le serveur garde un <b>journal de connexions</b>. Chaque ligne dit <em>à quelle heure</em> et <em>quel compte</em> s'est connecté, et si ça a marché. Problème : ce journal fait <b>${NB_LIGNES4} lignes</b> rien que pour cette nuit ! Le vrai Père Noël dort entre 2 h et 5 h du matin. Si son compte se connecte à ce moment-là, ce n'est pas lui… »</p>`,
+    puzzle: `<p>Le fichier <code>journal.txt</code> contient ${NB_LIGNES4} lignes, triées par heure. Chaque ligne a trois morceaux séparés par des espaces : l'<b>heure</b>, le <b>compte</b> et le <b>résultat</b> (<code>SUCCES</code> ou <code>ECHEC</code>). Voici les 6 premières lignes :</p>
+<pre class="code">${JOURNAL4_APERCU}
+…</pre>
+<p><b>Combien de connexions réussies (<code>SUCCES</code>) du compte exact « pere_noel » ont eu lieu entre 2 h 00 et 4 h 59 (inclus) ?</b></p>
+<p class="note">Attention aux pièges : « pere_noel_2 » et « pere_noel_old » sont d'autres comptes. Le fichier est bien trop long pour être compté à la main : c'est un travail pour un programme.</p>`,
     python: {
       open: true,
-      label: 'Labo Python — le compteur de connexions suspectes (2 trous à remplir)',
+      label: 'Labo Python — l\'analyseur de journal (2 trous à remplir)',
       code: [
         JOURNAL4_PY,
         '',
+        'journal = lire_journal()',
+        'print(len(journal), "lignes dans le journal")',
+        'print("Première ligne :", journal[0])',
+        '',
         'compteur = 0',
-        'for heure, compte in journal:',
-        '    h = int(heure[:2])                         # les 2 premiers caractères : "02:41" -> 2',
-        '    if compte == ___ and 2 <= h <= 4:          # trou 1 : le nom du compte, entre guillemets',
-        '        compteur = ___                         # trou 2 : on ajoute 1 au compteur',
+        'for ligne in journal:',
+        '    heure_txt, compte, statut = ligne.split(" ")   # on coupe la ligne en 3 morceaux',
+        '    h = int(heure_txt[:2])                          # les 2 premiers caractères : "02:41:07" -> 2',
+        '    if compte == ___ and statut == ___ and 2 <= h <= 4:   # trous : le nom du compte et le résultat, entre guillemets',
+        '        compteur = compteur + 1',
         '',
         'print(compteur)',
       ].join('\n'),
     },
     hints: [
-      'Une boucle <code>for</code> lit les lignes du journal une par une. Le « compteur » est une variable qui part de 0 et grandit à chaque ligne qui répond aux critères.',
-      'Trou 1 : le texte exact du compte, avec des guillemets : <code>"pere_noel"</code>. Trou 2 : on veut augmenter le compteur de 1, donc <code>compteur + 1</code>.',
-      'Dans le journal, ne compte que les lignes « pere_noel » dont l\'heure est 2, 3 ou 4. Il y en a plus de 5 et moins de 10.',
+      'Le journal est bien trop long pour être lu à la main : une boucle <code>for</code> le parcourt ligne par ligne. Chaque ligne est coupée en trois morceaux (heure, compte, résultat). Il te manque les deux valeurs à comparer : ce sont des textes, donc entre guillemets.',
+      'Trou 1 : <code>"pere_noel"</code> (le nom exact du compte). Trou 2 : <code>"SUCCES"</code> (en majuscules, comme dans le fichier).',
+      'Le résultat est un nombre entre 40 et 80. Si ton programme affiche un nombre très différent, vérifie l\'orthographe des deux textes entre guillemets.',
     ],
     answer: REP4,
-    explain: `<p><b>Réponse : ${REP4} connexions suspectes.</b> Tu viens d'écrire un programme très classique : une boucle, une <b>condition</b> (<code>if</code>) qui combine deux tests avec <code>and</code>, et un <b>compteur</b>. C'est la base de l'analyse de données : les experts en cybersécurité font exactement ça sur des millions de lignes de journaux.</p>
+    explain: `<p><b>Réponse : ${REP4} connexions suspectes.</b> Tu viens d'analyser un fichier de ${NB_LIGNES4} lignes en une fraction de seconde : une boucle, des <b>conditions</b> combinées avec <code>and</code>, un <b>compteur</b>, et du découpage de texte (<code>split</code>). C'est exactement le travail des analystes en cybersécurité, mais sur des millions de lignes !</p>
 <p><b>Le saviez-vous ?</b> « <code>==</code> » compare deux valeurs (« est-ce égal ? ») alors que « <code>=</code> » range une valeur dans une variable. Mélanger les deux est l'une des erreurs les plus fréquentes… même chez les pros !</p>
-<p class="clue">🕵️ <b>Piste n°4 :</b> ${REP4} connexions en pleine nuit avec le compte du Père Noël, alors qu'il dormait. Le pirate connaît donc son mot de passe. Il l'a volé… ou deviné.</p>`,
+<p class="clue">🕵️ <b>Piste n°4 :</b> ${REP4} connexions réussies en pleine nuit avec le compte du Père Noël, alors qu'il dormait. Le pirate connaît donc son mot de passe. Il l'a volé… ou deviné.</p>`,
   },
   {
     day: 5,
@@ -330,13 +367,15 @@ print(cadeaux)</pre>
     story: `<p><b>Pixel :</b> « Ces 5 carrés de couleur ne sont pas là pour décorer ! Sur un écran, une couleur est décrite par trois nombres (rouge, vert, bleu) écrits en <b>hexadécimal</b>, un système en base 16 qui utilise les chiffres 0 à 9 puis les lettres A à F. Le pirate y a caché des lettres : chaque nombre est le code ASCII d'une lettre, comme au jour 1. »</p>`,
     puzzle: `<p>Chaque couleur s'écrit <code>#RRVVBB</code> : trois nombres hexadécimaux de 2 chiffres. Ici, chacun est le code ASCII d'une lettre (l'espace est 20 en hexadécimal, soit 32). Lis les couleurs dans l'ordre :</p>
 <pre class="code">${COULEURS6.join('  ')}</pre>
-<p><b>Par où le pirate est-il entré ?</b> (Le message se termine par le nom de l'endroit.)</p>`,
+<p><b>Par où le pirate est-il entré ?</b> (Le message se termine par le nom de l'endroit.)</p>
+<p class="note">Dans le labo, la liste ne contient que les 2 premières couleurs : à toi de recopier les 3 autres !</p>`,
     widget: { type: 'swatches', colors: COULEURS6, label: 'Les cinq carrés de couleur trouvés dans le coffre' },
     python: {
       open: true,
       label: 'Labo Python — le traducteur de couleurs (2 trous à remplir)',
       code: [
-        `couleurs = [${COULEURS6.map((c) => `"${c}"`).join(', ')}]`,
+        '# Il n\'y a ici que les 2 premières couleurs : recopie les 3 autres depuis l\'énoncé, dans la liste (entre guillemets, séparées par des virgules)',
+        `couleurs = [${COULEURS6.slice(0, 2).map((c) => `"${c}"`).join(', ')}]`,
         '',
         'message = ""',
         'for couleur in couleurs:',
@@ -348,7 +387,7 @@ print(cadeaux)</pre>
       ].join('\n'),
     },
     hints: [
-      'Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres. La boucle interne doit les lire un par un : après le premier nombre, elle doit sauter de 2 caractères pour arriver au suivant.',
+      'Le labo ne contient que 2 couleurs : recopie les autres depuis l\'énoncé. Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois.',
       'Trou 1 : on avance de 2 en 2. Trou 2 : l\'hexadécimal, c\'est « base 16 » (comme « base 2 » pour le binaire au jour 1).',
       'Remplace le premier ___ par 2 et le second par 16, puis exécute. Le programme affiche une phrase : il te demande l\'endroit par où il est passé.',
     ],
@@ -431,7 +470,7 @@ print(cadeaux)</pre>
 // ---------- Sorties ----------
 const out = DAYS.map((d) => {
   const { answer, ...rest } = d;
-  return { ...rest, h: [].concat(answer).map((a) => hash(d.day, a)) };
+  return { ...rest, hints: d.hints.slice(0, 1), h: [].concat(answer).map((a) => hash(d.day, a)) };
 });
 
 mkdirSync(join(root, 'js'), { recursive: true });
@@ -447,6 +486,7 @@ const md = [
   '# Solutions (réservé aux parents 🤫)',
   '',
   '> Ne publiez pas ce dossier `parents/` si les enfants ont accès au dépôt.',
+  '> Le site n\'affiche que l\'**indice 1** de chaque jour ; les indices 2 et 3 (plus révélateurs) sont réservés aux parents, ci-dessous.',
   '',
   `**Récompense semaine 1** : cachette « ${REWARDS[1].cachette} » (${REWARDS[1].cadeau}). À modifier dans \`tools/generate.mjs\` (REWARDS), puis \`node tools/generate.mjs\`.`,
   '',
