@@ -128,7 +128,8 @@
     hintBtn.type = 'button';
     hintBtn.className = 'btn ghost small';
     const showHints = () => {
-      const k = state.hints[d.day] || 0;
+      // Si la progression sauvegardée date d'avant (plus d'indices demandés que disponibles), on borne.
+      const k = Math.min(state.hints[d.day] || 0, d.hints.length);
       hintBox.querySelectorAll('.hint').forEach((n) => n.remove());
       for (let i = 0; i < k; i++) {
         const h = document.createElement('div');
@@ -140,7 +141,7 @@
       hintBtn.textContent = '💡 Un indice ? (' + k + '/' + d.hints.length + ')';
     };
     hintBtn.addEventListener('click', () => {
-      state.hints[d.day] = (state.hints[d.day] || 0) + 1; save(); showHints();
+      state.hints[d.day] = Math.min((state.hints[d.day] || 0) + 1, d.hints.length); save(); showHints();
     });
     hintBox.appendChild(hintBtn);
     body.appendChild(hintBox);
