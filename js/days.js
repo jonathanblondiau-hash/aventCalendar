@@ -809,5 +809,245 @@ window.DAYS = [
    "02435cefe2f63d46c7ed37fb46c6457a56e8d7dd2a3bc67e8ef29eaca19d0138",
    "9e2a9bfda5a588b9ecbf6e13cfa8d4837a48997fc3d0c1fd9e0fe73ddd7e43ab"
   ]
+ },
+ {
+  "day": 22,
+  "title": "Les archives du web",
+  "concept": "OSINT : enquêter avec des sources ouvertes",
+  "device": "both",
+  "minutes": 20,
+  "story": "<p><b>Pixel :</b> « C'est l'heure de l'enquête de terrain ! Les professionnels l'appellent l'<b>OSINT</b> (<em>Open Source Intelligence</em>) : retrouver quelqu'un en n'utilisant que des informations <b>publiques</b>. On a le pseudo du pirate : <b>polaris88</b>. Mais les quatre suspects ont tous nettoyé leurs pages en voyant qu'on enquêtait… Heureusement, internet n'oublie jamais : des sites d'<b>archives</b> gardent des copies des anciennes versions des pages web, comme des photos du passé. »</p>\n<p class=\"note\">⚠️ Les suspects sont des personnages de fiction. Dans la vraie vie, l'OSINT sert à vérifier une information ou à se protéger, jamais à harceler quelqu'un ni à révéler sa vie privée.</p>",
+  "puzzle": "<p>Voici les pages des quatre suspects, avec leurs anciennes versions archivées. Ouvre chaque archive et cherche une trace du pseudo <b>polaris88</b>.</p>\n<p><b>Qui est le pirate ?</b> (Un nom.)</p>",
+  "widget": {
+   "type": "archive",
+   "profiles": [
+    {
+     "nom": "Le Grinch",
+     "emoji": "💚",
+     "snaps": [
+      {
+       "date": "Aujourd'hui",
+       "url": "montagne-grinch.fr/profil",
+       "lignes": [
+        "Le Grinch — Ermite de la montagne",
+        "Bio : « Je déteste Noël. Tout. Le bruit, les chansons, les guirlandes. »",
+        "Contact : grinch@montagne-grinch.fr",
+        "Ville : Mont Crumpit · Dernière activité : hier, 14 h 20"
+       ]
+      },
+      {
+       "date": "2020",
+       "url": "archive.web/2020/montagne-grinch.fr",
+       "lignes": [
+        "Le Grinch — Bricoleur de génie",
+        "Bio : « Inventeur de pièges à chaussettes. »",
+        "Contact : grinch.officiel@montagne-grinch.fr",
+        "Pseudo sur les forums : <b>GrinchVert</b>"
+       ]
+      }
+     ]
+    },
+    {
+     "nom": "Krampus",
+     "emoji": "😈",
+     "snaps": [
+      {
+       "date": "Aujourd'hui",
+       "url": "grotte-krampus.fr/profil",
+       "lignes": [
+        "Krampus — Gardien de la grotte",
+        "Bio : « Les enfants pas sages me connaissent. »",
+        "Contact : k@grotte-krampus.fr",
+        "Ville : Haute montagne · Dernière activité : il y a 3 jours"
+       ]
+      },
+      {
+       "date": "2019",
+       "url": "archive.web/2019/grotte-krampus.fr",
+       "lignes": [
+        "Krampus — Page personnelle",
+        "Bio : « Je rends visite aux enfants le 5 décembre. »",
+        "Pseudo sur les forums : <b>k_rampus_66</b>"
+       ]
+      }
+     ]
+    },
+    {
+     "nom": "Jack Frost",
+     "emoji": "❄️",
+     "snaps": [
+      {
+       "date": "Aujourd'hui",
+       "url": "palais-de-glace.fr/profil",
+       "lignes": [
+        "Jack Frost — Esprit de l'hiver",
+        "Bio : « J'aime la neige, le givre et le silence. »",
+        "Contact : pro@palais-de-glace.fr",
+        "Ville : Près de Strasbourg · Dernière activité : cette nuit, 3 h 12"
+       ]
+      },
+      {
+       "date": "2021",
+       "url": "archive.web/2021/palais-de-glace.fr",
+       "lignes": [
+        "Jack Frost ❄️ — Esprit de l'hiver",
+        "Bio : « Quand tout le monde fête Noël, qui pense à l'hiver ? Personne ne se souvient de moi. »",
+        "Contact : <b>polaris88@mailnuit.fr</b>",
+        "Pseudo sur les forums : <b>polaris88</b> · Ville : Strasbourg"
+       ]
+      },
+      {
+       "date": "2017",
+       "url": "archive.web/2017/palais-de-glace.fr",
+       "lignes": [
+        "Jack Frost — Bienvenue",
+        "Page en construction."
+       ]
+      }
+     ]
+    },
+    {
+     "nom": "Gus",
+     "emoji": "🧝",
+     "snaps": [
+      {
+       "date": "Aujourd'hui",
+       "url": "atelier.pole-nord.fr/lutins/gus",
+       "lignes": [
+        "Gus — Lutin d'emballage (ex-atelier de fabrication)",
+        "Bio : « Rétrogradé le mois dernier. Mais je garde le sourire. »",
+        "Contact : gus@atelier.pole-nord.fr"
+       ]
+      },
+      {
+       "date": "2022",
+       "url": "archive.web/2022/atelier.pole-nord.fr/lutins/gus",
+       "lignes": [
+        "Gus — Lutin fabricant de jouets",
+        "Bio : « Fier de mon travail à l'atelier. »",
+        "Badge d'accès : <b>738215</b>",
+        "Pseudo sur les forums : <b>gus_lutin42</b>"
+       ]
+      }
+     ]
+    }
+   ],
+   "label": "Le Web Archive — les pages des 4 suspects"
+  },
+  "hints": [
+   "Les pages d'aujourd'hui ont été nettoyées, mais pas les archives. Ouvre l'ancienne version de chaque suspect et cherche le pseudo polaris88 (ou l'adresse e-mail qui le contient). Compare aussi avec les autres indices : la ville, la phrase « personne ne se souvient de moi »."
+  ],
+  "explain": "<p><b>Le pirate : Jack Frost !</b> En 2021, il avait écrit sur sa page : <em>« Personne ne se souvient de moi »</em>, avec son adresse « polaris88@mailnuit.fr » et son pseudo de forum. Depuis, il a effacé ces lignes de la page actuelle… mais l'archive les a gardées. Les autres suspects n'avaient rien à voir avec « polaris88 » : le <b>Grinch</b> n'était qu'une fausse piste (très suspect, mais ses pseudos sont « GrinchVert » et sa bio n'a rien à voir).</p>\n<p><b>Et le complice ?</b> Dans l'archive de 2022 de <b>Gus</b>, on voit son <b>badge d'accès n°738215</b>, celui du boîtier du jour 12 et du bloc falsifié du jour 18. C'est lui qui a ouvert la cheminée-serveur depuis l'atelier.</p>\n<p><b>Ce que tu viens de voir :</b></p>\n<ul>\n<li>📜 <b>Rien ne disparaît vraiment d'internet.</b> Un pseudo, un numéro, une photo publiés un jour peuvent être retrouvés des années après.</li>\n<li>🔁 <b>Réutiliser le même pseudo</b> sur plusieurs sites permet de relier tes comptes entre eux. C'est une grosse faille de vie privée.</li>\n<li>🧭 <b>L'OSINT est une méthode</b> : recouper plusieurs sources, ne jamais se fier à un seul indice, et douter des fausses pistes évidentes.</li>\n</ul>\n<p class=\"clue\">🕵️ <b>Piste n°22 :</b> le pirate est <b>Jack Frost</b>, l'esprit de l'hiver, qui vit près de Strasbourg. Son complice est <b>Gus</b>, le lutin rétrogradé. Demain : où se cache Jack Frost ?</p>",
+  "h": [
+   "35d8c0a718fc825a92985b31f1089fae4f95e875a840a9acee0544a60c7c52f8",
+   "b77c060f8cbe2ac245a3ad501becb21633263cd07c13a4408701c594b567db84",
+   "be71816a736bd492df2e50c36f5b87bd0576ba2737c5d421ede1aaea22dce6d9",
+   "03899b262f26f60f166383ff8f235f3b7730007daaf7790dc0ad2bd6b1f9a547"
+  ]
+ },
+ {
+  "day": 23,
+  "title": "La photo géolocalisée",
+  "concept": "Métadonnées (EXIF) & géolocalisation",
+  "device": "laptop",
+  "minutes": 25,
+  "story": "<p><b>Pixel :</b> « On connaît le pirate, mais pas sa cachette. Heureusement, Jack Frost aime partager ses photos. Et chaque photo prise avec un téléphone contient des <b>métadonnées</b> cachées (le format <b>EXIF</b>) : le modèle de l'appareil, la date, l'heure… et parfois les <b>coordonnées GPS</b> exactes de l'endroit où elle a été prise ! C'est ainsi que des gens ont été localisés par erreur en publiant une simple photo. »</p>",
+  "puzzle": "<p>Voici 4 photos publiées en ligne cette semaine. Repère celle du pirate (publiée par son pseudo <b>polaris88</b>), regarde ses métadonnées, puis trouve le lieu connu <b>le plus proche</b> des coordonnées GPS.</p>\n<p><b>Où se cache Jack Frost ?</b> (Le nom du lieu.)</p>\n<p class=\"note\">Les 5 lieux connus : Atelier du Père Noël (78.2232, 15.6267) · Chalet du Grinch (48.61, 7.7) · Grotte de Krampus (47.5, 10.2) · Palais de glace (48.6, 7.713) · Marché de Noël (48.5839, 7.75).</p>",
+  "widget": {
+   "type": "exif",
+   "photos": [
+    {
+     "emoji": "☕",
+     "legende": "Chocolat chaud au marché de Noël !",
+     "auteur": "lutine_mia",
+     "meta": {
+      "Appareil": "PhonePole X2",
+      "Date de prise de vue": "2026-12-01 18:40",
+      "Logiciel": "Appareil photo 4.1",
+      "Coordonnées GPS": "48.5839, 7.7500"
+     }
+    },
+    {
+     "emoji": "🏔️",
+     "legende": "Mon chalet, sa vue et ses grincheuses",
+     "auteur": "grinch_officiel",
+     "meta": {
+      "Appareil": "Bricolo-Cam",
+      "Date de prise de vue": "2026-11-28 14:05",
+      "Logiciel": "Aucun",
+      "Coordonnées GPS": "48.6100, 7.7000"
+     }
+    },
+    {
+     "emoji": "❄️",
+     "legende": "Ma vue ce soir. Personne ne la verra.",
+     "auteur": "polaris88",
+     "meta": {
+      "Appareil": "GivreCam 9",
+      "Date de prise de vue": "2026-12-01 03:12",
+      "Logiciel": "GivreCam 9.2",
+      "Coordonnées GPS": "48.6000, 7.7000"
+     }
+    },
+    {
+     "emoji": "🎄",
+     "legende": "Le sapin géant de l'atelier",
+     "auteur": "gus_lutin42",
+     "meta": {
+      "Appareil": "PhonePole X2",
+      "Date de prise de vue": "2026-11-30 09:20",
+      "Logiciel": "Appareil photo 4.1",
+      "Coordonnées GPS": "78.2232, 15.6267"
+     }
+    }
+   ],
+   "label": "Les photos publiées en ligne"
+  },
+  "python": {
+   "open": true,
+   "label": "Labo Python — le calculateur de distances (2 trous à remplir)",
+   "code": "import math\n\n# Distance en km entre deux points du globe (formule de Haversine)\ndef distance_km(lat1, lon1, lat2, lon2):\n    r = ___                                  # trou 1 : le rayon de la Terre en kilomètres (environ 6371)\n    p1 = math.radians(lat1)\n    p2 = math.radians(lat2)\n    dp = math.radians(lat2 - lat1)\n    dl = math.radians(lon2 - lon1)\n    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2\n    return 2 * r * math.asin(math.___(a))    # trou 2 : la racine carrée (square root en anglais)\n\nphoto = (48.6000, 7.7000)    # les coordonnées GPS lues dans les métadonnées de la bonne photo\n\nlieux = {\n    \"Atelier du Père Noël\": (78.2232, 15.6267),\n    \"Chalet du Grinch\": (48.61, 7.7),\n    \"Grotte de Krampus\": (47.5, 10.2),\n    \"Palais de glace\": (48.6, 7.713),\n    \"Marché de Noël\": (48.5839, 7.75),\n}\n\nmeilleur = None\nplus_petite = 99999\nfor nom, (lat, lon) in lieux.items():\n    d = distance_km(photo[0], photo[1], lat, lon)\n    print(nom, \":\", round(d, 2), \"km\")\n    if d < plus_petite:\n        plus_petite = d\n        meilleur = nom\n\nprint(\"Lieu le plus proche :\", meilleur)"
+  },
+  "hints": [
+   "Une seule photo est publiée par « polaris88 » : ouvre ses métadonnées et lis les coordonnées GPS. Compare-les ensuite aux 5 lieux. Attention : un petit écart de longitude ne représente pas la même distance qu'un petit écart de latitude, c'est pour ça qu'on utilise une formule (le labo la contient)."
+  ],
+  "explain": "<p><b>Jack Frost se cache au Palais de glace.</b> Le programme donne : Palais de glace : 0.96 km · Chalet du Grinch : 1.11 km · Marché de Noël : 4.09 km · Grotte de Krampus : 222.45 km · Atelier du Père Noël : 3310.53 km.</p>\n<p><b>Le piège :</b> en comparant simplement les nombres, le <b>chalet du Grinch</b> semblait plus proche (écart de 0,0100 contre 0,0130 degré). Mais un degré de longitude est plus court qu'un degré de latitude dès qu'on s'éloigne de l'équateur : à Strasbourg, il ne vaut que 73 km contre 111 km. Avec la bonne formule, c'est le palais de glace qui gagne. Le Grinch était encore une fausse piste !</p>\n<p><b>La date de la photo :</b> « 2026-12-01 03:12 », en pleine nuit : c'est la plage horaire des connexions suspectes du jour 16. Les métadonnées confirment ce que les journaux laissaient deviner.</p>\n<p><b>Les bons réflexes :</b> les réseaux sociaux enlèvent en général les métadonnées des photos publiées, mais pas toujours (envoi direct par e-mail, certains sites). Désactive la géolocalisation de l'appareil photo de ton téléphone, ou supprime les métadonnées avant d'envoyer une photo à quelqu'un que tu ne connais pas bien.</p>\n<p class=\"clue\">🕵️ <b>Piste n°23 :</b> Jack Frost est au <b>Palais de glace</b>, près de Strasbourg. Demain soir à 23 h 42, il lancera l'attaque finale. Mais rien n'est perdu : tu as trois clés, il te reste à les utiliser !</p>",
+  "h": [
+   "ccc621324c4462902a5e69ec3723c9604a8939681495079665d9a6a9579120bc",
+   "bbad1441d72654b125627df1c9c777853028878ec38f01963e6520fbcee57e26",
+   "d344cf4b7b45192b050e56c063c88dd5b6b8631c202a1f58ceeb3e052149b606"
+  ]
+ },
+ {
+  "day": 24,
+  "title": "Le grand décryptage",
+  "concept": "Finale : tout ce que tu as appris",
+  "device": "laptop",
+  "minutes": 30,
+  "story": "<p class=\"alert\">🚨 24 DÉCEMBRE — 23 H 12. IL RESTE 30 MINUTES !</p>\n<p><b>Pixel :</b> « Tu l'as fait, détective : tu sais qui est le pirate, où il se cache, et à quelle heure il frappe. Mais Jack Frost a mis en place un <b>arrêt d'urgence</b>, protégé par un message à <b>trois couches</b> de chiffrement. Chaque couche est un Vigenère, verrouillé avec l'une de tes trois <b>clés</b> : celle de la semaine 1, celle de la semaine 2, celle de la semaine 3. Il faut les retirer toutes les trois. C'est maintenant ou jamais ! »</p>",
+  "puzzle": "<p>Le message du système d'arrêt d'urgence :</p>\n<pre class=\"code\">WF CYT VZY DJXEIT D WVVVHRR UHO JKZSY</pre>\n<p>Les trois couches ont été posées l'une après l'autre, avec la <b>clé 1</b>, la <b>clé 2</b> et la <b>clé 3</b>. Tes clés sont dans le trousseau, en haut de la page.</p>\n<p><b>Quel est le mot qui arrête l'attaque ?</b></p>\n<p class=\"note\">Il te manque une clé ? Retourne résoudre l'énigme du jour 7, 14 ou 21 pour l'obtenir. Question bonus : est-ce que l'ordre dans lequel tu retires les couches a de l'importance ? Essaie, et réfléchis à pourquoi.</p>",
+  "python": {
+   "open": true,
+   "label": "Labo Python — le grand décryptage (3 trous à remplir)",
+   "code": "message = \"WF CYT VZY DJXEIT D WVVVHRR UHO JKZSY\"\n\ndef dechiffrer_vigenere(texte, cle):\n    resultat = \"\"\n    i = 0\n    for lettre in texte:\n        if lettre == \" \":\n            resultat = resultat + \" \"\n        else:\n            decalage = ord(cle[i % len(cle)]) - 65\n            numero = ord(lettre) - 65\n            nouveau = (numero - decalage) % 26\n            resultat = resultat + chr(nouveau + 65)\n            i = i + 1\n    return resultat\n\ntexte = message\ntexte = dechiffrer_vigenere(texte, \"___\")     # trou 1 : une des trois clés du trousseau (en MAJUSCULES)\ntexte = dechiffrer_vigenere(texte, \"___\")     # trou 2 : une autre clé\ntexte = dechiffrer_vigenere(texte, \"___\")     # trou 3 : la dernière\nprint(texte)"
+  },
+  "hints": [
+   "Les trois mots à écrire (en MAJUSCULES) sont les clés du trousseau, obtenues aux jours 7, 14 et 21 : une clé par couche, il faut les utiliser toutes les trois."
+  ],
+  "key": {
+   "n": 4,
+   "value": "MERCI"
+  },
+  "explain": "<p><b>Message déchiffré :</b> « LE MOT QUI ARRETE L ATTAQUE EST MERCI ».</p>\n<p class=\"success\">🎉 Tu as arrêté l'attaque !</p>\n<p><b>Pourquoi l'ordre n'avait pas d'importance ?</b> Chaque couche de Vigenère <em>ajoute</em> un décalage à chaque lettre. Empiler trois couches revient à ajouter la somme des trois décalages, et en mathématiques, <b>a + b + c = c + b + a</b> : l'addition est commutative. Les chiffrements modernes mélangent des opérations qui ne commutent pas, justement pour éviter ce genre de raccourci.</p>\n<div class=\"reward\">\n<h3>🔑 Clé n°4 : <span class=\"key\">MERCI</span></h3>\n<p>Le mot de passe d'arrêt d'urgence n'était pas un mot compliqué : Jack Frost voulait seulement que quelqu'un lui dise <b>merci</b>.</p>\n</div>\n<p><b>Pixel :</b> « Jack Frost a lu ton message sur son écran, à 23 h 41. Il a baissé les bras, et il a écrit : <em>“Personne ne m'avait dit merci pour la neige depuis trois cents ans.”</em> On l'a invité au réveillon. Gus a été renvoyé à l'atelier de fabrication (et il a promis de ne plus jamais utiliser son badge n°738215 pour autre chose que du travail). Noël est sauvé… grâce à toi ! »</p>\n<div class=\"reward\">\n<h3>🎁 La grande récompense</h3>\n<p>Pixel a mis le grand cadeau en sécurité pour vous deux. Pour le trouver, il a chiffré la cachette avec un Vigenère dont la clé est <b>les trois clés mises bout à bout</b> (semaine 1 + semaine 2 + semaine 3).</p>\n<pre class=\"code\">EN DQPH JO ARAIA</pre>\n</div>\n<div class=\"suspects\">\n<h3>🧠 Ce que tu as appris en 24 jours</h3>\n<ul>\n<li>💻 <b>Python :</b> variables, boucles, conditions, fonctions, listes, dictionnaires, modules.</li>\n<li>🔢 <b>Représentation des données :</b> binaire, ASCII, hexadécimal, couleurs RVB, base64, QR codes.</li>\n<li>🔐 <b>Cryptographie :</b> César, Vigenère, force brute, hachage SHA-256, RSA.</li>\n<li>🧮 <b>Algorithmes :</b> parcours en largeur (GPS), recherche dichotomique, preuve de travail.</li>\n<li>🤖 <b>IA :</b> k plus proches voisins, prédiction du mot suivant, injection de prompt.</li>\n<li>🛡️ <b>Cybersécurité :</b> phishing, mots de passe, métadonnées, OSINT et vie privée.</li>\n</ul>\n<p>Le plus important : tu as appris à <b>chercher</b>, à <b>tester</b>, à <b>te méfier des évidences</b> et à <b>ne pas abandonner</b>. Garde cette curiosité. Joyeux Noël, détective ! 🎄</p>\n</div>",
+  "after": {
+   "python": {
+    "open": true,
+    "label": "Labo Python — où est cachée la grande récompense ? (3 trous à remplir)",
+    "code": "def dechiffrer_vigenere(texte, cle):\n    resultat = \"\"\n    i = 0\n    for lettre in texte:\n        if lettre == \" \":\n            resultat = resultat + \" \"\n        else:\n            decalage = ord(cle[i % len(cle)]) - 65\n            numero = ord(lettre) - 65\n            nouveau = (numero - decalage) % 26\n            resultat = resultat + chr(nouveau + 65)\n            i = i + 1\n    return resultat\n\nmessage = \"EN DQPH JO ARAIA\"\ncle1 = \"___\"            # clé de la semaine 1\ncle2 = \"___\"            # clé de la semaine 2\ncle3 = \"___\"            # clé de la semaine 3\ncle = cle1 + cle2 + cle3        # les trois clés mises bout à bout\nprint(dechiffrer_vigenere(message, cle))"
+   }
+  },
+  "h": [
+   "5adde40a70dd25e91fbb02f76bf51b02c8bd8b44f4b94d15c92ef728b8f95e04"
+  ]
  }
 ];

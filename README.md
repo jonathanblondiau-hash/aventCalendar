@@ -31,14 +31,18 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 | 19 — Injection de prompt : faire parler un chatbot (📱) | ✅ prêt |
 | 20 — RSA : clé publique / clé privée | ✅ prêt |
 | 21 — Boss de la semaine 3 : casser RSA + **clé n°3** + **récompense** + dossier de l'enquête | ✅ prêt |
-| 22 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
+| 22 — OSINT : les archives du web (📱) | ✅ prêt |
+| 23 — Métadonnées EXIF & géolocalisation | ✅ prêt |
+| 24 — Finale : le grand décryptage + **clé n°4** + **grande récompense** | ✅ prêt |
+
+Le calendrier est **complet** (24 jours). Il reste à relire chaque jour et à personnaliser les 4 cachettes (`tools/recompenses.mjs`).
 
 ## Récompenses
 
 Chaque semaine (jours 7, 14, 21, 24), l'énigme finale donne une **clé** (collectée dans le trousseau en haut de page, elle servira
 au décryptage final) et une **récompense réelle** dont la cachette est chiffrée.
 **À personnaliser par les parents :** `tools/recompenses.mjs` (cachette en MAJUSCULES sans accents, puis
-`node tools/generate.mjs`). Valeurs actuelles : semaine 1 « DANS LE FRIGO », semaine 2 « SOUS TON OREILLER » et semaine 3 « DANS TA CHAUSSURE » (provisoires).
+`node tools/generate.mjs`). Valeurs actuelles : semaine 1 « DANS LE FRIGO », semaine 2 « SOUS TON OREILLER » semaine 3 « DANS TA CHAUSSURE » et semaine 4 (finale du 24) « AU PIED DU SAPIN » (provisoires).
 
 ## Tester avant décembre
 
@@ -65,10 +69,10 @@ est arrêtée au bout de 8 secondes sans figer la page.
 
 ## Ajouter ou modifier un jour
 
-1. Éditer `tools/generate.mjs` (semaine 1) `tools/semaine2.mjs` (semaine 2) ou `tools/semaine3.mjs` (semaine 3) : le contenu et la réponse en clair de chaque jour y sont définis.
+1. Éditer `tools/generate.mjs` (semaine 1) `tools/semaine2.mjs` (semaine 2) ou `tools/semaine3.mjs` (semaine 3) ou `tools/semaine4.mjs` (semaine 4) : le contenu et la réponse en clair de chaque jour y sont définis.
 2. `node tools/generate.mjs` → régénère `js/days.js` (réponses hachées) et `parents/SOLUTIONS.md`.
 
-Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'chat' }`, `python: { label, code, open }`
+Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'chat' | 'archive' | 'exif' }`, `python: { label, code, open }`
 (utiliser `___` pour les trous à remplir), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
 
 ## Fichiers
@@ -84,6 +88,7 @@ js/days.js        GÉNÉRÉ — contenu des jours
 tools/generate.mjs  générateur + contenu de la semaine 1
 tools/semaine2.mjs  contenu de la semaine 2
 tools/semaine3.mjs  contenu de la semaine 3
+tools/semaine4.mjs  contenu de la semaine 4 (enquête OSINT + finale)
 tools/recompenses.mjs  cachettes des récompenses (à personnaliser)
 tools/make-qr.mjs + qr-jour11.json  QR code du jour 11
 parents/SOLUTIONS.md  GÉNÉRÉ — réponses et indices

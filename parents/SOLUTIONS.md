@@ -7,6 +7,7 @@
 - Semaine 1 (jour 7) : cachette « DANS LE FRIGO » (une surprise)
 - Semaine 2 (jour 14) : cachette « SOUS TON OREILLER » (une surprise)
 - Semaine 3 (jour 21) : cachette « DANS TA CHAUSSURE » (une surprise)
+- Semaine 4 (jour 24) : cachette « AU PIED DU SAPIN » (le grand cadeau)
 
 
 | Jour | Titre | Réponse |
@@ -32,6 +33,9 @@
 | 19 | L'assistant bavard | **23h42** ou **2342** |
 | 20 | La clé publique | **bonnet** ou **bonnetvert** ou **lebonnetvert** ou **unbonnetvert** |
 | 21 | Casser le chiffrement | **boule** ou **laboule** ou **bouledesapin** |
+| 22 | Les archives du web | **jackfrost** ou **jack** ou **frost** ou **bonhommedegivre** |
+| 23 | La photo géolocalisée | **palaisdeglace** ou **lepalaisdeglace** ou **palais** |
+| 24 | Le grand décryptage | **merci** |
 
 ## Jour 1 — Le message des lutins
 
@@ -158,3 +162,21 @@
 - Indice 1 : Étape 1 : un nombre p divise n quand le reste de la division de n par p est… 0. Étape 3 : pour déchiffrer, on utilise la clé <b>privée</b> que l'étape 2 vient de calculer : elle porte un nom d'une seule lettre.
 - Indice 2 : Trou 1 : <code>0</code>. Trou 2 : <code>d</code>.
 - Indice 3 : Le message donne l'endroit où est la clé : un objet rond qui pend aux branches du sapin.
+
+## Jour 22 — Les archives du web
+
+- Indice 1 : Les pages d'aujourd'hui ont été nettoyées, mais pas les archives. Ouvre l'ancienne version de chaque suspect et cherche le pseudo polaris88 (ou l'adresse e-mail qui le contient). Compare aussi avec les autres indices : la ville, la phrase « personne ne se souvient de moi ».
+- Indice 2 : Le pseudo apparaît dans l'archive de 2021 d'un seul suspect, avec une bio qui parle d'être oublié.
+- Indice 3 : Le pirate est l'esprit de l'hiver : c'est celui dont le nom évoque le givre.
+
+## Jour 23 — La photo géolocalisée
+
+- Indice 1 : Une seule photo est publiée par « polaris88 » : ouvre ses métadonnées et lis les coordonnées GPS. Compare-les ensuite aux 5 lieux. Attention : un petit écart de longitude ne représente pas la même distance qu'un petit écart de latitude, c'est pour ça qu'on utilise une formule (le labo la contient).
+- Indice 2 : Trou 1 : le rayon de la Terre vaut environ <code>6371</code> km. Trou 2 : la racine carrée en Python s'appelle <code>sqrt</code> (dans le module math).
+- Indice 3 : Deux lieux sont presque aussi proches l'un que l'autre. Le programme affiche les distances : le plus proche est le palais de l'esprit de l'hiver.
+
+## Jour 24 — Le grand décryptage
+
+- Indice 1 : Les trois mots à écrire (en MAJUSCULES) sont les clés du trousseau, obtenues aux jours 7, 14 et 21 : une clé par couche, il faut les utiliser toutes les trois.
+- Indice 2 : Les trois clés : « ETOILE », « GUIRLANDE » et « BOULE ». L'ordre n'a pas d'importance (voir l'explication).
+- Indice 3 : Le message final dit quel mot arrête l'attaque : c'est un mot très simple que Jack Frost n'a jamais entendu.

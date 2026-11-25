@@ -338,5 +338,59 @@ window.Widgets = (function () {
     box.appendChild(wrap);
   }
 
-  return { bits, cesar, python, switches, swatches, maze, qr, guess, mails, scatter, chat };
+  // --- Archives du web : onglets par suspect, versions datées de leur page ---
+  function archive(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🗄️ ' + (cfg.label || 'Archives')));
+    const tabs = el('div', 'arc-tabs');
+    const chips = el('div', 'arc-chips');
+    const view = el('div', 'arc-view');
+    let cur = 0, snap = 0;
+    const render = () => {
+      tabs.querySelectorAll('button').forEach((b, i) => b.classList.toggle('on', i === cur));
+      const prof = cfg.profiles[cur];
+      chips.innerHTML = '';
+      prof.snaps.forEach((s, i) => {
+        const c = el('button', 'arc-chip' + (i === snap ? ' on' : ''), s.date === 'Aujourd\'hui' ? '🌐 Aujourd\'hui' : '🕰️ Archive ' + s.date);
+        c.type = 'button';
+        c.addEventListener('click', () => { snap = i; render(); });
+        chips.appendChild(c);
+      });
+      const s = prof.snaps[snap];
+      view.innerHTML = '<div class="arc-url">🔒 ' + s.url + '</div><div class="arc-page"><h4>' + s.lignes[0] + '</h4>' + s.lignes.slice(1).map((l) => '<p>' + l + '</p>').join('') + '</div>';
+    };
+    cfg.profiles.forEach((p, i) => {
+      const b = el('button', 'arc-tab', p.emoji + ' ' + p.nom);
+      b.type = 'button';
+      b.addEventListener('click', () => { cur = i; snap = 0; render(); });
+      tabs.appendChild(b);
+    });
+    wrap.append(tabs, chips, view);
+    box.appendChild(wrap);
+    render();
+  }
+
+  // --- Photos avec métadonnées EXIF à la demande ---
+  function exif(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '📷 ' + (cfg.label || 'Photos')));
+    const grid = el('div', 'photos');
+    const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    cfg.photos.forEach((ph) => {
+      const card = el('div', 'photo');
+      card.innerHTML = '<div class="photo-pic">' + ph.emoji + '</div><div class="photo-cap">« ' + esc(ph.legende) + ' »</div><div class="photo-by">Publié par <b>@' + esc(ph.auteur) + '</b></div>';
+      const btn = el('button', 'btn small ghost', '🔎 Métadonnées');
+      btn.type = 'button';
+      const tbl = el('table', 'exif');
+      tbl.hidden = true;
+      tbl.innerHTML = Object.keys(ph.meta).map((k) => '<tr><th>' + esc(k) + '</th><td>' + esc(ph.meta[k]) + '</td></tr>').join('');
+      btn.addEventListener('click', () => { tbl.hidden = !tbl.hidden; btn.textContent = tbl.hidden ? '🔎 Métadonnées' : '🙈 Masquer'; });
+      card.append(btn, tbl);
+      grid.appendChild(card);
+    });
+    wrap.appendChild(grid);
+    box.appendChild(wrap);
+  }
+
+  return { bits, cesar, python, switches, swatches, maze, qr, guess, mails, scatter, chat, archive, exif };
 })();

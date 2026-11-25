@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { REWARDS } from './recompenses.mjs';
 import { DAYS_S2 } from './semaine2.mjs';
 import { DAYS_S3 } from './semaine3.mjs';
+import { DAYS_S4 } from './semaine4.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -461,7 +462,7 @@ print(cadeaux)</pre>
     },
   },
 ];
-DAYS.push(...DAYS_S2, ...DAYS_S3);
+DAYS.push(...DAYS_S2, ...DAYS_S3, ...DAYS_S4);
 
 // ---------- Sorties ----------
 const out = DAYS.map((d) => {
@@ -485,7 +486,7 @@ const md = [
   '> Le site n\'affiche que l\'**indice 1** de chaque jour ; les indices 2 et 3 (plus révélateurs) sont réservés aux parents, ci-dessous.',
   '',
   '**Récompenses réelles** (à personnaliser dans `tools/recompenses.mjs`, puis `node tools/generate.mjs`) :',
-  ...Object.entries(REWARDS).map(([w, r]) => `- Semaine ${w} (jour ${w * 7}) : cachette « ${r.cachette} » (${r.cadeau})`),,
+  ...Object.entries(REWARDS).map(([w, r]) => `- Semaine ${w} (jour ${w == 4 ? 24 : w * 7}) : cachette « ${r.cachette} » (${r.cadeau})`),,
   '',
   '| Jour | Titre | Réponse |',
   '|---|---|---|',
