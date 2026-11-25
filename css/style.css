@@ -176,3 +176,17 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 .pick { cursor: crosshair; touch-action: manipulation; }
 .pick-hint { display: block; text-align: center; }
 .swatch code.picked { background: rgba(255, 207, 74, .25); color: var(--gold); }
+
+.mail { background: #0a1124; border: 1px solid rgba(255, 255, 255, .15); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; }
+.mail-from { color: var(--muted); font-size: .9rem; }
+.mail-subject { font-weight: 800; margin: 4px 0; }
+.mail-body { color: #d6e0f5; font-size: .95rem; margin-bottom: 8px; }
+.fake-btn { display: inline-block; background: #36466f; border-radius: 8px; padding: 4px 12px; font-size: .9rem; margin-bottom: 8px; }
+.mail-details { background: rgba(94, 194, 255, .1); border-left: 4px solid #5ec2ff; border-radius: 6px; padding: 6px 12px; margin-top: 8px; font-size: .9rem; overflow-wrap: anywhere; }
+.mail-details[hidden] { display: none; }
+.mail-details div { margin: 2px 0; }
+.scatter { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; border-radius: 10px; }
+.chat-log { background: #0a1124; border-radius: 10px; padding: 10px; height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.chat-msg { max-width: 86%; padding: 8px 12px; border-radius: 14px; font-size: .95rem; line-height: 1.4; }
+.chat-msg.bot { background: #26396b; align-self: flex-start; border-bottom-left-radius: 4px; }
+.chat-msg.user { background: var(--green); align-self: flex-end; border-bottom-right-radius: 4px; }

@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { REWARDS } from './recompenses.mjs';
 import { DAYS_S2 } from './semaine2.mjs';
+import { DAYS_S3 } from './semaine3.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -460,7 +461,7 @@ print(cadeaux)</pre>
     },
   },
 ];
-DAYS.push(...DAYS_S2);
+DAYS.push(...DAYS_S2, ...DAYS_S3);
 
 // ---------- Sorties ----------
 const out = DAYS.map((d) => {

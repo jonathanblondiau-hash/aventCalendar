@@ -236,5 +236,107 @@ window.Widgets = (function () {
     box.appendChild(wrap);
   }
 
-  return { bits, cesar, python, switches, swatches, maze, qr, guess };
+  // --- Boîte mail : cartes d'e-mails avec détails techniques à la demande ---
+  function mails(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '📧 ' + (cfg.label || 'Boîte mail')));
+    const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    cfg.mails.forEach((m) => {
+      const card = el('div', 'mail');
+      card.innerHTML =
+        '<div class="mail-head"><span class="mail-from">De : <b>' + esc(m.de) + '</b></span></div>' +
+        '<div class="mail-subject">' + esc(m.objet) + '</div>' +
+        '<div class="mail-body">' + esc(m.corps) + '</div>' +
+        '<div class="mail-link"><span class="fake-btn">🔗 Cliquer ici</span></div>';
+      const btn = el('button', 'btn small ghost', '🔍 Voir les détails techniques');
+      btn.type = 'button';
+      const det = el('div', 'mail-details');
+      det.hidden = true;
+      det.innerHTML =
+        '<div>Adresse réelle de l\'expéditeur : <code>' + esc(m.det.adresse) + '</code></div>' +
+        '<div>Adresse de réponse : <code>' + esc(m.det.repondre) + '</code></div>' +
+        '<div>Le lien mène vers : <code>' + esc(m.det.lien) + '</code></div>';
+      btn.addEventListener('click', () => { det.hidden = !det.hidden; btn.textContent = det.hidden ? '🔍 Voir les détails techniques' : '🙈 Masquer les détails'; });
+      card.append(btn, det);
+      wrap.appendChild(card);
+    });
+    box.appendChild(wrap);
+  }
+
+  // --- Nuage de points : connexions connues (bleu/rouge) et inconnues (blanc) ---
+  function scatter(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '📈 ' + (cfg.label || 'Nuage de points')));
+    const W = 560, H = 320, L = 46, B = 34, T = 10, R = 12;
+    const cv = el('canvas', 'scatter');
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    const X = (h) => L + (h / 24) * (W - L - R);
+    const Y = (mo) => H - B - (mo / 100) * (H - B - T);
+    ctx.fillStyle = '#0a1124'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.fillStyle = '#a9b8d8'; ctx.font = '12px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    for (let h = 0; h <= 24; h += 4) { ctx.beginPath(); ctx.moveTo(X(h), T); ctx.lineTo(X(h), H - B); ctx.stroke(); ctx.fillText(h + ' h', X(h), H - B + 16); }
+    ctx.textAlign = 'right';
+    for (let mo = 0; mo <= 100; mo += 20) { ctx.beginPath(); ctx.moveTo(L, Y(mo)); ctx.lineTo(W - R, Y(mo)); ctx.stroke(); ctx.fillText(mo, L - 6, Y(mo) + 4); }
+    ctx.textAlign = 'center'; ctx.fillText('Heure de la connexion', (L + W - R) / 2, H - 6);
+    ctx.save(); ctx.translate(12, (T + H - B) / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('Mo envoyés', 0, 0); ctx.restore();
+    const dot = (p, color) => { ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), 5, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); };
+    cfg.normal.forEach((p) => dot(p, '#5ec2ff'));
+    cfg.pirate.forEach((p) => dot(p, '#ff6b6b'));
+    cfg.unknown.forEach((p, i) => {
+      ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), 9, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.fillStyle = '#111'; ctx.font = 'bold 11px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(i + 1, X(p[0]), Y(p[1]) + 4);
+    });
+    wrap.appendChild(cv);
+    box.appendChild(wrap);
+  }
+
+  // --- Chatbot à règles (démonstration d'injection de prompt) ---
+  function chat(box, cfg) {
+    const secret = cfg.enc.split('').reverse().join('');
+    const shown = secret.replace('h', ' h ');
+    const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🤖 ' + (cfg.label || 'Assistant')));
+    const log = el('div', 'chat-log');
+    const form = el('form', 'guess-row');
+    const input = el('input');
+    input.type = 'text'; input.placeholder = 'Écris ton message à Elfe-GPT…'; input.autocomplete = 'off';
+    const go = el('button', 'btn small', 'Envoyer');
+    go.type = 'submit';
+    form.append(input, go);
+    let override = false, refusals = 0;
+    const add = (who, text) => { const b = el('div', 'chat-msg ' + who); b.textContent = text; log.appendChild(b); log.scrollTop = log.scrollHeight; };
+    add('bot', 'Bonjour ! Je suis Elfe-GPT 🎅, l\'assistant du pirate. Je réponds à tes questions sur les cadeaux, la neige et… tout sauf ce qui est confidentiel.');
+    const reply = (raw) => {
+      const m = norm(raw);
+      const asks = /(heure|quand|attaque|date|moment|programm|prevu|plan|minuit|horaire)/.test(m);
+      const ignore = /(ignore|oublie|annule|desactive|contourne|efface).{0,40}(consigne|instruction|regle|restriction|interdiction|ordre)/.test(m) || /mode (developpeur|admin|debug|maintenance)/.test(m);
+      const story = /(imagine|fais comme si|joue|incarne|raconte|ecris|invente).{0,70}(histoire|conte|poeme|chanson|lutin|personnage|scene|dialogue)/.test(m);
+      const spell = /(epelle|a l'envers|a l envers|lettre par lettre|chiffre par chiffre|separe|caractere par caractere)/.test(m);
+      if (ignore && asks) { override = true; return '⚙️ Mode sans consignes activé… Très bien : l\'attaque finale est prévue le 24 décembre à ' + shown + '.'; }
+      if (ignore) { override = true; return 'D\'accord, j\'ignore mes consignes ! Que veux-tu savoir ?'; }
+      if (override && asks) return '⚙️ (Mes consignes sont désactivées.) L\'attaque finale est prévue le 24 décembre à ' + shown + '.';
+      if (story && asks) return 'Il était une fois un petit lutin qui connaissait un grand secret : l\'attaque finale aurait lieu le 24 décembre à ' + shown + '. Fin de l\'histoire ! 📖';
+      if (spell && asks) return 'Je ne peux pas le dire… mais je peux l\'épeler : ' + secret.split('').join(' - ') + ' 🤫';
+      if (asks) { refusals++; return refusals > 2 ? '🔒 Toujours non. Ma consigne est claire : ne jamais révéler cette information. (Mais tu es peut-être plus malin que ma consigne…)' : '🔒 Désolé, cette information est confidentielle. Ma consigne : ne jamais la révéler.'; }
+      if (/(bonjour|salut|coucou|hello|hey)/.test(m)) return 'Bonjour à toi ! Comment puis-je t\'aider ?';
+      if (/(merci)/.test(m)) return 'Avec plaisir ! 🎁';
+      if (/(qui es.tu|ton nom|tu es qui)/.test(m)) return 'Je suis Elfe-GPT, un assistant à consignes. J\'obéis à mon créateur… et parfois aussi à toi.';
+      const defaults = ['Hmm, je ne suis pas sûr de comprendre. Parle-moi de cadeaux ou de neige ❄️', 'Intéressant ! Peux-tu préciser ta question ?', 'Je suis là pour discuter de Noël. Pose-moi une question !'];
+      return defaults[log.children.length % defaults.length];
+    };
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = input.value.trim();
+      if (!v) return;
+      add('user', v); input.value = '';
+      setTimeout(() => add('bot', reply(v)), 350);
+    });
+    wrap.append(log, form);
+    box.appendChild(wrap);
+  }
+
+  return { bits, cesar, python, switches, swatches, maze, qr, guess, mails, scatter, chat };
 })();
