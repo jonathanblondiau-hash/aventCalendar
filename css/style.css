@@ -172,3 +172,7 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 
 .maze-hint { display: none; color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
 @media (max-width: 700px) { .maze-hint { display: block; } }
+
+.pick { cursor: crosshair; touch-action: manipulation; }
+.pick-hint { display: block; text-align: center; }
+.swatch code.picked { background: rgba(255, 207, 74, .25); color: var(--gold); }

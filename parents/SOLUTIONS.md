@@ -57,7 +57,7 @@
 
 ## Jour 6 — Les couleurs du pirate
 
-- Indice 1 : Le labo ne contient que 2 couleurs : recopie les autres depuis l'énoncé. Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois.
+- Indice 1 : Le labo ne contient que 2 couleurs : ajoute les autres (la 3ᵉ est écrite dans l'énoncé, les 2 dernières se lisent avec la pipette : touche chaque carré). Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois.
 - Indice 2 : Trou 1 : on avance de 2 en 2. Trou 2 : l'hexadécimal, c'est « base 16 » (comme « base 2 » pour le binaire au jour 1).
 - Indice 3 : Remplace le premier ___ par 2 et le second par 16, puis exécute. Le programme affiche une phrase : il te demande l'endroit par où il est passé.
 

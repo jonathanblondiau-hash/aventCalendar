@@ -126,13 +126,26 @@ window.Widgets = (function () {
   function swatches(box, cfg) {
     const wrap = el('div', 'widget');
     wrap.appendChild(el('div', 'widget-title', '🎨 ' + (cfg.label || 'Couleurs')));
+    const hidden = cfg.hidden || [];
     const row = el('div', 'swatches');
-    cfg.colors.forEach((c) => {
+    cfg.colors.forEach((c, i) => {
       const s = el('div', 'swatch');
-      s.innerHTML = '<span class="swatch-color" style="background:' + c + '"></span><code>' + c + '</code>';
+      const cv = el('canvas', 'swatch-color pick');
+      cv.width = 72; cv.height = 72;
+      const ctx = cv.getContext('2d');
+      ctx.fillStyle = c; ctx.fillRect(0, 0, 72, 72);
+      const code = el('code', null, hidden.indexOf(i) !== -1 ? '#??????' : c);
+      // La pipette lit le vrai pixel du carré : le code n'est affiché que si on l'utilise.
+      cv.addEventListener('click', () => {
+        const d = ctx.getImageData(36, 36, 1, 1).data;
+        code.textContent = '#' + [d[0], d[1], d[2]].map((v) => v.toString(16).toUpperCase().padStart(2, '0')).join('');
+        code.classList.add('picked');
+      });
+      cv.title = 'Touche pour lire la couleur avec la pipette';
+      s.append(cv, code);
       row.appendChild(s);
     });
-    wrap.appendChild(row);
+    wrap.append(el('div', 'maze-hint pick-hint', '🧪 Pipette : touche un carré pour lire son code couleur.'), row);
     box.appendChild(wrap);
   }
 

@@ -118,8 +118,8 @@ window.DAYS = [
   "concept": "Hexadécimal & couleurs RVB",
   "device": "laptop",
   "minutes": 20,
-  "story": "<p><b>Pixel :</b> « Ces 5 carrés de couleur ne sont pas là pour décorer ! Sur un écran, une couleur est décrite par trois nombres (rouge, vert, bleu) écrits en <b>hexadécimal</b>, un système en base 16 qui utilise les chiffres 0 à 9 puis les lettres A à F. Le pirate y a caché des lettres : chaque nombre est le code ASCII d'une lettre, comme au jour 1. »</p>",
-  "puzzle": "<p>Chaque couleur s'écrit <code>#RRVVBB</code> : trois nombres hexadécimaux de 2 chiffres. Ici, chacun est le code ASCII d'une lettre (l'espace est 20 en hexadécimal, soit 32). Lis les couleurs dans l'ordre :</p>\n<pre class=\"code\">#504152  #204C41  #204348  #454D49  #4E4545</pre>\n<p><b>Par où le pirate est-il entré ?</b> (Le message se termine par le nom de l'endroit.)</p>\n<p class=\"note\">Dans le labo, la liste ne contient que les 2 premières couleurs : à toi de recopier les 3 autres !</p>",
+  "story": "<p><b>Pixel :</b> « Ces 5 carrés de couleur ne sont pas là pour décorer ! Sur un écran, une couleur est décrite par trois nombres (rouge, vert, bleu) écrits en <b>hexadécimal</b>, un système en base 16 qui utilise les chiffres 0 à 9 puis les lettres A à F. Le pirate y a caché des lettres : chaque nombre est le code ASCII d'une lettre, comme au jour 1. Mais attention : quelqu'un a renversé du chocolat chaud sur la feuille ☕ et les codes des <b>deux dernières couleurs</b> sont effacés. Heureusement, les carrés eux-mêmes sont intacts : il suffit de savoir <em>lire</em> une couleur. »</p>",
+  "puzzle": "<p>Chaque couleur s'écrit <code>#RRVVBB</code> : trois nombres hexadécimaux de 2 chiffres. Ici, chacun est le code ASCII d'une lettre (l'espace est 20 en hexadécimal, soit 32). Lis les couleurs dans l'ordre :</p>\n<pre class=\"code\">#504152  #204C41  #204348  #??????  #??????</pre>\n<p><b>Par où le pirate est-il entré ?</b> (Le message se termine par le nom de l'endroit.)</p>\n<p class=\"note\">Les deux derniers codes sont effacés : utilise la <b>pipette 🧪</b> sous les carrés de couleur, elle lit le code d'une couleur quand tu la touches. Dans le labo, la liste ne contient que les 2 premières couleurs : à toi d'ajouter les 3 autres !</p>",
   "widget": {
    "type": "swatches",
    "colors": [
@@ -129,15 +129,19 @@ window.DAYS = [
     "#454D49",
     "#4E4545"
    ],
+   "hidden": [
+    3,
+    4
+   ],
    "label": "Les cinq carrés de couleur trouvés dans le coffre"
   },
   "python": {
    "open": true,
    "label": "Labo Python — le traducteur de couleurs (2 trous à remplir)",
-   "code": "# Il n'y a ici que les 2 premières couleurs : recopie les 3 autres depuis l'énoncé, dans la liste (entre guillemets, séparées par des virgules)\ncouleurs = [\"#504152\", \"#204C41\"]\n\nmessage = \"\"\nfor couleur in couleurs:\n    for i in range(1, 7, ___):                      # trou 1 : on lit 2 caractères à la fois, donc on avance de ... en ...\n        canal = couleur[i:i + 2]                    # par ex. \"50\" (on saute le # du début)\n        message = message + chr(int(canal, ___))    # trou 2 : l'hexadécimal est en base ... ?\n\nprint(message)"
+   "code": "# Il n'y a ici que les 2 premières couleurs : ajoute les 3 autres dans la liste (la 3e est dans l'énoncé, les 2 dernières se lisent à la pipette). Entre guillemets, séparées par des virgules.\ncouleurs = [\"#504152\", \"#204C41\"]\n\nmessage = \"\"\nfor couleur in couleurs:\n    for i in range(1, 7, ___):                      # trou 1 : on lit 2 caractères à la fois, donc on avance de ... en ...\n        canal = couleur[i:i + 2]                    # par ex. \"50\" (on saute le # du début)\n        message = message + chr(int(canal, ___))    # trou 2 : l'hexadécimal est en base ... ?\n\nprint(message)"
   },
   "hints": [
-   "Le labo ne contient que 2 couleurs : recopie les autres depuis l'énoncé. Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois."
+   "Le labo ne contient que 2 couleurs : ajoute les autres (la 3ᵉ est écrite dans l'énoncé, les 2 dernières se lisent avec la pipette : touche chaque carré). Chaque couleur contient 3 nombres de 2 chiffres hexadécimaux, donc 3 lettres : la boucle interne doit les lire un par un, en sautant de 2 caractères à chaque fois."
   ],
   "explain": "<p><b>Message décodé :</b> « PAR LA CHEMINEE ». Le pirate est entré par la <b>cheminée</b>… la cheminée-serveur, par où passent tous les câbles de l'atelier !</p>\n<p>Pourquoi l'hexadécimal ? Parce qu'un octet (8 bits) s'écrit toujours avec exactement 2 chiffres hexadécimaux (de 00 à FF), alors qu'il en faut 8 en binaire. C'est plus court et plus lisible : les programmeurs et les designers l'utilisent partout (couleurs, adresses mémoire…). Le rouge pur est <code>#FF0000</code> : 255 de rouge, 0 de vert, 0 de bleu.</p>\n<p><b>Le saviez-vous ?</b> Un écran affiche environ 16,7 millions de couleurs : 256 × 256 × 256. Ton cerveau n'en distingue qu'une partie !</p>\n<p class=\"clue\">🕵️ <b>Piste n°6 :</b> le pirate est entré par la cheminée-serveur. Il a laissé un dernier fichier, protégé à double tour. Demain, c'est le grand décryptage !</p>",
   "h": [
