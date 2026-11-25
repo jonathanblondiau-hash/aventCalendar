@@ -32,5 +32,9 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+      # Laisse à GitHub le temps d'enregistrer l'artefact avant de le déployer
+      # (évite l'erreur « Found 0 artifact(s) » en cas de décalage de synchronisation).
+      - name: Attendre l'enregistrement de l'artefact
+        run: sleep 30
       - id: deployment
         uses: actions/deploy-pages@v4
