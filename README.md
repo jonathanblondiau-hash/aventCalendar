@@ -17,14 +17,21 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 | 5 — Logique booléenne (coffre à 4 interrupteurs, 📱 possible) | ✅ prêt |
 | 6 — Hexadécimal & couleurs | ✅ prêt |
 | 7 — Boss de la semaine 1 + **clé n°1** + **récompense** | ✅ prêt |
-| 8 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
+| 8 — Dictionnaires & compteurs (listes sabotées) | ✅ prêt |
+| 9 — Labyrinthe & parcours en largeur (📱 possible) | ✅ prêt |
+| 10 — Vigenère & mots de passe | ✅ prêt |
+| 11 — QR code & base64 (📱 + 💻) | ✅ prêt |
+| 12 — Recherche dichotomique, code à 6 chiffres (📱 possible) | ✅ prêt |
+| 13 — Hachage SHA-256 & attaque par dictionnaire | ✅ prêt |
+| 14 — Boss de la semaine 2 + **clé n°2** + **récompense** + dossier des suspects | ✅ prêt |
+| 15 à 24 | 🛠️ à écrire (les portes affichent « Bientôt… ») |
 
 ## Récompenses
 
 Chaque semaine (jours 7, 14, 21, 24), l'énigme finale donne une **clé** (collectée dans le trousseau en haut de page, elle servira
 au décryptage final) et une **récompense réelle** dont la cachette est chiffrée.
-**À personnaliser par les parents :** `REWARDS` en haut de `tools/generate.mjs` (cachette en MAJUSCULES sans accents, puis
-`node tools/generate.mjs`). Par défaut : « SOUS LE SAPIN ».
+**À personnaliser par les parents :** `tools/recompenses.mjs` (cachette en MAJUSCULES sans accents, puis
+`node tools/generate.mjs`). Valeurs actuelles : semaine 1 « DANS LE FRIGO », semaine 2 « SOUS TON OREILLER » (provisoire).
 
 ## Tester avant décembre
 
@@ -51,10 +58,10 @@ est arrêtée au bout de 8 secondes sans figer la page.
 
 ## Ajouter ou modifier un jour
 
-1. Éditer `tools/generate.mjs` (le contenu et la réponse en clair de chaque jour y sont définis).
+1. Éditer `tools/generate.mjs` (semaine 1) ou `tools/semaine2.mjs` (semaine 2) : le contenu et la réponse en clair de chaque jour y sont définis.
 2. `node tools/generate.mjs` → régénère `js/days.js` (réponses hachées) et `parents/SOLUTIONS.md`.
 
-Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' }`, `python: { label, code, open }`
+Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' }`, `python: { label, code, open }`
 (utiliser `___` pour les trous à remplir), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
 
 ## Fichiers
@@ -67,6 +74,9 @@ js/widgets.js     calculette binaire, roue de César, labo Python
 js/pyrunner.js    exécution de Python (Pyodide + Web Worker)
 js/sha256.js      vérification des réponses
 js/days.js        GÉNÉRÉ — contenu des jours
-tools/generate.mjs  source du contenu + générateur
+tools/generate.mjs  générateur + contenu de la semaine 1
+tools/semaine2.mjs  contenu de la semaine 2
+tools/recompenses.mjs  cachettes des récompenses (à personnaliser)
+tools/make-qr.mjs + qr-jour11.json  QR code du jour 11
 parents/SOLUTIONS.md  GÉNÉRÉ — réponses et indices
 ```

@@ -5,6 +5,8 @@ import { createHash } from 'node:crypto';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { REWARDS } from './recompenses.mjs';
+import { DAYS_S2 } from './semaine2.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -40,14 +42,6 @@ const defauts = cadeaux % 4;
 cadeaux = cadeaux + defauts * 10;
 const REP3 = String(cadeaux); // 45
 
-// =====================================================================
-// RÉCOMPENSES RÉELLES — à personnaliser par les parents !
-// La cachette est chiffrée (César) et déchiffrée par les enfants avec du Python.
-// Écrire en MAJUSCULES, sans accents ni ponctuation. Puis : node tools/generate.mjs
-// =====================================================================
-const REWARDS = {
-  1: { cachette: 'DANS LE FRIGO', cadeau: 'une surprise' },
-};
 const SHIFT_REWARD = 7; // même décalage que le pirate au jour 2
 
 // ---------- Jour 4 : gros journal de connexions (3000 lignes générées, impossible à compter à la main) ----------
@@ -466,6 +460,7 @@ print(cadeaux)</pre>
     },
   },
 ];
+DAYS.push(...DAYS_S2);
 
 // ---------- Sorties ----------
 const out = DAYS.map((d) => {
@@ -488,7 +483,8 @@ const md = [
   '> Ne publiez pas ce dossier `parents/` si les enfants ont accès au dépôt.',
   '> Le site n\'affiche que l\'**indice 1** de chaque jour ; les indices 2 et 3 (plus révélateurs) sont réservés aux parents, ci-dessous.',
   '',
-  `**Récompense semaine 1** : cachette « ${REWARDS[1].cachette} » (${REWARDS[1].cadeau}). À modifier dans \`tools/generate.mjs\` (REWARDS), puis \`node tools/generate.mjs\`.`,
+  '**Récompenses réelles** (à personnaliser dans `tools/recompenses.mjs`, puis `node tools/generate.mjs`) :',
+  ...Object.entries(REWARDS).map(([w, r]) => `- Semaine ${w} (jour ${w * 7}) : cachette « ${r.cachette} » (${r.cadeau})`),,
   '',
   '| Jour | Titre | Réponse |',
   '|---|---|---|',

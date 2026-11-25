@@ -152,3 +152,23 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 .swatch { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .swatch-color { width: 72px; height: 72px; border-radius: 12px; border: 2px solid rgba(255, 255, 255, .4); }
+
+.maze-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 10px; padding-bottom: 4px; text-align: center; }
+.maze { --cell: clamp(26px, 4vw, 30px); display: inline-grid; grid-template-columns: repeat(var(--w), var(--cell)); grid-auto-rows: var(--cell); gap: 1px; background: #0a1124; padding: 3px; border-radius: 8px; }
+.mz { padding: 0; border: 0; border-radius: 3px; font: inherit; font-size: .85rem; font-weight: 800; touch-action: manipulation; }
+.mz.wall { background: #42598c; }
+.mz.free { background: #dbe8ff; cursor: pointer; }
+.mz.mark { background: var(--gold); }
+.mz.start { background: var(--green); color: #fff; }
+.mz.end { background: var(--red); color: #fff; }
+.qr { max-width: 300px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 4px; }
+.qr svg { display: block; width: 100%; height: auto; }
+.guess-row { display: flex; gap: 8px; }
+.guess-row input { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border-radius: 10px; border: 2px solid rgba(255, 255, 255, .25); background: #0a1124; color: var(--ink); }
+.guess-log { max-height: 160px; overflow-y: auto; margin: 8px 0 0; padding-left: 22px; color: var(--muted); font-size: .92rem; }
+.suspects { background: rgba(94, 194, 255, .1); border: 2px solid #5ec2ff; border-radius: 14px; padding: 4px 16px 10px; margin: 14px 0; }
+.suspects h3 { margin: 10px 0 6px; }
+.suspects ul { padding-left: 18px; }
+
+.maze-hint { display: none; color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
+@media (max-width: 700px) { .maze-hint { display: block; } }

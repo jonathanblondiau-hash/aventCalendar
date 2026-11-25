@@ -136,5 +136,92 @@ window.Widgets = (function () {
     box.appendChild(wrap);
   }
 
-  return { bits, cesar, python, switches, swatches };
+  // --- Labyrinthe : on touche les cases pour marquer son chemin, un compteur compte les pas ---
+  function maze(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🧊 ' + (cfg.label || 'Labyrinthe')));
+    const W = cfg.rows[0].length;
+    const scroller = el('div', 'maze-scroll');
+    const grid = el('div', 'maze');
+    grid.style.setProperty('--w', W);
+    scroller.appendChild(grid);
+    const out = el('div', 'bits-out');
+    let n = 0;
+    const update = () => { out.innerHTML = 'Cases marquées (sans compter le départ) : <b>' + n + '</b>'; };
+    cfg.rows.forEach((row) => [...row].forEach((ch) => {
+      const cell = el('button', 'mz ' + (ch === '#' ? 'wall' : 'free') + (ch === 'S' ? ' start' : '') + (ch === 'A' ? ' end' : ''));
+      cell.type = 'button';
+      if (ch === 'S' || ch === 'A') cell.textContent = ch;
+      if (ch === '#') { cell.disabled = true; }
+      else if (ch === ' ') {
+        cell.addEventListener('click', () => { cell.classList.toggle('mark'); n += cell.classList.contains('mark') ? 1 : -1; update(); });
+      } else if (ch === 'A') {
+        cell.addEventListener('click', () => { cell.classList.toggle('mark'); n += cell.classList.contains('mark') ? 1 : -1; update(); });
+      } else { cell.disabled = true; }
+      grid.appendChild(cell);
+    }));
+    const clear = el('button', 'btn small ghost', '↺ Tout effacer');
+    clear.type = 'button';
+    clear.addEventListener('click', () => { grid.querySelectorAll('.mark').forEach((c) => c.classList.remove('mark')); n = 0; update(); });
+    wrap.append(el('div', 'maze-hint', '↔ Le plateau est plus large que l\'écran : fais-le glisser avec le doigt pour voir la suite.'), scroller, out, clear);
+    box.appendChild(wrap);
+    update();
+  }
+
+  // --- QR code : dessiné en SVG à partir d'une matrice de 0/1 ---
+  function qr(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '📷 ' + (cfg.label || 'QR code')));
+    const n = cfg.rows.length, Q = 4, size = n + 2 * Q;
+    let rects = '';
+    cfg.rows.forEach((row, r) => { for (let c = 0; c < n; c++) if (row[c] === '1') rects += '<rect x="' + (c + Q) + '" y="' + (r + Q) + '" width="1" height="1"/>'; });
+    const holder = el('div', 'qr');
+    holder.innerHTML = '<svg viewBox="0 0 ' + size + ' ' + size + '" shape-rendering="crispEdges" role="img" aria-label="QR code à scanner"><rect width="' + size + '" height="' + size + '" fill="#fff"/><g fill="#000">' + rects + '</g></svg>';
+    wrap.appendChild(holder);
+    box.appendChild(wrap);
+  }
+
+  // --- Boîtier à code : « plus » / « moins » avec un nombre limité d'essais ---
+  function guess(box, cfg) {
+    const secret = cfg.enc - 314159;
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '🔢 ' + (cfg.label || 'Boîtier')));
+    const info = el('div', 'bits-out');
+    const row = el('form', 'guess-row');
+    const input = el('input');
+    input.type = 'number'; input.min = 1; input.max = cfg.max; input.inputMode = 'numeric'; input.placeholder = 'Un nombre entre 1 et ' + cfg.max.toLocaleString('fr-FR');
+    const go = el('button', 'btn small', 'Essayer');
+    go.type = 'submit';
+    row.append(input, go);
+    const log = el('ol', 'guess-log');
+    let left = cfg.tries;
+    const show = (msg) => { info.innerHTML = msg; };
+    show('Essais restants : <b>' + left + '</b>');
+    row.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = parseInt(input.value, 10);
+      if (!(v >= 1 && v <= cfg.max)) { show('Entre un nombre entre 1 et ' + cfg.max.toLocaleString('fr-FR') + '.'); return; }
+      input.value = '';
+      const li = el('li');
+      if (v === secret) {
+        li.innerHTML = '<b>' + v + '</b> → ✅ le boîtier s\'ouvre !';
+        log.prepend(li);
+        show('🔓 <b>Code trouvé : ' + v + '</b> — écris-le dans la réponse ci-dessous.');
+        go.disabled = true; input.disabled = true;
+        return;
+      }
+      li.innerHTML = '<b>' + v + '</b> → ' + (v < secret ? '⬆️ C\'est plus grand' : '⬇️ C\'est plus petit');
+      log.prepend(li);
+      left--;
+      if (left <= 0) {
+        show('🚨 <b>Alarme !</b> Le boîtier se verrouille quelques secondes… puis il te redonne ' + cfg.tries + ' essais.');
+        go.disabled = true;
+        setTimeout(() => { left = cfg.tries; go.disabled = false; log.innerHTML = ''; show('Essais restants : <b>' + left + '</b> (le code n\'a pas changé !)'); }, 4000);
+      } else show('Essais restants : <b>' + left + '</b>');
+    });
+    wrap.append(row, info, log);
+    box.appendChild(wrap);
+  }
+
+  return { bits, cesar, python, switches, swatches, maze, qr, guess };
 })();

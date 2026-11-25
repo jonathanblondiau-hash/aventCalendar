@@ -3,7 +3,10 @@
 > Ne publiez pas ce dossier `parents/` si les enfants ont accès au dépôt.
 > Le site n'affiche que l'**indice 1** de chaque jour ; les indices 2 et 3 (plus révélateurs) sont réservés aux parents, ci-dessous.
 
-**Récompense semaine 1** : cachette « DANS LE FRIGO » (une surprise). À modifier dans `tools/generate.mjs` (REWARDS), puis `node tools/generate.mjs`.
+**Récompenses réelles** (à personnaliser dans `tools/recompenses.mjs`, puis `node tools/generate.mjs`) :
+- Semaine 1 (jour 7) : cachette « DANS LE FRIGO » (une surprise)
+- Semaine 2 (jour 14) : cachette « SOUS TON OREILLER » (une surprise)
+
 
 | Jour | Titre | Réponse |
 |---|---|---|
@@ -14,6 +17,13 @@
 | 5 | Le coffre du pirate | **0111** |
 | 6 | Les couleurs du pirate | **cheminee** ou **lacheminee** |
 | 7 | Le coffre-fort de la semaine | **etoile** ou **letoile** |
+| 8 | La liste du Père Noël | **Strasbourg** |
+| 9 | Le GPS du traîneau | **38** |
+| 10 | Le second message | **verglas** |
+| 11 | Le QR code piégé | **atelier** ou **latelier** ou **atelierdesjouets** ou **latelierdesjouets** |
+| 12 | Le coffre à 6 chiffres | **738215** |
+| 13 | Le mot de passe haché | **traineau58** |
+| 14 | Le journal secret du pirate | **guirlande** ou **laguirlande** |
 
 ## Jour 1 — Le message des lutins
 
@@ -56,3 +66,45 @@
 - Indice 1 : Deux étapes enchaînées : d'abord transformer l'hexadécimal en texte (c'est le travail de <code>hex_vers_texte</code>), puis casser le César sur ce texte (la fonction <code>dechiffrer</code>, déjà écrite).
 - Indice 2 : Trou 1 : l'hexadécimal, c'est la base 16. Trou 2 : <code>range(1, 26)</code> va de 1 à 25. Trou 3 : un appel à la fonction : <code>dechiffrer(texte, essai)</code>.
 - Indice 3 : Lance le programme : 25 lignes s'affichent, une seule est une vraie phrase. La clé est cachée dans une partie du sapin qui brille en haut.
+
+## Jour 8 — La liste du Père Noël
+
+- Indice 1 : Le dictionnaire <code>degats</code> sert de tableau de comptage : <code>degats.get(ville, 0)</code> lit le score actuel d'une ville (0 si elle n'y est pas encore), et on y ajoute une victime. Il te manque deux nombres.
+- Indice 2 : Trou 1 : <code>0</code> (aucun cadeau). Trou 2 : <code>1</code> (une victime de plus).
+- Indice 3 : Le programme affiche le score de chaque ville. Une seule ville se détache nettement des autres : Strasbourg.
+
+## Jour 9 — Le GPS du traîneau
+
+- Indice 1 : Cherche d'abord un chemin qui marche, puis demande-toi s'il existe un raccourci. Il y a des « boucles » dans le labyrinthe : plusieurs routes mènent au même endroit.
+- Indice 2 : Dans le labo (facultatif) : trou 1 = <code>-1</code> (la gauche), trou 2 = <code>distance</code> (le dictionnaire des cases déjà découvertes).
+- Indice 3 : Le plus court chemin fait exactement 38 pas.
+
+## Jour 10 — Le second message
+
+- Indice 1 : Premier trou : dans la fonction, de combien recule-t-on chaque lettre ? La variable qui contient le décalage vient juste d'être calculée, deux lignes plus haut. Deuxième trou : souviens-toi du mot de passe du pirate, trouvé au jour 2.
+- Indice 2 : Trou 1 : <code>decalage</code>. Trou 2 : le mot de passe du jour 2, écrit en majuscules.
+- Indice 3 : La clé est <code>RUDOLPH</code>. Le message décodé se termine par le nouveau mot de passe.
+
+## Jour 11 — Le QR code piégé
+
+- Indice 1 : Scanne le QR avec l'appareil photo du téléphone, puis recopie (ou envoie-toi par message) le texte obtenu sur le Chromebook. Dans le labo, le trou 2 est le nom de la fonction de décodage du module <code>base64</code> : elle commence par « b64 ».
+- Indice 2 : Trou 2 : <code>b64decode</code>. Attention à bien recopier tous les caractères du texte, y compris le « = » final.
+- Indice 3 : Le message décodé dit où travaille le complice : un lieu bien connu des lutins, où l'on fabrique les jouets.
+
+## Jour 12 — Le coffre à 6 chiffres
+
+- Indice 1 : Ne teste pas 1, puis 2, puis 3… Commence par le nombre au milieu de l'intervalle (500 000). Selon la réponse « plus » ou « moins », tu sais dans quelle moitié se trouve le code. Recommence avec la moitié qui reste, et ainsi de suite.
+- Indice 2 : Après le premier essai (500 000), il reste 500 000 possibilités ; après le deuxième, 250 000 ; puis 125 000… Il suffit de 20 essais pour un million de possibilités.
+- Indice 3 : Le code est entre 700 000 et 800 000. Continue à couper en deux !
+
+## Jour 13 — Le mot de passe haché
+
+- Indice 1 : Le programme essaie chaque mot avec chaque nombre de 00 à 99, calcule l'empreinte de chaque essai et la compare à la cible. Il te manque combien de nombres on essaie, et quelle variable contient l'empreinte calculée.
+- Indice 2 : Trou 1 : <code>100</code> (de 0 à 99 inclus, ça fait 100 valeurs). Trou 2 : <code>empreinte</code>.
+- Indice 3 : Le mot de passe est un mot qui sert à tirer le Père Noël dans les airs, suivi de deux chiffres.
+
+## Jour 14 — Le journal secret du pirate
+
+- Indice 1 : Deux étapes enchaînées : le base64 en dernier a été appliqué, donc c'est la première chose à défaire. Trou 1 : la même fonction qu'au jour 11. Trou 2 : le pirate a utilisé deux mots de passe jusqu'ici ; essaie-les tous les deux et regarde lequel donne une vraie phrase.
+- Indice 2 : Trou 1 : <code>b64decode</code>. Trou 2 : le mot de passe est celui trouvé au jour 10 (le second message), pas celui du jour 2.
+- Indice 3 : La clé est <code>VERGLAS</code>. La phrase finale dit où est cachée la deuxième clé : un objet qui brille sur le sapin.
