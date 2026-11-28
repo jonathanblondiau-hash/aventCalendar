@@ -243,29 +243,19 @@ cadeaux = cadeaux // 5
 defauts = cadeaux % 4
 cadeaux = cadeaux + defauts * 10
 print(cadeaux)</pre>
-<p><b>Quel nombre ce programme affiche-t-il ?</b> C'est le nombre de cadeaux volés. Fais le calcul ligne par ligne, puis vérifie dans le labo si tu veux.</p>
+<p><b>Quel nombre ce programme affiche-t-il ?</b> C'est le nombre de cadeaux volés. Fais le calcul ligne par ligne.</p>
 <p class="note">Deux symboles nouveaux : <code>//</code> est la <b>division entière</b> (on garde seulement la partie entière du résultat) et <code>%</code> est le <b>modulo</b> (le reste de la division).</p>`,
     python: {
-      label: 'Labo Python — regarde chaque étape du calcul',
+      label: 'Labo Python — comprends les symboles « // » et « % »',
       code: [
-        'lutins = 12',
-        'par_lutin = 7',
-        'cadeaux = lutins * par_lutin',
-        'print("Après la ligne 3, cadeaux vaut", cadeaux)',
+        'print(17 / 5)      # la division normale',
+        'print(17 // 5)     # la division entière : combien de fois 5 « rentre » dans 17 ?',
+        'print(17 % 5)      # le modulo : ce qui reste après cette division',
         '',
-        'cadeaux = cadeaux - 9',
-        'print("Après la ligne 4, cadeaux vaut", cadeaux)',
-        '',
-        'cadeaux = cadeaux // 5          # division entière',
-        'print("Après la ligne 5, cadeaux vaut", cadeaux)',
-        '',
-        'defauts = cadeaux % 4           # le reste de la division par 4',
-        'print("La ligne 6 calcule defauts =", defauts)',
-        '',
-        'cadeaux = cadeaux + defauts * 10',
-        'print("Après la ligne 7, cadeaux vaut", cadeaux)',
-        '',
-        'print(cadeaux)',
+        '# À toi d\'essayer avec d\'autres nombres :',
+        'print(20 // 6, 20 % 6)',
+        'print(100 // 7, 100 % 7)',
+        'print(9 // 3, 9 % 3)     # que se passe-t-il quand la division « tombe juste » ?',
       ].join('\n'),
     },
     hints: [
@@ -290,7 +280,8 @@ print(cadeaux)</pre>
 <pre class="code">${JOURNAL4_APERCU}
 …</pre>
 <p><b>Combien de connexions réussies (<code>SUCCES</code>) du compte exact « pere_noel » ont eu lieu entre 2 h 00 et 4 h 59 (inclus) ?</b></p>
-<p class="note">Tu n'as pas à télécharger le fichier : il est déjà disponible dans le labo Python, et ton programme doit le <b>lire lui-même</b> avec <code>open("journal.txt")</code>. Attention aux pièges : « pere_noel_2 » et « pere_noel_old » sont d'autres comptes.</p>`,
+<p>📄 Le fichier : <a href="#" class="dl" data-file="journal.txt">journal.txt</a> (clique dessus pour le télécharger et le regarder).</p>
+<p class="note">Il est aussi déjà disponible dans le labo Python : ton programme doit le <b>lire lui-même</b> avec <code>open("journal.txt")</code>. Attention aux pièges : « pere_noel_2 » et « pere_noel_old » sont d'autres comptes.</p>`,
     python: {
       open: true,
       label: 'Labo Python — l\'analyseur de journal (3 trous à remplir)',

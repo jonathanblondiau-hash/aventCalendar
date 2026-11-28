@@ -116,6 +116,20 @@
     const puzzle = document.createElement('div');
     puzzle.className = 'puzzle';
     puzzle.innerHTML = d.puzzle;
+    // Liens <a data-file="nom"> : téléchargent le fichier fourni au labo Python.
+    puzzle.querySelectorAll('[data-file]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const name = link.getAttribute('data-file');
+        const content = d.python && d.python.files && d.python.files[name];
+        if (content === undefined) return;
+        const url = URL.createObjectURL(new Blob([content], { type: 'text/plain;charset=utf-8' }));
+        const tmp = document.createElement('a');
+        tmp.href = url; tmp.download = name;
+        document.body.appendChild(tmp); tmp.click(); tmp.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      });
+    });
     body.append(head, story, puzzle);
 
     if (d.widget) Widgets[d.widget.type](body, d.widget);

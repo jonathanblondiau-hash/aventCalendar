@@ -117,7 +117,7 @@ export const DAYS_S4 = [
 <li>💰 <b>Scrooge</b> : « polaris88 » apparaît bien sur son blog… mais comme <em>quelqu'un qu'il a bloqué</em>. Une mention n'est pas une identité : Scrooge est la <em>victime</em> des insultes, pas leur auteur.</li>
 <li>💚 <b>Le Grinch</b> : le suspect évident, mais ses pseudos sont « GrinchVert » et « grinch_du_nord », et rien ne le relie à Strasbourg ni à la nuit de l'attaque.</li>
 </ul>
-<p><b>Et le complice ?</b> Dans l'archive de 2022 de <b>Gus</b>, on voit son <b>badge d'accès n°738215</b>, celui du boîtier du jour 12 et du bloc falsifié du jour 18. C'est lui qui a ouvert la cheminée-serveur depuis l'atelier.</p>
+<p><b>Et le complice ?</b> Dans l'archive de 2022 de <b>Gus</b>, on voit son <b>badge d'accès n°738215</b>, celui du boîtier du jour 12. C'est lui qui a ouvert la cheminée-serveur depuis l'atelier.</p>
 <p><b>Ce que tu viens de voir :</b></p>
 <ul>
 <li>📜 <b>Rien ne disparaît vraiment d'internet.</b> Un pseudo, un numéro, une photo publiés un jour peuvent être retrouvés des années après.</li>
@@ -199,18 +199,7 @@ export const DAYS_S4 = [
 <p>Pixel a mis ${REWARDS[4].cadeau} en sécurité pour vous deux. Pour le trouver, il a chiffré la cachette avec un Vigenère dont la clé est <b>les trois clés mises bout à bout</b> (semaine 1 + semaine 2 + semaine 3).</p>
 <pre class="code">${CACHETTE4_CHIFFREE}</pre>
 </div>
-<div class="suspects">
-<h3>🧠 Ce que tu as appris en 24 jours</h3>
-<ul>
-<li>💻 <b>Python :</b> variables, boucles, conditions, fonctions, listes, dictionnaires, modules.</li>
-<li>🔢 <b>Représentation des données :</b> binaire, ASCII, hexadécimal, couleurs RVB, base64, QR codes.</li>
-<li>🔐 <b>Cryptographie :</b> César, Vigenère, force brute, hachage SHA-256, RSA.</li>
-<li>🧮 <b>Algorithmes :</b> parcours en largeur (GPS), recherche dichotomique, preuve de travail.</li>
-<li>🤖 <b>IA :</b> k plus proches voisins, prédiction du mot suivant, injection de prompt.</li>
-<li>🛡️ <b>Cybersécurité :</b> phishing, mots de passe, métadonnées, OSINT et vie privée.</li>
-</ul>
-<p>Le plus important : tu as appris à <b>chercher</b>, à <b>tester</b>, à <b>te méfier des évidences</b> et à <b>ne pas abandonner</b>. Garde cette curiosité. Joyeux Noël, détective ! 🎄</p>
-</div>`,
+<p>Joyeux Noël, détective ! 🎄</p>`,
     after: {
       python: {
         open: true,

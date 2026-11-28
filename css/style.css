@@ -213,3 +213,4 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 .lab-out { max-height: 320px; overflow-y: auto; }
 .maplink { display: inline-block; margin-top: 8px; font-size: .85rem; color: #5ec2ff; }
 .maplink[hidden] { display: none; }
+.chat-tag { display: block; font-size: .72rem; opacity: .75; margin-top: 3px; }

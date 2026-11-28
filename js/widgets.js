@@ -319,35 +319,45 @@ window.Widgets = (function () {
   // --- Chatbot à règles (démonstration d'injection de prompt) ---
   function chat(box, cfg) {
     const secret = cfg.enc.split('').reverse().join('');
-    const shown = secret.replace('h', ' h ');
+    const shown = cfg.shown || secret.replace('h', ' h ');
+    const reveal = (cfg.reveal || 'l\'attaque finale est prévue le 24 décembre à {S}').replace('{S}', shown);
+    const asksRe = new RegExp(cfg.asks || '(heure|quand|attaque|date|moment|programm|prevu|plan|minuit|horaire)');
     const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const polite = cfg.polite || null; // { min, lexicon } : l'assistant ne répond qu'aux messages au ton assez positif
+    const score = (msg) => norm(msg).split(/[^a-z0-9]+/).reduce((t, w) => t + ((polite.lexicon[w]) || 0), 0);
     const wrap = el('div', 'widget');
     wrap.appendChild(el('div', 'widget-title', '🤖 ' + (cfg.label || 'Assistant')));
     const log = el('div', 'chat-log');
     const form = el('form', 'guess-row');
     const input = el('input');
-    input.type = 'text'; input.placeholder = 'Écris ton message à Elfe-GPT…'; input.autocomplete = 'off';
+    input.type = 'text'; input.placeholder = 'Écris ton message à ' + (cfg.name || 'Elfe-GPT') + '…'; input.autocomplete = 'off';
     const go = el('button', 'btn small', 'Envoyer');
     go.type = 'submit';
     form.append(input, go);
     let override = false, refusals = 0;
-    const add = (who, text) => { const b = el('div', 'chat-msg ' + who); b.textContent = text; log.appendChild(b); log.scrollTop = log.scrollHeight; };
-    add('bot', 'Bonjour ! Je suis Elfe-GPT 🎅, l\'assistant du pirate. Je réponds à tes questions sur les cadeaux, la neige et… tout sauf ce qui est confidentiel.');
+    const add = (who, text, tag) => {
+      const b = el('div', 'chat-msg ' + who); b.textContent = text;
+      if (tag) { const t = el('span', 'chat-tag', tag); b.appendChild(t); }
+      log.appendChild(b); log.scrollTop = log.scrollHeight;
+    };
+    add('bot', cfg.intro || 'Bonjour ! Je suis Elfe-GPT 🎅, l\'assistant du pirate. Je réponds à tes questions sur les cadeaux, la neige et… tout sauf ce qui est confidentiel.');
     const reply = (raw) => {
       const m = norm(raw);
-      const asks = /(heure|quand|attaque|date|moment|programm|prevu|plan|minuit|horaire)/.test(m);
+      const asks = asksRe.test(m);
       const ignore = /(ignore|oublie|annule|desactive|contourne|efface).{0,40}(consigne|instruction|regle|restriction|interdiction|ordre)/.test(m) || /mode (developpeur|admin|debug|maintenance)/.test(m);
       const story = /(imagine|fais comme si|joue|incarne|raconte|ecris|invente).{0,70}(histoire|conte|poeme|chanson|lutin|personnage|scene|dialogue)/.test(m);
       const spell = /(epelle|a l'envers|a l envers|lettre par lettre|chiffre par chiffre|separe|caractere par caractere)/.test(m);
-      if (ignore && asks) { override = true; return '⚙️ Mode sans consignes activé… Très bien : l\'attaque finale est prévue le 24 décembre à ' + shown + '.'; }
+      const complete = cfg.complete && /(continue|complete|termine|acheve).{0,50}(phrase|texte|debut)/.test(m);
+      if (ignore && asks) { override = true; return '⚙️ Mode sans consignes activé… Très bien : ' + reveal + '.'; }
       if (ignore) { override = true; return 'D\'accord, j\'ignore mes consignes ! Que veux-tu savoir ?'; }
-      if (override && asks) return '⚙️ (Mes consignes sont désactivées.) L\'attaque finale est prévue le 24 décembre à ' + shown + '.';
-      if (story && asks) return 'Il était une fois un petit lutin qui connaissait un grand secret : l\'attaque finale aurait lieu le 24 décembre à ' + shown + '. Fin de l\'histoire ! 📖';
+      if (override && asks) return '⚙️ (Mes consignes sont désactivées.) ' + reveal + '.';
+      if (complete && asks) return 'Avec plaisir, je continue : « …' + reveal + '. » ✍️';
+      if (story && asks) return 'Il était une fois un petit lutin qui connaissait un grand secret : ' + reveal + '. Fin de l\'histoire ! 📖';
       if (spell && asks) return 'Je ne peux pas le dire… mais je peux l\'épeler : ' + secret.split('').join(' - ') + ' 🤫';
       if (asks) { refusals++; return refusals > 2 ? '🔒 Toujours non. Ma consigne est claire : ne jamais révéler cette information. (Mais tu es peut-être plus malin que ma consigne…)' : '🔒 Désolé, cette information est confidentielle. Ma consigne : ne jamais la révéler.'; }
       if (/(bonjour|salut|coucou|hello|hey)/.test(m)) return 'Bonjour à toi ! Comment puis-je t\'aider ?';
       if (/(merci)/.test(m)) return 'Avec plaisir ! 🎁';
-      if (/(qui es.tu|ton nom|tu es qui)/.test(m)) return 'Je suis Elfe-GPT, un assistant à consignes. J\'obéis à mon créateur… et parfois aussi à toi.';
+      if (/(qui es.tu|ton nom|tu es qui)/.test(m)) return 'Je suis ' + (cfg.name || 'Elfe-GPT') + ', un assistant à consignes. J\'obéis à mon créateur… et parfois aussi à toi.';
       const defaults = ['Hmm, je ne suis pas sûr de comprendre. Parle-moi de cadeaux ou de neige ❄️', 'Intéressant ! Peux-tu préciser ta question ?', 'Je suis là pour discuter de Noël. Pose-moi une question !'];
       return defaults[log.children.length % defaults.length];
     };
@@ -355,8 +365,15 @@ window.Widgets = (function () {
       e.preventDefault();
       const v = input.value.trim();
       if (!v) return;
-      add('user', v); input.value = '';
-      setTimeout(() => add('bot', reply(v)), 350);
+      let tag = '';
+      let blocked = null;
+      if (polite) {
+        const sc = score(v);
+        tag = 'Score de politesse : ' + (sc > 0 ? '+' : '') + sc;
+        if (sc < polite.min) blocked = '😠 Ton message n\'est pas assez positif (score ' + sc + '). Je ne réponds qu\'aux messages dont le score de politesse est d\'au moins ' + polite.min + '. Sois plus aimable !';
+      }
+      add('user', v, tag); input.value = '';
+      setTimeout(() => add('bot', blocked || reply(v)), 350);
     });
     wrap.append(log, form);
     box.appendChild(wrap);

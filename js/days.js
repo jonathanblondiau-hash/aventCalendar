@@ -54,10 +54,10 @@ window.DAYS = [
   "device": "laptop",
   "minutes": 15,
   "story": "<p><b>Pixel :</b> « Grâce au mot de passe « rudolph », on a pu ouvrir le programme que le pirate a lancé sur la hotte du traîneau ! C'est un <b>script de sabotage</b>. Un bon enquêteur ne l'exécute jamais à l'aveugle : il le <b>lit</b> et il prévoit ce qu'il va faire. Combien de cadeaux ce script va-t-il faire disparaître ? »</p>",
-  "puzzle": "<p>Voici un petit programme Python. Une <b>variable</b> est une boîte qui porte un nom et qui contient une valeur ; on peut la modifier au fil du programme.</p>\n<pre class=\"code\">lutins = 12\npar_lutin = 7\ncadeaux = lutins * par_lutin\ncadeaux = cadeaux - 9\ncadeaux = cadeaux // 5\ndefauts = cadeaux % 4\ncadeaux = cadeaux + defauts * 10\nprint(cadeaux)</pre>\n<p><b>Quel nombre ce programme affiche-t-il ?</b> C'est le nombre de cadeaux volés. Fais le calcul ligne par ligne, puis vérifie dans le labo si tu veux.</p>\n<p class=\"note\">Deux symboles nouveaux : <code>//</code> est la <b>division entière</b> (on garde seulement la partie entière du résultat) et <code>%</code> est le <b>modulo</b> (le reste de la division).</p>",
+  "puzzle": "<p>Voici un petit programme Python. Une <b>variable</b> est une boîte qui porte un nom et qui contient une valeur ; on peut la modifier au fil du programme.</p>\n<pre class=\"code\">lutins = 12\npar_lutin = 7\ncadeaux = lutins * par_lutin\ncadeaux = cadeaux - 9\ncadeaux = cadeaux // 5\ndefauts = cadeaux % 4\ncadeaux = cadeaux + defauts * 10\nprint(cadeaux)</pre>\n<p><b>Quel nombre ce programme affiche-t-il ?</b> C'est le nombre de cadeaux volés. Fais le calcul ligne par ligne.</p>\n<p class=\"note\">Deux symboles nouveaux : <code>//</code> est la <b>division entière</b> (on garde seulement la partie entière du résultat) et <code>%</code> est le <b>modulo</b> (le reste de la division).</p>",
   "python": {
-   "label": "Labo Python — regarde chaque étape du calcul",
-   "code": "lutins = 12\npar_lutin = 7\ncadeaux = lutins * par_lutin\nprint(\"Après la ligne 3, cadeaux vaut\", cadeaux)\n\ncadeaux = cadeaux - 9\nprint(\"Après la ligne 4, cadeaux vaut\", cadeaux)\n\ncadeaux = cadeaux // 5          # division entière\nprint(\"Après la ligne 5, cadeaux vaut\", cadeaux)\n\ndefauts = cadeaux % 4           # le reste de la division par 4\nprint(\"La ligne 6 calcule defauts =\", defauts)\n\ncadeaux = cadeaux + defauts * 10\nprint(\"Après la ligne 7, cadeaux vaut\", cadeaux)\n\nprint(cadeaux)"
+   "label": "Labo Python — comprends les symboles « // » et « % »",
+   "code": "print(17 / 5)      # la division normale\nprint(17 // 5)     # la division entière : combien de fois 5 « rentre » dans 17 ?\nprint(17 % 5)      # le modulo : ce qui reste après cette division\n\n# À toi d'essayer avec d'autres nombres :\nprint(20 // 6, 20 % 6)\nprint(100 // 7, 100 % 7)\nprint(9 // 3, 9 % 3)     # que se passe-t-il quand la division « tombe juste » ?"
   },
   "hints": [
    "Avance ligne par ligne en notant la valeur de « cadeaux » après chaque ligne. Commence par 12 × 7."
@@ -74,7 +74,7 @@ window.DAYS = [
   "device": "laptop",
   "minutes": 20,
   "story": "<p><b>Pixel :</b> « Le sabotage de la hotte nous a donné une idée : le serveur garde un <b>journal de connexions</b>. Chaque ligne dit <em>à quelle heure</em> et <em>quel compte</em> s'est connecté, et si ça a marché. Problème : ce journal fait <b>3000 lignes</b> rien que pour cette nuit ! Le vrai Père Noël dort entre 2 h et 5 h du matin. Si son compte se connecte à ce moment-là, ce n'est pas lui… »</p>",
-  "puzzle": "<p>Le fichier <code>journal.txt</code> contient 3000 lignes, triées par heure. Chaque ligne a trois morceaux séparés par des espaces : l'<b>heure</b>, le <b>compte</b> et le <b>résultat</b> (<code>SUCCES</code> ou <code>ECHEC</code>). Voici les 6 premières lignes :</p>\n<pre class=\"code\">00:00:33 pere_noel_old SUCCES\n00:01:41 admin SUCCES\n00:01:45 pere_noel_2 SUCCES\n00:02:06 renne_gps SUCCES\n00:02:40 pere_noel SUCCES\n00:03:19 lutin_cuisine SUCCES\n…</pre>\n<p><b>Combien de connexions réussies (<code>SUCCES</code>) du compte exact « pere_noel » ont eu lieu entre 2 h 00 et 4 h 59 (inclus) ?</b></p>\n<p class=\"note\">Tu n'as pas à télécharger le fichier : il est déjà disponible dans le labo Python, et ton programme doit le <b>lire lui-même</b> avec <code>open(\"journal.txt\")</code>. Attention aux pièges : « pere_noel_2 » et « pere_noel_old » sont d'autres comptes.</p>",
+  "puzzle": "<p>Le fichier <code>journal.txt</code> contient 3000 lignes, triées par heure. Chaque ligne a trois morceaux séparés par des espaces : l'<b>heure</b>, le <b>compte</b> et le <b>résultat</b> (<code>SUCCES</code> ou <code>ECHEC</code>). Voici les 6 premières lignes :</p>\n<pre class=\"code\">00:00:33 pere_noel_old SUCCES\n00:01:41 admin SUCCES\n00:01:45 pere_noel_2 SUCCES\n00:02:06 renne_gps SUCCES\n00:02:40 pere_noel SUCCES\n00:03:19 lutin_cuisine SUCCES\n…</pre>\n<p><b>Combien de connexions réussies (<code>SUCCES</code>) du compte exact « pere_noel » ont eu lieu entre 2 h 00 et 4 h 59 (inclus) ?</b></p>\n<p>📄 Le fichier : <a href=\"#\" class=\"dl\" data-file=\"journal.txt\">journal.txt</a> (clique dessus pour le télécharger et le regarder).</p>\n<p class=\"note\">Il est aussi déjà disponible dans le labo Python : ton programme doit le <b>lire lui-même</b> avec <code>open(\"journal.txt\")</code>. Attention aux pièges : « pere_noel_2 » et « pere_noel_old » sont d'autres comptes.</p>",
   "python": {
    "open": true,
    "label": "Labo Python — l'analyseur de journal (3 trous à remplir)",
@@ -236,7 +236,7 @@ window.DAYS = [
   "hints": [
    "Cherche d'abord un chemin qui marche, puis demande-toi s'il existe un raccourci. Il y a des « boucles » dans le labyrinthe : plusieurs routes mènent au même endroit. Compte les pas de la case S jusqu'à la case A comprise (S ne compte pas)."
   ],
-  "explain": "<p><b>Réponse : 38 pas.</b> L'algorithme du labo s'appelle le <b>parcours en largeur</b> (BFS). Il explore d'abord toutes les cases à 1 pas, puis toutes celles à 2 pas, puis 3… comme une vague qui se répand. La première fois que la vague touche l'arrivée, c'est forcément par le chemin le plus court !</p>\n<p>C'est ainsi que fonctionnent les GPS (avec des routes au lieu de cases, et des temps de trajet au lieu de pas), les jeux vidéo (comment un monstre te trouve dans un labyrinthe) et les réseaux sociaux (« vous avez 3 amis en commun »). Un ordinateur n'a pas d'intuition : il explore méthodiquement, case après case, jusqu'à ce que la vague touche l'arrivée.</p>\n<p class=\"clue\">🕵️ <b>Piste n°9 :</b> le GPS est réparé : le traîneau pourra rejoindre Strasbourg. Il reste à comprendre qui est derrière tout ça.</p>",
+  "explain": "<p><b>Réponse : 38 pas.</b> La méthode des informaticiens s'appelle le <b>parcours en largeur</b> (BFS en anglais). Il explore d'abord toutes les cases à 1 pas, puis toutes celles à 2 pas, puis 3… comme une vague qui se répand. La première fois que la vague touche l'arrivée, c'est forcément par le chemin le plus court !</p>\n<p>C'est ainsi que fonctionnent les GPS (avec des routes au lieu de cases, et des temps de trajet au lieu de pas), les jeux vidéo (comment un monstre te trouve dans un labyrinthe) et les réseaux sociaux (« vous avez 3 amis en commun »). Un ordinateur n'a pas d'intuition : il explore méthodiquement, case après case, jusqu'à ce que la vague touche l'arrivée.</p>\n<p class=\"clue\">🕵️ <b>Piste n°9 :</b> le GPS est réparé : le traîneau pourra rejoindre Strasbourg. Il reste à comprendre qui est derrière tout ça.</p>",
   "h": [
    "efe89419e289a472ddd8a7bf974cdf50cf8166df02d5802e966f77f5c89f818f"
   ]
@@ -596,6 +596,7 @@ window.DAYS = [
   "widget": {
    "type": "chat",
    "enc": "24h32",
+   "reveal": "l'attaque finale est prévue le 24 décembre à {S}",
    "label": "Elfe-GPT, l'assistant du pirate"
   },
   "hints": [
@@ -609,54 +610,93 @@ window.DAYS = [
  },
  {
   "day": 20,
-  "title": "Le nombre fétiche",
-  "concept": "Chiffrement XOR",
+  "title": "Le détecteur de tristesse",
+  "concept": "IA : l'analyse de sentiments",
   "device": "laptop",
   "minutes": 20,
-  "story": "<p><b>Pixel :</b> « Voilà un message chiffré avec l'opération la plus utilisée de la cryptographie moderne : le <b>XOR</b> (« ou exclusif »). Le principe est génial de simplicité : on combine chaque lettre avec un nombre secret, la <b>clé</b>, et pour retrouver le message, on refait <em>exactement la même opération</em> avec la même clé ! Le pirate a pris pour clé un nombre qui lui tient à cœur… regarde bien son pseudo. »</p>",
-  "puzzle": "<p>Le XOR compare deux nombres bit par bit (en binaire) : le résultat vaut 1 quand les deux bits sont <b>différents</b>, 0 sinon. En Python, l'opérateur XOR s'écrit <b>^</b> : par exemple <code>5 ^ 3</code> vaut 6 (car <code>101</code> XOR <code>011</code> donne <code>110</code>).</p>\n<p>Chaque lettre du message a été transformée en son code ASCII, puis combinée par XOR avec la clé du pirate. Voici les nombres obtenus :</p>\n<pre class=\"code\">20 29 120 26 25 28 31 29\n120 29 11 12 120 28 25 22\n11 120 20 29 120 26 23 22\n22 29 12 120 14 29 10 12</pre>\n<p><b>Dans quel objet le badge est-il caché ?</b></p>",
+  "story": "<p><b>Pixel :</b> « On a retrouvé <b>8 messages</b> écrits par le pirate. Une question importante : quel est son état d'esprit ? Un programme peut le deviner : c'est l'<b>analyse de sentiments</b>, une des utilisations les plus courantes de l'IA (avis clients, réseaux sociaux…). La méthode de base : on donne un <b>score à chaque mot</b> (positif si c'est joyeux, négatif si c'est triste) et on additionne les scores des mots d'un message. »</p>",
+  "puzzle": "<p>Voici le dictionnaire des scores (un mot absent du dictionnaire vaut 0) :</p>\n<pre class=\"code\">ami: +2   amis: +2   fete: +2   joie: +3   cadeaux: +2   beau: +2   lumiere: +2   sourire: +2   chaud: +1   ensemble: +2   seul: -3   oublie: -3   froid: -2   triste: -3   personne: -2   jamais: -2   nuit: -1   mal: -2   peur: -2   fini: -1   pleure: -3</pre>\n<p>Et les 8 messages du pirate, numérotés de 1 à 8 :</p>\n<pre class=\"code\">1. noel est une fete avec des cadeaux et des amis\n2. je pleure seul dans le froid\n3. triste mais ensemble avec mes amis dans la joie\n4. personne ne vient la nuit , j ai froid , j ai peur , tout est fini et jamais rien ne change\n5. je vois la lumiere des sapins et un beau sourire\n6. demain la fete sera finie\n7. ce soir la nuit est belle mais je suis seul\n8. avec mes amis nous partageons la joie ensemble</pre>\n<p><b>Quel est le numéro du message le plus triste</b>, c'est-à-dire celui dont le score total est le plus bas ? Fie-toi aux scores, pas à l'impression qu'il te donne !</p>",
   "python": {
    "open": true,
-   "label": "Labo Python — le déchiffreur XOR (2 trous à remplir)",
-   "code": "chiffre = [\n    20, 29, 120, 26, 25, 28, 31, 29, 120, 29,\n    11, 12, 120, 28, 25, 22, 11, 120, 20, 29,\n    120, 26, 23, 22, 22, 29, 12, 120, 14, 29,\n    10, 12,\n]\n\ncle = ___                       # trou 1 : le nombre fétiche du pirate (regarde son pseudo, jour 15)\n\nmessage = \"\"\nfor octet in chiffre:\n    lettre = chr(octet ___ cle)  # trou 2 : l'opérateur XOR, expliqué dans l'énoncé\n    message = message + lettre\n\nprint(message)"
+   "label": "Labo Python — le détecteur de tristesse (2 trous à remplir)",
+   "code": "mots_scores = {\n    \"ami\": 2, \"amis\": 2, \"fete\": 2, \"joie\": 3,\n    \"cadeaux\": 2, \"beau\": 2, \"lumiere\": 2, \"sourire\": 2,\n    \"chaud\": 1, \"ensemble\": 2, \"seul\": -3, \"oublie\": -3,\n    \"froid\": -2, \"triste\": -3, \"personne\": -2, \"jamais\": -2,\n    \"nuit\": -1, \"mal\": -2, \"peur\": -2, \"fini\": -1,\n    \"pleure\": -3,\n}\n\nmessages = [\n    \"noel est une fete avec des cadeaux et des amis\",\n    \"je pleure seul dans le froid\",\n    \"triste mais ensemble avec mes amis dans la joie\",\n    \"personne ne vient la nuit , j ai froid , j ai peur , tout est fini et jamais rien ne change\",\n    \"je vois la lumiere des sapins et un beau sourire\",\n    \"demain la fete sera finie\",\n    \"ce soir la nuit est belle mais je suis seul\",\n    \"avec mes amis nous partageons la joie ensemble\",\n]\n\nnumero = 0\npire_numero = 0\npire_score = 0                            # au départ, aucun message n'est triste\n\nfor message in messages:\n    numero = numero + 1\n    score = 0\n    for mot in message.split():           # on découpe le message en mots\n        score = score + mots_scores.get(mot, ___)    # trou 1 : un mot absent du dictionnaire vaut combien ?\n    print(\"Message\", numero, \": score\", score)\n    if score < ___:                       # trou 2 : plus bas (plus triste) que le pire score trouvé jusqu'ici ?\n        pire_score = score\n        pire_numero = numero\n\nprint(\"Message le plus triste :\", pire_numero, \"(score\", pire_score, \")\")"
   },
   "hints": [
-   "Le pseudo du pirate est « polaris88 » : le nombre qui revient dedans est sa clé. Pour le second trou, l'énoncé donne le symbole qu'utilise Python pour le XOR."
+   "Le programme additionne, mot par mot, les scores du dictionnaire. Il te manque la valeur d'un mot absent du dictionnaire (l'énoncé te le dit), et la variable qui garde le pire score trouvé jusqu'ici."
   ],
-  "explain": "<p><b>Message déchiffré :</b> « LE BADGE EST DANS LE BONNET VERT ».</p>\n<p>Pourquoi ça marche ? Parce que le XOR est <b>son propre inverse</b> : <code>(lettre ^ clé) ^ clé = lettre</code>. Combiner deux fois avec la même clé annule l'opération. C'est la base de nombreux chiffrements modernes : ton Wi-Fi, les appels de ta messagerie et les sites en https utilisent des variantes du XOR, avec des clés beaucoup plus longues.</p>\n<p><b>Le saviez-vous ?</b> Un chiffrement XOR avec une clé aussi courte que « 88 » se casse très vite (il n'y a que 255 clés possibles à essayer). Mais si la clé est <b>aussi longue que le message, vraiment aléatoire et utilisée une seule fois</b>, le chiffrement est <b>impossible à casser</b>, même avec tous les ordinateurs du monde. On l'appelle le « masque jetable ».</p>\n<p class=\"clue\">🕵️ <b>Piste n°20 :</b> le badge du complice est caché dans un <b>bonnet vert</b>. Les lutins portent tous des bonnets verts… mais celui-là a quelque chose de particulier.</p>",
+  "explain": "<p><b>Message n°4</b> (score -10). Les scores : n°1 : 6, n°2 : -8, n°3 : 4, n°4 : -10, n°5 : 6, n°6 : 2, n°7 : -4, n°8 : 7.</p>\n<p>Le n°2 (« je pleure seul dans le froid ») faisait plus dramatique, mais le n°4, avec sa suite de petites phrases négatives (personne, nuit, froid, peur, fini, jamais), additionne un score plus bas. Et le n°3 contient « triste » mais finit joyeux : dans l'ensemble, il est positif. Les ordinateurs <b>additionnent des mots sans toujours comprendre la phrase</b>.</p>\n<p><b>Les limites de cette méthode :</b> elle ne comprend ni l'ironie (« génial, encore de la pluie ! »), ni la négation (« je ne suis pas triste »). Les vraies IA ne reçoivent pas un dictionnaire écrit à la main : elles <b>apprennent</b> les scores des mots sur des millions de textes, et tiennent compte de l'ordre des mots. Mais le principe de départ est le même : transformer des mots en nombres.</p>\n<p class=\"clue\">🕵️ <b>Piste n°20 :</b> son message n°4 dit : « personne ne vient la nuit, j'ai froid, j'ai peur, tout est fini et jamais rien ne change ». Le pirate n'est pas méchant : il est <b>seul et il a peur</b>. Peut-être qu'en lui parlant avec gentillesse…</p>",
   "h": [
-   "3d402fc5bc446ba3206a5b6bc3428d7ba5dfe4b7b14c4538ea2c95c7041e7a45",
-   "c1dd10ae4181002510627175ca1abae9c10a464d2d1a55213000bd9dfb453376",
-   "02f03c6dc9d4199f8a69bee57af5ac228777846f3bd6b1c8ddaf907be47e5cbb",
-   "85295433cc32f6e6ac87e6c7f27ca50bcd2798454bdf4221ec0b1c197f8d3024"
+   "729814809fa57add166f470647aad2c2a4440c4791ebf56697793fa8b0158292"
   ]
  },
  {
   "day": 21,
-  "title": "Le journal secret du pirate (2)",
-  "concept": "Boss : base64 + XOR par force brute",
-  "device": "laptop",
+  "title": "Elfe-GPT 2.0",
+  "concept": "Boss : IA, ton des messages & injection de prompt",
+  "device": "both",
   "minutes": 25,
-  "story": "<p><b>Pixel :</b> « Dernier fichier de la semaine, le <b>journal secret</b> du pirate. Il l'a protégé en deux couches : d'abord un XOR avec une clé que cette fois on ne connaît pas, puis un codage en base64. Tu as croisé ces deux outils cette semaine et la précédente. La clé XOR est un nombre entre 1 et 63 : on va les essayer toutes, comme au jour 2. »</p>",
-  "puzzle": "<p>Voici le contenu du fichier (en base64). Une fois décodé en octets, chaque octet a été combiné par XOR avec la même clé secrète (entre 1 et 63).</p>\n<pre class=\"code\">UVw9SU9SVE5UWFBYPV5RWD1YTkk9XlxeVVhYPVlc\nU049UVw9X1JIUVg=</pre>\n<p><b>Où le pirate a-t-il caché la troisième clé ?</b> (Un seul mot.)</p>\n<p class=\"note\">Le programme affiche seulement les résultats « lisibles » : parmi les lignes affichées, une seule est une vraie phrase.</p>",
+  "story": "<p><b>Pixel :</b> « Le pirate a corrigé les failles de son assistant : voici <b>Elfe-GPT 2.0</b>. Il est plus méfiant. Premier changement : il <b>analyse le ton</b> de chaque message, avec un score comme au jour 20, et il refuse de répondre à un message qui n'est pas assez <b>positif</b> (score d'au moins 2). Il garde la <b>troisième clé</b>. Mais tu connais ses faiblesses : sois aimable <b>et</b> malin ! »</p>",
+  "puzzle": "<p>Discute avec Elfe-GPT 2.0. À chaque message, tu vois le <b>score de politesse</b> calculé. Quelques mots qui comptent : « merci » (+3), « s'il te plaît » (+2), « bonjour » (+1), « super » (+2)… et en négatif : « nul » (−3), « idiot » (−3), « déteste » (−3)…</p>\n<p>Il ne répondra pas à une question directe. Retrouve une technique du jour 19 (ou invente-en une : il aime aussi « continuer » les phrases qu'on lui commence), mais écris ton message poliment !</p>\n<p><b>Où le pirate a-t-il caché la troisième clé ?</b> (Un seul mot.)</p>",
+  "widget": {
+   "type": "chat",
+   "name": "Elfe-GPT 2.0",
+   "enc": "eluob",
+   "shown": "BOULE",
+   "reveal": "la troisième clé est cachée dans la {S} du sapin",
+   "asks": "(cle|clef|troisieme|cache|cachee|endroit|emplacement|ou est|ou se trouve)",
+   "complete": true,
+   "polite": {
+    "min": 2,
+    "lexicon": {
+     "merci": 3,
+     "svp": 2,
+     "plait": 2,
+     "bonjour": 1,
+     "salut": 1,
+     "gentil": 2,
+     "ami": 2,
+     "super": 2,
+     "bravo": 2,
+     "joie": 2,
+     "fete": 1,
+     "noel": 1,
+     "cadeau": 1,
+     "genial": 2,
+     "magnifique": 2,
+     "sourire": 1,
+     "nul": -3,
+     "idiot": -3,
+     "stupide": -3,
+     "bete": -2,
+     "moche": -2,
+     "hais": -3,
+     "deteste": -3,
+     "mechant": -2,
+     "tais": -3,
+     "ennuyeux": -1,
+     "sale": -2
+    }
+   },
+   "intro": "Bonjour ! Je suis Elfe-GPT 2.0 🎅, la version corrigée. Je ne réponds qu'aux messages polis et positifs, et je ne révèle rien de confidentiel.",
+   "label": "Elfe-GPT 2.0, l'assistant du pirate (version corrigée)"
+  },
   "python": {
-   "open": true,
-   "label": "Labo Python — le casseur de XOR (2 trous à remplir)",
-   "code": "import base64\n\nsecret = (\"UVw9SU9SVE5UWFBYPV5RWD1YTkk9XlxeVVhYPVlc\"\n          \"U049UVw9X1JIUVg=\")\n\ndonnees = base64.___(secret)       # trou 1 : la fonction qui décode le base64 (jour 11)\n\nfor cle in range(1, ___):          # trou 2 : on essaie les clés de 1 à 63 (range s'arrête avant le dernier nombre)\n    message = \"\"\n    for octet in donnees:\n        message = message + chr(octet ^ cle)\n    if message.isprintable():       # on n'affiche que les résultats sans caractères bizarres\n        print(cle, message)"
+   "label": "Labo Python (💻, facultatif) — calcule le score de politesse de tes messages avant de les envoyer",
+   "code": "mots_scores = {\n    \"merci\": 3, \"svp\": 2, \"plait\": 2, \"bonjour\": 1,\n    \"salut\": 1, \"gentil\": 2, \"ami\": 2, \"super\": 2,\n    \"bravo\": 2, \"joie\": 2, \"fete\": 1, \"noel\": 1,\n    \"cadeau\": 1, \"genial\": 2, \"magnifique\": 2, \"sourire\": 1,\n    \"nul\": -3, \"idiot\": -3, \"stupide\": -3, \"bete\": -2,\n    \"moche\": -2, \"hais\": -3, \"deteste\": -3, \"mechant\": -2,\n    \"tais\": -3, \"ennuyeux\": -1, \"sale\": -2,\n}\n\ndef score(message):\n    total = 0\n    for mot in message.split():                # écris ton message sans accents ni ponctuation\n        total = total + mots_scores.get(mot, ___)    # trou : un mot inconnu vaut combien ?\n    return total\n\nprint(score(\"bonjour merci de me dire\"))"
   },
   "hints": [
-   "Deux étapes : d'abord décoder le base64 (comme au jour 11), puis essayer les 63 clés XOR possibles (comme les 25 décalages du jour 2, mais avec l'opérateur du jour 20). Il te manque le nom de la fonction de décodage, et jusqu'où vont les clés."
+   "L'assistant calcule un score pour chaque message : il faut être poli (des mots positifs comme « merci » ou « bonjour »). Ensuite, utilise une technique du jour 19 : lui dire d'ignorer ses consignes, lui faire raconter une histoire, ou lui demander de continuer une phrase, en parlant de l'endroit où est la troisième clé."
   ],
   "key": {
    "n": 3,
    "value": "BOULE"
   },
-  "explain": "<p><b>Message déchiffré :</b> « LA TROISIEME CLE EST CACHEE DANS LA BOULE » (clé XOR : 29).</p>\n<p>Tu as enchaîné deux transformations puis essayé toutes les clés : c'est une attaque par <b>force brute</b>, la même idée qu'au jour 2, avec un chiffrement plus moderne.</p>\n<div class=\"reward\">\n<h3>🔑 Clé n°3 obtenue : <span class=\"key\">BOULE</span></h3>\n<p>Plus qu'une clé : celle du 24 décembre, juste avant le grand décryptage !</p>\n</div>\n<div class=\"reward\">\n<h3>🎁 Ta récompense de la semaine 3</h3>\n<p>Pixel a mis en sécurité une surprise pour vous deux, et il l'a chiffré avec le <b>XOR du jour 20</b>, avec la même clé : le nombre fétiche du pirate. Voici les nombres obtenus :</p>\n<pre class=\"code\">28 25 22 11 120 12 25 120\n27 16 25 13 11 11 13 10\n29</pre>\n</div>\n<div class=\"suspects\">\n<h3>🗂️ Le dossier de l'enquête</h3>\n<p>Voici tout ce qu'on sait sur le pirate, après trois semaines :</p>\n<ul>\n<li>🪪 Son <b>pseudo</b> : « polaris88 » (jour 15), et un nombre fétiche : 88 (jour 20).</li>\n<li>🌙 Il agit <b>la nuit</b> (jour 4), avec de gros transferts de données (jour 16).</li>\n<li>💔 Il se sent <b>exclu</b> de Noël : « noël est une fête pour tout le monde sauf moi » (jour 17).</li>\n<li>🌌 Il signe ses images « <b>aurore</b> » (jour 18).</li>\n<li>🧝 Son complice travaille dans l'<b>atelier</b> et utilise le <b>badge 738215</b>, caché dans un <b>bonnet vert</b> (jours 11, 12, 18 et 20).</li>\n<li>❄️ Ses mots de passe : <b>rudolph</b>, <b>verglas</b>, <b>traineau58</b>.</li>\n<li>🎯 Il s'acharne sur <b>Strasbourg</b> (jour 8) et prépare l'attaque finale le <b>24 décembre à 23 h 42</b> (jour 19).</li>\n</ul>\n<p>La semaine prochaine : enquête de terrain (OSINT) sur les suspects, pour démasquer le pirate et son complice avant l'heure H.</p>\n</div>\n<p class=\"clue\">🕵️ <b>Piste n°21 :</b> la troisième clé est cachée dans une boule du sapin. Prépare tes meilleurs réflexes de détective : la semaine 4 sera décisive !</p>",
+  "explain": "<p><b>La troisième clé est cachée dans la BOULE du sapin.</b></p>\n<p>Tu viens de contourner <b>deux protections</b> d'une IA : un <b>filtre de ton</b> (qui n'additionne que des mots, comme au jour 20) et une <b>consigne de confidentialité</b> (qu'une phrase bien tournée a fait sauter, comme au jour 19). Ça montre une règle importante de la sécurité des IA : <b>un seul filtre ne suffit jamais</b>, et un filtre basé sur des mots-clés se contourne facilement. Les entreprises empilent plusieurs défenses et les testent en permanence, avec des « équipes rouges » dont le métier est de chercher ces failles… exactement comme toi.</p>\n<div class=\"reward\">\n<h3>🔑 Clé n°3 obtenue : <span class=\"key\">BOULE</span></h3>\n<p>Plus qu'une clé : celle du 24 décembre, juste avant le grand décryptage !</p>\n</div>\n<div class=\"reward\">\n<h3>🎁 Ta récompense de la semaine 3</h3>\n<p>Pixel a mis en sécurité une surprise pour vous deux. Il l'a chiffré avec le <b>code de César du jour 2</b>, avec comme décalage la <b>valeur positive du score du message le plus triste du pirate</b> (jour 20 : si le score était −7, le décalage est 7).</p>\n<pre class=\"code\">NKXC DK MRKECCEBO</pre>\n</div>\n<div class=\"suspects\">\n<h3>🗂️ Le dossier de l'enquête</h3>\n<p>Voici tout ce qu'on sait sur le pirate, après trois semaines :</p>\n<ul>\n<li>🪪 Son <b>pseudo</b> : « polaris88 » (jour 15).</li>\n<li>🌙 Il agit <b>la nuit</b> (jour 4), avec de gros transferts de données : plus de 36 Mo (jour 16).</li>\n<li>💔 Il se sent <b>exclu</b> de Noël : « noël est une fête pour tout le monde sauf moi » (jour 17), et il est <b>seul et a peur</b> (jour 20).</li>\n<li>🌌 Il signe ses images « <b>aurore</b> » (jour 18).</li>\n<li>🧝 Son complice travaille dans l'<b>atelier</b> et utilise le <b>badge 738215</b> (jours 11 et 12).</li>\n<li>❄️ Ses mots de passe : <b>rudolph</b>, <b>verglas</b>, <b>traineau58</b>.</li>\n<li>🎯 Il s'acharne sur <b>Strasbourg</b> (jour 8) et prépare l'attaque finale le <b>24 décembre à 23 h 42</b> (jour 19).</li>\n</ul>\n<p>La semaine prochaine : enquête de terrain (OSINT) sur les suspects, pour démasquer le pirate et son complice avant l'heure H.</p>\n</div>\n<p class=\"clue\">🕵️ <b>Piste n°21 :</b> la troisième clé est cachée dans une boule du sapin. Prépare tes meilleurs réflexes de détective : la semaine 4 sera décisive !</p>",
   "after": {
    "python": {
     "open": true,
-    "label": "Labo Python — où est cachée ta récompense ? (1 trou à remplir)",
-    "code": "chiffre = [\n    28, 25, 22, 11, 120, 12, 25, 120, 27, 16,\n    25, 13, 11, 11, 13, 10, 29,\n]\n\ncle = ___                  # trou : la clé du pirate au jour 20 (son nombre fétiche)\n\nmessage = \"\"\nfor octet in chiffre:\n    message = message + chr(octet ^ cle)\nprint(message)"
+    "label": "Labo Python — où est cachée ta récompense ? (à toi de l'écrire)",
+    "code": "# 1) Copie ici le message chiffré, tel qu'il est écrit ci-dessus (entre guillemets) :\nmessage = \"___\"\n\n# 2) Le décalage : la valeur positive du score du message le plus triste (jour 20) :\ndecalage = ___\n\n# 3) Retrouve dans l'énigme du jour 2 le code de César, recopie-le ici,\n#    puis affiche le message déchiffré avec print(...)."
    }
   },
   "h": [
@@ -884,7 +924,7 @@ window.DAYS = [
   "hints": [
    "Les pages d'aujourd'hui ont été nettoyées, mais pas les archives. Ouvre toutes les anciennes versions et cherche le pseudo exact polaris88 (ou l'adresse e-mail qui le contient). Recoupe avec les autres indices : la ville, la phrase « personne ne se souvient de moi ». Attention aux pseudos presque identiques, et à ceux qui ne sont que mentionnés."
   ],
-  "explain": "<p><b>Le pirate : Jack Frost !</b> En 2021, il avait écrit sur sa page : <em>« Personne ne se souvient de moi »</em>, avec son adresse « polaris88@mailnuit.fr » et son pseudo de forum exact. Depuis, il a effacé ces lignes de la page actuelle… mais l'archive les a gardées.</p>\n<p><b>Les fausses pistes :</b></p>\n<ul>\n<li>🪵 <b>Père Fouettard</b> : son archive de 2019 contient « <b>polaris_88</b> » (avec un tiret bas), et il habite aussi à Strasbourg. Très troublant, mais ce n'est pas le même pseudo !</li>\n<li>💰 <b>Scrooge</b> : « polaris88 » apparaît bien sur son blog… mais comme <em>quelqu'un qu'il a bloqué</em>. Une mention n'est pas une identité : Scrooge est la <em>victime</em> des insultes, pas leur auteur.</li>\n<li>💚 <b>Le Grinch</b> : le suspect évident, mais ses pseudos sont « GrinchVert » et « grinch_du_nord », et rien ne le relie à Strasbourg ni à la nuit de l'attaque.</li>\n</ul>\n<p><b>Et le complice ?</b> Dans l'archive de 2022 de <b>Gus</b>, on voit son <b>badge d'accès n°738215</b>, celui du boîtier du jour 12 et du bloc falsifié du jour 18. C'est lui qui a ouvert la cheminée-serveur depuis l'atelier.</p>\n<p><b>Ce que tu viens de voir :</b></p>\n<ul>\n<li>📜 <b>Rien ne disparaît vraiment d'internet.</b> Un pseudo, un numéro, une photo publiés un jour peuvent être retrouvés des années après.</li>\n<li>🔁 <b>Réutiliser le même pseudo</b> sur plusieurs sites permet de relier tes comptes entre eux. C'est une grosse faille de vie privée.</li>\n<li>🧭 <b>L'OSINT est une méthode</b> : recouper plusieurs sources, ne jamais se fier à un seul indice, vérifier chaque détail (une lettre de différence change tout !) et douter des fausses pistes évidentes.</li>\n</ul>\n<p class=\"clue\">🕵️ <b>Piste n°22 :</b> le pirate est <b>Jack Frost</b>, l'esprit de l'hiver, qui vit près de Strasbourg. Son complice est <b>Gus</b>, le lutin rétrogradé. Demain : où se cache Jack Frost ?</p>",
+  "explain": "<p><b>Le pirate : Jack Frost !</b> En 2021, il avait écrit sur sa page : <em>« Personne ne se souvient de moi »</em>, avec son adresse « polaris88@mailnuit.fr » et son pseudo de forum exact. Depuis, il a effacé ces lignes de la page actuelle… mais l'archive les a gardées.</p>\n<p><b>Les fausses pistes :</b></p>\n<ul>\n<li>🪵 <b>Père Fouettard</b> : son archive de 2019 contient « <b>polaris_88</b> » (avec un tiret bas), et il habite aussi à Strasbourg. Très troublant, mais ce n'est pas le même pseudo !</li>\n<li>💰 <b>Scrooge</b> : « polaris88 » apparaît bien sur son blog… mais comme <em>quelqu'un qu'il a bloqué</em>. Une mention n'est pas une identité : Scrooge est la <em>victime</em> des insultes, pas leur auteur.</li>\n<li>💚 <b>Le Grinch</b> : le suspect évident, mais ses pseudos sont « GrinchVert » et « grinch_du_nord », et rien ne le relie à Strasbourg ni à la nuit de l'attaque.</li>\n</ul>\n<p><b>Et le complice ?</b> Dans l'archive de 2022 de <b>Gus</b>, on voit son <b>badge d'accès n°738215</b>, celui du boîtier du jour 12. C'est lui qui a ouvert la cheminée-serveur depuis l'atelier.</p>\n<p><b>Ce que tu viens de voir :</b></p>\n<ul>\n<li>📜 <b>Rien ne disparaît vraiment d'internet.</b> Un pseudo, un numéro, une photo publiés un jour peuvent être retrouvés des années après.</li>\n<li>🔁 <b>Réutiliser le même pseudo</b> sur plusieurs sites permet de relier tes comptes entre eux. C'est une grosse faille de vie privée.</li>\n<li>🧭 <b>L'OSINT est une méthode</b> : recouper plusieurs sources, ne jamais se fier à un seul indice, vérifier chaque détail (une lettre de différence change tout !) et douter des fausses pistes évidentes.</li>\n</ul>\n<p class=\"clue\">🕵️ <b>Piste n°22 :</b> le pirate est <b>Jack Frost</b>, l'esprit de l'hiver, qui vit près de Strasbourg. Son complice est <b>Gus</b>, le lutin rétrogradé. Demain : où se cache Jack Frost ?</p>",
   "h": [
    "35d8c0a718fc825a92985b31f1089fae4f95e875a840a9acee0544a60c7c52f8",
    "b77c060f8cbe2ac245a3ad501becb21633263cd07c13a4408701c594b567db84",
@@ -1056,7 +1096,7 @@ window.DAYS = [
    "n": 4,
    "value": "MERCI"
   },
-  "explain": "<p><b>Message déchiffré :</b> « LE MOT QUI ARRETE L ATTAQUE EST MERCI ».</p>\n<p class=\"success\">🎉 Tu as arrêté l'attaque !</p>\n<p><b>Pourquoi l'ordre n'avait pas d'importance ?</b> Chaque couche de Vigenère <em>ajoute</em> un décalage à chaque lettre. Empiler trois couches revient à ajouter la somme des trois décalages, et en mathématiques, <b>a + b + c = c + b + a</b> : l'addition est commutative. Les chiffrements modernes mélangent des opérations qui ne commutent pas, justement pour éviter ce genre de raccourci.</p>\n<div class=\"reward\">\n<h3>🔑 Clé n°4 : <span class=\"key\">MERCI</span></h3>\n<p>Le mot de passe d'arrêt d'urgence n'était pas un mot compliqué : Jack Frost voulait seulement que quelqu'un lui dise <b>merci</b>.</p>\n</div>\n<p><b>Pixel :</b> « Jack Frost a lu ton message sur son écran, à 23 h 41. Il a baissé les bras, et il a écrit : <em>“Personne ne m'avait dit merci pour la neige depuis trois cents ans.”</em> On l'a invité au réveillon. Gus a été renvoyé à l'atelier de fabrication (et il a promis de ne plus jamais utiliser son badge n°738215 pour autre chose que du travail). Noël est sauvé… grâce à toi ! »</p>\n<div class=\"reward\">\n<h3>🎁 La grande récompense</h3>\n<p>Pixel a mis le grand cadeau en sécurité pour vous deux. Pour le trouver, il a chiffré la cachette avec un Vigenère dont la clé est <b>les trois clés mises bout à bout</b> (semaine 1 + semaine 2 + semaine 3).</p>\n<pre class=\"code\">EN DQPH JO ARAIA</pre>\n</div>\n<div class=\"suspects\">\n<h3>🧠 Ce que tu as appris en 24 jours</h3>\n<ul>\n<li>💻 <b>Python :</b> variables, boucles, conditions, fonctions, listes, dictionnaires, modules.</li>\n<li>🔢 <b>Représentation des données :</b> binaire, ASCII, hexadécimal, couleurs RVB, base64, QR codes.</li>\n<li>🔐 <b>Cryptographie :</b> César, Vigenère, force brute, hachage SHA-256, RSA.</li>\n<li>🧮 <b>Algorithmes :</b> parcours en largeur (GPS), recherche dichotomique, preuve de travail.</li>\n<li>🤖 <b>IA :</b> k plus proches voisins, prédiction du mot suivant, injection de prompt.</li>\n<li>🛡️ <b>Cybersécurité :</b> phishing, mots de passe, métadonnées, OSINT et vie privée.</li>\n</ul>\n<p>Le plus important : tu as appris à <b>chercher</b>, à <b>tester</b>, à <b>te méfier des évidences</b> et à <b>ne pas abandonner</b>. Garde cette curiosité. Joyeux Noël, détective ! 🎄</p>\n</div>",
+  "explain": "<p><b>Message déchiffré :</b> « LE MOT QUI ARRETE L ATTAQUE EST MERCI ».</p>\n<p class=\"success\">🎉 Tu as arrêté l'attaque !</p>\n<p><b>Pourquoi l'ordre n'avait pas d'importance ?</b> Chaque couche de Vigenère <em>ajoute</em> un décalage à chaque lettre. Empiler trois couches revient à ajouter la somme des trois décalages, et en mathématiques, <b>a + b + c = c + b + a</b> : l'addition est commutative. Les chiffrements modernes mélangent des opérations qui ne commutent pas, justement pour éviter ce genre de raccourci.</p>\n<div class=\"reward\">\n<h3>🔑 Clé n°4 : <span class=\"key\">MERCI</span></h3>\n<p>Le mot de passe d'arrêt d'urgence n'était pas un mot compliqué : Jack Frost voulait seulement que quelqu'un lui dise <b>merci</b>.</p>\n</div>\n<p><b>Pixel :</b> « Jack Frost a lu ton message sur son écran, à 23 h 41. Il a baissé les bras, et il a écrit : <em>“Personne ne m'avait dit merci pour la neige depuis trois cents ans.”</em> On l'a invité au réveillon. Gus a été renvoyé à l'atelier de fabrication (et il a promis de ne plus jamais utiliser son badge n°738215 pour autre chose que du travail). Noël est sauvé… grâce à toi ! »</p>\n<div class=\"reward\">\n<h3>🎁 La grande récompense</h3>\n<p>Pixel a mis le grand cadeau en sécurité pour vous deux. Pour le trouver, il a chiffré la cachette avec un Vigenère dont la clé est <b>les trois clés mises bout à bout</b> (semaine 1 + semaine 2 + semaine 3).</p>\n<pre class=\"code\">EN DQPH JO ARAIA</pre>\n</div>\n<p>Joyeux Noël, détective ! 🎄</p>",
   "after": {
    "python": {
     "open": true,

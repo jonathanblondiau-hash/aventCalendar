@@ -29,8 +29,8 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 | 17 — IA générative : deviner le mot suivant | ✅ prêt |
 | 18 — Compression d'image (RLE) | ✅ prêt |
 | 19 — Injection de prompt : faire parler un chatbot (📱) | ✅ prêt |
-| 20 — Chiffrement XOR | ✅ prêt |
-| 21 — Boss de la semaine 3 : base64 + XOR par force brute + **clé n°3** + **récompense** + dossier de l'enquête | ✅ prêt |
+| 20 — IA : analyse de sentiments (score des mots) | ✅ prêt |
+| 21 — Boss de la semaine 3 : chatbot poli (ton des messages + injection de prompt) + **clé n°3** + **récompense** + dossier de l'enquête | ✅ prêt |
 | 22 — OSINT : les archives du web, 6 suspects et fausses pistes (📱) | ✅ prêt |
 | 23 — Métadonnées EXIF & Google Maps (📱, sans Python) | ✅ prêt |
 | 24 — Finale : le grand décryptage + **clé n°4** + **grande récompense** | ✅ prêt |
@@ -72,8 +72,8 @@ est arrêtée au bout de 8 secondes sans figer la page.
 1. Éditer `tools/generate.mjs` (semaine 1) `tools/semaine2.mjs` (semaine 2) ou `tools/semaine3.mjs` (semaine 3) ou `tools/semaine4.mjs` (semaine 4) : le contenu et la réponse en clair de chaque jour y sont définis.
 2. `node tools/generate.mjs` → régénère `js/days.js` (réponses hachées) et `parents/SOLUTIONS.md`.
 
-Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'strip' | 'chat' | 'archive' | 'exif' }`, `python: { label, code, open }`
-(utiliser `___` pour les trous à remplir), `files: { nom: contenu }` (fichiers que le programme peut lire avec `open()`), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
+Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'strip' | 'chat' (options : `polite`, `reveal`, `asks`, `complete`) | 'archive' | 'exif' }`, `python: { label, code, open }`
+(utiliser `___` pour les trous à remplir), `files: { nom: contenu }` (fichiers que le programme peut lire avec `open()`, téléchargeables via un lien `<a class="dl" data-file="nom">`), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
 
 ## Fichiers
 

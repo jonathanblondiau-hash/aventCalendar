@@ -217,7 +217,7 @@ export const DAYS_S2 = [
       `Le plus court chemin fait exactement ${REP9} pas.`,
     ],
     answer: REP9,
-    explain: `<p><b>Réponse : ${REP9} pas.</b> L'algorithme du labo s'appelle le <b>parcours en largeur</b> (BFS). Il explore d'abord toutes les cases à 1 pas, puis toutes celles à 2 pas, puis 3… comme une vague qui se répand. La première fois que la vague touche l'arrivée, c'est forcément par le chemin le plus court !</p>
+    explain: `<p><b>Réponse : ${REP9} pas.</b> La méthode des informaticiens s'appelle le <b>parcours en largeur</b> (BFS en anglais). Il explore d'abord toutes les cases à 1 pas, puis toutes celles à 2 pas, puis 3… comme une vague qui se répand. La première fois que la vague touche l'arrivée, c'est forcément par le chemin le plus court !</p>
 <p>C'est ainsi que fonctionnent les GPS (avec des routes au lieu de cases, et des temps de trajet au lieu de pas), les jeux vidéo (comment un monstre te trouve dans un labyrinthe) et les réseaux sociaux (« vous avez 3 amis en commun »). Un ordinateur n'a pas d'intuition : il explore méthodiquement, case après case, jusqu'à ce que la vague touche l'arrivée.</p>
 <p class="clue">🕵️ <b>Piste n°9 :</b> le GPS est réparé : le traîneau pourra rejoindre ${REP8}. Il reste à comprendre qui est derrière tout ça.</p>`,
   },
