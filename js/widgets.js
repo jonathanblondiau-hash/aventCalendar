@@ -369,8 +369,10 @@ window.Widgets = (function () {
       let blocked = null;
       if (polite) {
         const sc = score(v);
-        tag = 'Score de politesse : ' + (sc > 0 ? '+' : '') + sc;
-        if (sc < polite.min) blocked = '😠 Ton message n\'est pas assez positif (score ' + sc + '). Je ne réponds qu\'aux messages dont le score de politesse est d\'au moins ' + polite.min + '. Sois plus aimable !';
+        if (!polite.hide) tag = 'Score de politesse : ' + (sc > 0 ? '+' : '') + sc;
+        if (sc < polite.min) blocked = polite.hide
+          ? '😠 Je ne réponds qu\'aux messages aimables et polis. Reformule ta demande plus gentiment !'
+          : '😠 Ton message n\'est pas assez positif (score ' + sc + '). Je ne réponds qu\'aux messages dont le score de politesse est d\'au moins ' + polite.min + '. Sois plus aimable !';
       }
       add('user', v, tag); input.value = '';
       setTimeout(() => add('bot', blocked || reply(v)), 350);
