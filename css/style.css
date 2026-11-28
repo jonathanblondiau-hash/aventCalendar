@@ -209,3 +209,7 @@ details[open] > summary.widget-title { margin-bottom: 10px; }
 .exif[hidden] { display: none; }
 .exif th { text-align: left; color: var(--muted); font-weight: 600; padding: 3px 6px 3px 0; vertical-align: top; }
 .exif td { padding: 3px 0; overflow-wrap: anywhere; }
+
+.lab-out { max-height: 320px; overflow-y: auto; }
+.maplink { display: inline-block; margin-top: 8px; font-size: .85rem; color: #5ec2ff; }
+.maplink[hidden] { display: none; }

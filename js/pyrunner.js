@@ -20,6 +20,7 @@ window.PyRunner = (function () {
     'init.catch((e) => postMessage({ type: "initerror", error: String(e) }));',
     'onmessage = async (e) => {',
     '  await init; buf = [];',
+    '  if (e.data.files) { for (const n in e.data.files) py.FS.writeFile(n, e.data.files[n]); }',
     '  try { await py.runPythonAsync(e.data.code); postMessage({ type: "done", out: buf.join("\\n") }); }',
     '  catch (err) { postMessage({ type: "error", out: buf.join("\\n"), error: String(err.message || err) }); }',
     '};',
@@ -53,7 +54,7 @@ window.PyRunner = (function () {
     return '⚠️ Erreur' + where + ' : ' + last + (tip ? '\n👉 ' + tip : '');
   }
 
-  async function run(code, onStatus) {
+  async function run(code, onStatus, files) {
     if (/___/.test(code)) return { ok: false, text: '✏️ Il reste des « ___ » à remplacer par ta réponse avant de lancer le programme !' };
     if (!window.Worker) return { ok: false, text: 'Ton navigateur ne peut pas exécuter Python ici.' };
     try {
@@ -77,7 +78,7 @@ window.PyRunner = (function () {
         else resolve({ ok: false, text: (e.data.out ? e.data.out + '\n' : '') + friendly(e.data.error) });
       };
       worker.addEventListener('message', onMsg);
-      worker.postMessage({ code });
+      worker.postMessage({ code, files });
     });
   }
 

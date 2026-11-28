@@ -125,7 +125,7 @@ if (QR.text !== b64(CLAIR11)) throw new Error('Jour 11 : le QR code ne correspon
 // Jour 12 : recherche dichotomique (code PIN)
 // =====================================================================
 const PIN12 = 738215;
-const MAX12 = 1000000;
+const MAX12 = 999999; // un code à 6 chiffres : de 000000 à 999999 (un million de possibilités)
 const ESSAIS12 = 22;
 
 // =====================================================================
@@ -185,7 +185,6 @@ export const DAYS_S2 = [
         '        degats[ville] = degats.get(ville, 0) + ___           # trou 2 : on ajoute une victime à cette ville',
         '',
         'print(degats)',
-        'print("Ville la plus touchée :", max(degats, key=degats.get))',
       ].join('\n'),
     },
     hints: [
@@ -208,44 +207,18 @@ export const DAYS_S2 = [
     minutes: 20,
     story: `<p><b>Pixel :</b> « Le pirate a aussi détraqué le GPS du traîneau : plus aucune route vers <b>${REP8}</b> ! J'ai retrouvé la carte du glacier qui entoure le Pôle Nord : un labyrinthe de murs de glace. Il faut recalculer l'itinéraire le <b>plus court</b> de l'atelier (S) jusqu'à ${REP8} (A). »</p>`,
     puzzle: `<p>Voici la carte : les cases sombres sont des murs de glace, on se déplace d'une case à la fois vers le haut, le bas, la gauche ou la droite (pas en diagonale). Il existe <b>plusieurs chemins</b> de S à A, mais un seul nombre de pas est le minimum.</p>
-<p><b>Quel est le nombre minimal de déplacements pour aller de S à A ?</b></p>
-<p class="note">Sur téléphone : touche les cases du chemin pour les marquer, le compteur te donne le nombre de pas. Sur Chromebook : tu peux aussi laisser un programme chercher (c'est exactement comme ça que fonctionne un GPS).</p>`,
+<p><b>Comment compter ?</b> Un <b>pas</b> = un déplacement vers une case voisine. Si tu pars de S et que tu marches sur 5 cases pour arriver à A (A compris), ton chemin fait <b>5 pas</b> : la case de départ S ne compte pas, la case d'arrivée A compte. Le compteur sous la carte fait ce calcul pour toi.</p>
+<p><b>Quel est le nombre minimal de pas pour aller de S à A ?</b></p>
+<p class="note">Touche les cases de ton chemin pour les marquer (une case touchée une 2ᵉ fois se démarque). Cherche bien : il y a des raccourcis cachés.</p>`,
     widget: { type: 'maze', rows: MAZE, label: 'La carte du glacier — touche les cases pour marquer ton chemin' },
-    python: {
-      label: 'Labo Python (💻, facultatif) — l\'algorithme du GPS : parcours en largeur (2 trous)',
-      code: [
-        MAZE_PY,
-        '',
-        '# On cherche la case de départ S',
-        'for l in range(len(labyrinthe)):',
-        '    for c in range(len(labyrinthe[0])):',
-        '        if labyrinthe[l][c] == "S":',
-        '            depart = (l, c)',
-        '',
-        'from collections import deque',
-        'file = deque([depart])               # les cases à explorer, dans l\'ordre',
-        'distance = {depart: 0}               # distance (en pas) depuis le départ de chaque case découverte',
-        '',
-        'while file:',
-        '    l, c = file.popleft()            # on prend la case la plus ancienne de la file',
-        '    if labyrinthe[l][c] == "A":',
-        '        print("Distance minimale :", distance[(l, c)])',
-        '        break',
-        '    for dl, dc in [(1, 0), (-1, 0), (0, 1), (0, ___)]:     # trou 1 : les 4 directions, il manque la gauche',
-        '        nl, nc = l + dl, c + dc',
-        '        if labyrinthe[nl][nc] != "#" and (nl, nc) not in ___:   # trou 2 : pas déjà visitée',
-        '            distance[(nl, nc)] = distance[(l, c)] + 1',
-        '            file.append((nl, nc))',
-      ].join('\n'),
-    },
     hints: [
-      'Cherche d\'abord un chemin qui marche, puis demande-toi s\'il existe un raccourci. Il y a des « boucles » dans le labyrinthe : plusieurs routes mènent au même endroit.',
-      'Dans le labo (facultatif) : trou 1 = <code>-1</code> (la gauche), trou 2 = <code>distance</code> (le dictionnaire des cases déjà découvertes).',
+      'Cherche d\'abord un chemin qui marche, puis demande-toi s\'il existe un raccourci. Il y a des « boucles » dans le labyrinthe : plusieurs routes mènent au même endroit. Compte les pas de la case S jusqu\'à la case A comprise (S ne compte pas).',
+      'Si tu trouves un nombre juste en dessous de la bonne réponse, vérifie que tu as bien compté la case A d\'arrivée.',
       `Le plus court chemin fait exactement ${REP9} pas.`,
     ],
     answer: REP9,
     explain: `<p><b>Réponse : ${REP9} pas.</b> L'algorithme du labo s'appelle le <b>parcours en largeur</b> (BFS). Il explore d'abord toutes les cases à 1 pas, puis toutes celles à 2 pas, puis 3… comme une vague qui se répand. La première fois que la vague touche l'arrivée, c'est forcément par le chemin le plus court !</p>
-<p>C'est ainsi que fonctionnent les GPS (avec des routes au lieu de cases, et des temps de trajet au lieu de pas), les jeux vidéo (comment un monstre te trouve dans un labyrinthe) et les réseaux sociaux (« vous avez 3 amis en commun »).</p>
+<p>C'est ainsi que fonctionnent les GPS (avec des routes au lieu de cases, et des temps de trajet au lieu de pas), les jeux vidéo (comment un monstre te trouve dans un labyrinthe) et les réseaux sociaux (« vous avez 3 amis en commun »). Un ordinateur n'a pas d'intuition : il explore méthodiquement, case après case, jusqu'à ce que la vague touche l'arrivée.</p>
 <p class="clue">🕵️ <b>Piste n°9 :</b> le GPS est réparé : le traîneau pourra rejoindre ${REP8}. Il reste à comprendre qui est derrière tout ça.</p>`,
   },
   // ------------------------------------------------------------ JOUR 10
@@ -263,7 +236,24 @@ export const DAYS_S2 = [
       open: true,
       label: 'Labo Python — le décodeur de Vigenère (2 trous à remplir)',
       code: [
-        VIGENERE_PY.replace('(numero - decalage)', '(numero - ___)').replace('# la lettre de la clé donne le décalage (A=0, B=1...)', '# la lettre de la clé donne le décalage (A=0, B=1...)'),
+        [
+          'def dechiffrer_vigenere(texte, cle):',
+          '    resultat = ""',
+          '    i = 0                                          # position dans la clé',
+          '    for lettre in texte:',
+          '        if lettre == " ":',
+          '            resultat = resultat + " "',
+          '        else:',
+          '            lettre_cle = cle[i % len(cle)]          # la lettre de la clé qui correspond à cette position',
+          '            decalage = ord(lettre_cle) - 65         # A=0, B=1, C=2...',
+          '            numero = ord(lettre) - 65',
+          '            nouveau = (numero - ___) % 26           # trou 1 : on recule du décalage',
+          '            nouvelle_lettre = chr(nouveau + 65)',
+          '            print(lettre, "| lettre de la clé :", lettre_cle, "| décalage :", decalage, "->", nouvelle_lettre)',
+          '            resultat = resultat + nouvelle_lettre',
+          '            i = i + 1',
+          '    return resultat',
+        ].join('\n'),
         '',
         `message = "${CHIFFRE10}"`,
         'cle = "___"           # trou 2 : le mot de passe que le pirate réutilise (en MAJUSCULES)',
@@ -321,16 +311,16 @@ export const DAYS_S2 = [
     concept: 'Recherche dichotomique',
     device: 'both',
     minutes: 15,
-    story: `<p><b>Pixel :</b> « Le complice a laissé un <b>badge électronique</b> dans l'atelier. Pour savoir à qui il appartient, il faut ouvrir son boîtier avec le code <b>PIN à 6 chiffres</b>… un nombre entre 1 et 1 000 000 ! Heureusement, le boîtier est bavard : à chaque essai, il répond « C'est plus » ou « C'est moins ». Mais attention : après <b>${ESSAIS12} essais ratés</b>, l'alarme se déclenche ! »</p>`,
-    puzzle: `<p>Un million de possibilités, ${ESSAIS12} essais seulement : impossible d'essayer les nombres un par un ! Il faut une stratégie maligne : <b>à chaque essai, éliminer la moitié des possibilités</b>.</p>
+    story: `<p><b>Pixel :</b> « Le complice a laissé un <b>badge électronique</b> dans l'atelier. Pour savoir à qui il appartient, il faut ouvrir son boîtier avec le code <b>PIN à 6 chiffres</b>… un nombre entre <b>0 et 999 999</b>, soit un million de possibilités ! Heureusement, le boîtier est bavard : à chaque essai, il répond « C'est plus » ou « C'est moins ». Mais attention : après <b>${ESSAIS12} essais ratés</b>, l'alarme se déclenche ! »</p>`,
+    puzzle: `<p>Un million de possibilités (de 0 à 999 999), ${ESSAIS12} essais seulement : impossible d'essayer les nombres un par un ! Il faut une stratégie maligne : <b>à chaque essai, éliminer la moitié des possibilités</b>.</p>
 <p><b>Quel est le code PIN du boîtier ?</b></p>`,
-    widget: { type: 'guess', max: MAX12, tries: ESSAIS12, enc: PIN12 + 314159, label: 'Le boîtier du badge' },
+    widget: { type: 'guess', min: 0, max: MAX12, tries: ESSAIS12, enc: PIN12 + 314159, label: 'Le boîtier du badge' },
     python: {
       label: 'Labo Python (💻, facultatif) — pourquoi ça marche : la recherche dichotomique en 2 trous',
       code: [
         'secret = 456789          # un nombre quelconque, pour t\'entraîner',
-        'bas = 1',
-        'haut = 1000000',
+        'bas = 0',
+        'haut = 999999',
         'essais = 0',
         '',
         'while True:',
@@ -347,12 +337,12 @@ export const DAYS_S2 = [
       ].join('\n'),
     },
     hints: [
-      'Ne teste pas 1, puis 2, puis 3… Commence par le nombre au milieu de l\'intervalle (500 000). Selon la réponse « plus » ou « moins », tu sais dans quelle moitié se trouve le code. Recommence avec la moitié qui reste, et ainsi de suite.',
+      'Ne teste pas 1, puis 2, puis 3… Commence par le nombre au milieu de l\'intervalle (environ 500 000). Selon la réponse « plus » ou « moins », tu sais dans quelle moitié se trouve le code. Recommence avec la moitié qui reste, et ainsi de suite.',
       'Après le premier essai (500 000), il reste 500 000 possibilités ; après le deuxième, 250 000 ; puis 125 000… Il suffit de 20 essais pour un million de possibilités.',
       `Le code est entre 700 000 et 800 000. Continue à couper en deux !`,
     ],
     answer: String(PIN12),
-    explain: `<p><b>Code PIN : ${PIN12}.</b> La méthode s'appelle la <b>recherche dichotomique</b>. Chaque essai coupe l'intervalle en deux : 1 000 000 → 500 000 → 250 000 → … → 1 en 20 essais. C'est le « log₂ » de 1 000 000 !</p>
+    explain: `<p><b>Code PIN : ${PIN12}.</b> La méthode s'appelle la <b>recherche dichotomique</b>. Chaque essai coupe l'intervalle en deux : 1 000 000 de possibilités → 500 000 → 250 000 → … → 1 en 20 essais. C'est le « log₂ » de 1 000 000 !</p>
 <p>La différence avec la méthode « un par un » est gigantesque : <b>jusqu'à 1 000 000 d'essais</b> d'un côté, <b>20 au maximum</b> de l'autre. Pour 1 milliard de possibilités ? Seulement <b>30</b> essais. C'est ce qui rend les moteurs de recherche et les bases de données si rapides.</p>
 <p><b>Le saviez-vous ?</b> C'est aussi pour ça qu'un code PIN à 4 chiffres est faible face à un ordinateur : 10 000 possibilités, c'est quelques secondes. D'où les blocages après 3 essais sur les cartes bancaires !</p>
 <p class="clue">🕵️ <b>Piste n°12 :</b> dans le boîtier, un badge numéro <b>${PIN12}</b>, enregistré pour un employé de l'atelier. Son identité est protégée… mais pas pour longtemps.</p>`,
@@ -383,6 +373,7 @@ export const DAYS_S2 = [
         '    for n in range(___):                     # trou 1 : les nombres de 00 à 99, donc range(combien ?)',
         '        essai = mot + f"{n:02d}"             # par ex. "noel07" : le nombre est toujours écrit avec 2 chiffres',
         '        empreinte = hashlib.sha256(essai.encode()).hexdigest()',
+        '        print(essai, "->", empreinte[:16])   # on affiche chaque essai et le début de son empreinte',
         '        if ___ == cible:                     # trou 2 : on compare l\'empreinte calculée à la cible',
         '            print("Mot de passe trouvé :", essai)',
       ].join('\n'),
@@ -411,25 +402,25 @@ export const DAYS_S2 = [
 <p><b>Où le pirate a-t-il caché la deuxième clé ?</b> (Un seul mot.)</p>`,
     python: {
       open: true,
-      label: 'Labo Python — la chaîne de décryptage (2 trous à remplir)',
+      label: 'Labo Python — la chaîne de décryptage (à toi de l\'écrire)',
       code: [
-        'import base64',
+        '# 1) Copie ici le texte de l\'énoncé (le fichier en base64), entre guillemets :',
+        'secret = "___"',
         '',
-        chunksPy('secret', SECRET14, 40, 10),
+        '# 2) Étape 1 : décoder le base64 pour retrouver le texte chiffré.',
+        '#    Retrouve dans l\'énigme du jour 11 le code qui fait ça, et recopie-le ici.',
         '',
-        VIGENERE_PY,
         '',
-        '# Étape 1 : décoder le base64 pour retrouver le texte chiffré',
-        'texte = base64.___(secret).decode()      # trou 1 : la fonction de décodage base64 (jour 11)',
+        '# 3) Étape 2 : déchiffrer le Vigenère avec un mot de passe du pirate.',
+        '#    Retrouve dans l\'énigme du jour 10 la fonction qui déchiffre, et recopie-la ici.',
         '',
-        '# Étape 2 : déchiffrer le Vigenère avec le bon mot de passe',
-        'cle = "___"                              # trou 2 : lequel des deux mots de passe du pirate ? (en MAJUSCULES)',
-        'print(dechiffrer_vigenere(texte, cle))',
+        '',
+        '# 4) Enchaîne les deux étapes, et affiche le résultat avec print(...).',
       ].join('\n'),
     },
     hints: [
-      'Deux étapes enchaînées : le base64 en dernier a été appliqué, donc c\'est la première chose à défaire. Trou 1 : la même fonction qu\'au jour 11. Trou 2 : le pirate a utilisé deux mots de passe jusqu\'ici ; essaie-les tous les deux et regarde lequel donne une vraie phrase.',
-      'Trou 1 : <code>b64decode</code>. Trou 2 : le mot de passe est celui trouvé au jour 10 (le second message), pas celui du jour 2.',
+      'Tu as déjà écrit le code de chacune des deux étapes : le base64 au jour 11, le Vigenère au jour 10. Retourne les consulter (les énigmes restent ouvertes), recopie-les dans le labo et enchaîne-les. Le base64 a été appliqué en dernier : c\'est la première chose à défaire. Pour le mot de passe, le pirate en a utilisé deux jusqu\'ici : essaie-les et regarde lequel donne une vraie phrase.',
+      'Étape 1 : <code>base64.b64decode(secret).decode()</code>. Étape 2 : la fonction du jour 10, avec le mot de passe trouvé au jour 10 (le second message), pas celui du jour 2.',
       'La clé est <code>VERGLAS</code>. La phrase finale dit où est cachée la deuxième clé : un objet qui brille sur le sapin.',
     ],
     answer: ['guirlande', 'laguirlande'],
@@ -460,13 +451,16 @@ export const DAYS_S2 = [
     after: {
       python: {
         open: true,
-        label: 'Labo Python — où est cachée ta récompense ? (1 trou à remplir)',
+        label: 'Labo Python — où est cachée ta récompense ? (à toi de l\'écrire)',
         code: [
-          VIGENERE_PY,
+          '# 1) Copie ici le message chiffré, tel qu\'il est écrit ci-dessus (entre guillemets) :',
+          'message = "___"',
           '',
-          `message = "${CACHETTE2_CHIFFREE}"`,
-          'cle = "___"        # le premier mot de passe du pirate, trouvé au jour 2 (en MAJUSCULES)',
-          'print(dechiffrer_vigenere(message, cle))',
+          '# 2) Copie ici la clé : le premier mot de passe du pirate, trouvé au jour 2 (en MAJUSCULES) :',
+          'cle = "___"',
+          '',
+          '# 3) Retrouve dans l\'énigme du jour 10 la fonction qui déchiffre un Vigenère, recopie-la ici,',
+          '#    puis affiche le résultat avec print(...).',
         ].join('\n'),
       },
     },

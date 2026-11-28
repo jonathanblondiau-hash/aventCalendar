@@ -86,7 +86,7 @@ window.Widgets = (function () {
     run.addEventListener('click', async () => {
       run.disabled = true;
       out.className = 'lab-out';
-      const res = await PyRunner.run(area.value, (t) => (status.textContent = t));
+      const res = await PyRunner.run(area.value, (t) => (status.textContent = t), cfg.files);
       status.textContent = '';
       out.textContent = res.text;
       out.classList.toggle('err', !res.ok);
@@ -160,7 +160,7 @@ window.Widgets = (function () {
     scroller.appendChild(grid);
     const out = el('div', 'bits-out');
     let n = 0;
-    const update = () => { out.innerHTML = 'Cases marquées (sans compter le départ) : <b>' + n + '</b>'; };
+    const update = () => { out.innerHTML = 'Pas comptés (cases marquées, la case d\'arrivée A comprise, la case de départ S non) : <b>' + n + '</b>'; };
     cfg.rows.forEach((row) => [...row].forEach((ch) => {
       const cell = el('button', 'mz ' + (ch === '#' ? 'wall' : 'free') + (ch === 'S' ? ' start' : '') + (ch === 'A' ? ' end' : ''));
       cell.type = 'button';
@@ -197,12 +197,13 @@ window.Widgets = (function () {
   // --- Boîtier à code : « plus » / « moins » avec un nombre limité d'essais ---
   function guess(box, cfg) {
     const secret = cfg.enc - 314159;
+    const min = cfg.min === undefined ? 1 : cfg.min;
     const wrap = el('div', 'widget');
     wrap.appendChild(el('div', 'widget-title', '🔢 ' + (cfg.label || 'Boîtier')));
     const info = el('div', 'bits-out');
     const row = el('form', 'guess-row');
     const input = el('input');
-    input.type = 'number'; input.min = 1; input.max = cfg.max; input.inputMode = 'numeric'; input.placeholder = 'Un nombre entre 1 et ' + cfg.max.toLocaleString('fr-FR');
+    input.type = 'number'; input.min = min; input.max = cfg.max; input.inputMode = 'numeric'; input.placeholder = 'Un nombre entre ' + min + ' et ' + cfg.max.toLocaleString('fr-FR');
     const go = el('button', 'btn small', 'Essayer');
     go.type = 'submit';
     row.append(input, go);
@@ -213,7 +214,7 @@ window.Widgets = (function () {
     row.addEventListener('submit', (e) => {
       e.preventDefault();
       const v = parseInt(input.value, 10);
-      if (!(v >= 1 && v <= cfg.max)) { show('Entre un nombre entre 1 et ' + cfg.max.toLocaleString('fr-FR') + '.'); return; }
+      if (!(v >= min && v <= cfg.max)) { show('Entre un nombre entre ' + min + ' et ' + cfg.max.toLocaleString('fr-FR') + '.'); return; }
       input.value = '';
       const li = el('li');
       if (v === secret) {
@@ -288,6 +289,29 @@ window.Widgets = (function () {
       ctx.beginPath(); ctx.arc(X(p[0]), Y(p[1]), 9, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
       ctx.fillStyle = '#111'; ctx.font = 'bold 11px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.fillText(i + 1, X(p[0]), Y(p[1]) + 4);
     });
+    wrap.appendChild(cv);
+    box.appendChild(wrap);
+  }
+
+  // --- Diagramme en bande : deux rangées de points (normal / pirate) sur un axe ---
+  function strip(box, cfg) {
+    const wrap = el('div', 'widget');
+    wrap.appendChild(el('div', 'widget-title', '📊 ' + (cfg.label || 'Mesures')));
+    const W = 560, H = 190, L = 84, R = 14;
+    const cv = el('canvas', 'scatter');
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    const X = (v) => L + (v / 100) * (W - L - R);
+    ctx.fillStyle = '#0a1124'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.fillStyle = '#a9b8d8'; ctx.font = '12px system-ui, sans-serif'; ctx.textAlign = 'center';
+    for (let v = 0; v <= 100; v += 10) { ctx.beginPath(); ctx.moveTo(X(v), 14); ctx.lineTo(X(v), H - 30); ctx.stroke(); ctx.fillText(v, X(v), H - 14); }
+    ctx.fillText('Mo envoyés', (L + W - R) / 2, H - 1);
+    ctx.textAlign = 'right'; ctx.font = 'bold 12px system-ui, sans-serif';
+    ctx.fillStyle = '#5ec2ff'; ctx.fillText('normales', L - 8, 56);
+    ctx.fillStyle = '#ff6b6b'; ctx.fillText('pirate', L - 8, 118);
+    const dot = (v, y, c) => { ctx.beginPath(); ctx.arc(X(v), y, 6, 0, Math.PI * 2); ctx.fillStyle = c; ctx.globalAlpha = .85; ctx.fill(); ctx.globalAlpha = 1; };
+    cfg.normal.forEach((v) => dot(v, 52, '#5ec2ff'));
+    cfg.pirate.forEach((v) => dot(v, 114, '#ff6b6b'));
     wrap.appendChild(cv);
     box.appendChild(wrap);
   }
@@ -386,11 +410,19 @@ window.Widgets = (function () {
       tbl.innerHTML = Object.keys(ph.meta).map((k) => '<tr><th>' + esc(k) + '</th><td>' + esc(ph.meta[k]) + '</td></tr>').join('');
       btn.addEventListener('click', () => { tbl.hidden = !tbl.hidden; btn.textContent = tbl.hidden ? '🔎 Métadonnées' : '🙈 Masquer'; });
       card.append(btn, tbl);
+      if (ph.gps) {
+        const a = el('a', 'maplink', '🗺️ Ouvrir ces coordonnées dans Google Maps');
+        a.href = 'https://www.google.com/maps?q=' + ph.gps.join(',');
+        a.target = '_blank'; a.rel = 'noopener';
+        a.hidden = true;
+        btn.addEventListener('click', () => { a.hidden = tbl.hidden; });
+        card.appendChild(a);
+      }
       grid.appendChild(card);
     });
     wrap.appendChild(grid);
     box.appendChild(wrap);
   }
 
-  return { bits, cesar, python, switches, swatches, maze, qr, guess, mails, scatter, chat, archive, exif };
+  return { bits, cesar, python, switches, swatches, maze, qr, guess, mails, scatter, strip, chat, archive, exif };
 })();

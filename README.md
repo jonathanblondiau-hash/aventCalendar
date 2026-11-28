@@ -13,26 +13,26 @@ La progression est sauvegardée dans le navigateur de l'appareil (un seul profil
 | 1 — Binaire, ASCII & premier programme Python | ✅ prêt |
 | 2 — César, fonctions & force brute | ✅ prêt |
 | 3 — Variables en Python | ✅ prêt |
-| 4 — Boucles, conditions & compteurs (journal de connexions) | ✅ prêt |
+| 4 — Lire un fichier, boucles & conditions (journal de connexions) | ✅ prêt |
 | 5 — Logique booléenne (coffre à 4 interrupteurs, 📱 possible) | ✅ prêt |
 | 6 — Hexadécimal & couleurs | ✅ prêt |
 | 7 — Boss de la semaine 1 + **clé n°1** + **récompense** | ✅ prêt |
 | 8 — Dictionnaires & compteurs (listes sabotées) | ✅ prêt |
-| 9 — Labyrinthe & parcours en largeur (📱 possible) | ✅ prêt |
+| 9 — Labyrinthe & parcours en largeur (📱, sans Python) | ✅ prêt |
 | 10 — Vigenère & mots de passe | ✅ prêt |
 | 11 — QR code & base64 (📱 + 💻) | ✅ prêt |
 | 12 — Recherche dichotomique, code à 6 chiffres (📱 possible) | ✅ prêt |
 | 13 — Hachage SHA-256 & attaque par dictionnaire | ✅ prêt |
 | 14 — Boss de la semaine 2 + **clé n°2** + **récompense** + dossier des suspects | ✅ prêt |
 | 15 — Phishing & faux e-mail (📱) | ✅ prêt |
-| 16 — IA : k plus proches voisins | ✅ prêt |
-| 17 — IA générative : prédire le mot suivant (chaîne de Markov) | ✅ prêt |
-| 18 — Blockchain & preuve de travail | ✅ prêt |
+| 16 — IA : apprendre un seuil à partir d'exemples | ✅ prêt |
+| 17 — IA générative : deviner le mot suivant | ✅ prêt |
+| 18 — Compression d'image (RLE) | ✅ prêt |
 | 19 — Injection de prompt : faire parler un chatbot (📱) | ✅ prêt |
-| 20 — RSA : clé publique / clé privée | ✅ prêt |
-| 21 — Boss de la semaine 3 : casser RSA + **clé n°3** + **récompense** + dossier de l'enquête | ✅ prêt |
-| 22 — OSINT : les archives du web (📱) | ✅ prêt |
-| 23 — Métadonnées EXIF & géolocalisation | ✅ prêt |
+| 20 — Chiffrement XOR | ✅ prêt |
+| 21 — Boss de la semaine 3 : base64 + XOR par force brute + **clé n°3** + **récompense** + dossier de l'enquête | ✅ prêt |
+| 22 — OSINT : les archives du web, 6 suspects et fausses pistes (📱) | ✅ prêt |
+| 23 — Métadonnées EXIF & Google Maps (📱, sans Python) | ✅ prêt |
 | 24 — Finale : le grand décryptage + **clé n°4** + **grande récompense** | ✅ prêt |
 
 Le calendrier est **complet** (24 jours). Il reste à relire chaque jour et à personnaliser les 4 cachettes (`tools/recompenses.mjs`).
@@ -72,8 +72,8 @@ est arrêtée au bout de 8 secondes sans figer la page.
 1. Éditer `tools/generate.mjs` (semaine 1) `tools/semaine2.mjs` (semaine 2) ou `tools/semaine3.mjs` (semaine 3) ou `tools/semaine4.mjs` (semaine 4) : le contenu et la réponse en clair de chaque jour y sont définis.
 2. `node tools/generate.mjs` → régénère `js/days.js` (réponses hachées) et `parents/SOLUTIONS.md`.
 
-Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'chat' | 'archive' | 'exif' }`, `python: { label, code, open }`
-(utiliser `___` pour les trous à remplir), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
+Outils interactifs disponibles pour un jour : `widget: { type: 'bits' | 'cesar' | 'switches' | 'swatches' | 'maze' | 'qr' | 'guess' | 'mails' | 'scatter' | 'strip' | 'chat' | 'archive' | 'exif' }`, `python: { label, code, open }`
+(utiliser `___` pour les trous à remplir), `files: { nom: contenu }` (fichiers que le programme peut lire avec `open()`), `after: { python }` (affiché après résolution) et `key: { n, value }` (clé du trousseau).
 
 ## Fichiers
 

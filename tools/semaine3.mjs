@@ -1,12 +1,8 @@
 // Semaine 3 (jours 15 à 21) : IA & nouvelles technologies, profil du pirate, clé n°3.
-import { createHash } from 'node:crypto';
 import { REWARDS } from './recompenses.mjs';
 
 // ---------- Outils ----------
-const sha = (s) => createHash('sha256').update(s).digest('hex');
 const chunk = (s, n) => s.match(new RegExp('.{1,' + n + '}', 'g'));
-const modpow = (b, e, m) => { let r = 1n; b = BigInt(b) % BigInt(m); e = BigInt(e); m = BigInt(m); while (e > 0n) { if (e & 1n) r = (r * b) % m; b = (b * b) % m; e >>= 1n; } return r; };
-const rsaEnc = (text, e, n) => [...text].map((c) => Number(modpow(c.charCodeAt(0), e, n)));
 const groups = (arr, n) => { const out = []; for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n)); return out; };
 const pyList = (name, arr, perLine = 10) => name + ' = [\n' + groups(arr, perLine).map((g) => '    ' + g.join(', ') + ',').join('\n') + '\n]';
 
@@ -26,53 +22,55 @@ const MAILS15 = [
 ];
 
 // =====================================================================
-// Jour 16 : k plus proches voisins (détecteur d'intrus)
+// Jour 16 : l'IA apprend un seuil à partir d'exemples
 // =====================================================================
-const NORMAL16 = [[8,12],[9,20],[9,5],[10,15],[10,28],[11,8],[11,22],[12,18],[12,3],[13,25],[13,10],[14,6],[14,30],[15,14],[15,19],[16,9],[16,27],[17,4],[17,21],[18,16],[19,11],[20,7],[7,9],[2,4],[3,6]];
-const PIRATE16 = [[1,62],[1,85],[2,48],[2,75],[2,91],[3,55],[3,80],[3,68],[4,43],[4,72],[4,88],[5,59],[5,38],[0,66],[23,52],[14,58]];
-const DATA16 = [...NORMAL16.map((p) => [...p, 'normal']), ...PIRATE16.map((p) => [...p, 'pirate'])];
-const INCONNUES16 = [[3, 70], [11, 12], [2, 5], [14, 55], [23, 47], [19, 28]];
-const K16 = 5;
-const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
-let NB_PIRATES16 = 0;
-for (const u of INCONNUES16) {
-  const s = [...DATA16].sort((a, b) => dist(u, a) - dist(u, b));
-  if (Math.abs(dist(u, s[K16 - 1]) - dist(u, s[K16])) < 1e-9) throw new Error('Jour 16 : égalité de distance pour ' + u);
-  if (s.slice(0, K16).filter((x) => x[2] === 'pirate').length > K16 / 2) NB_PIRATES16++;
+const NORMALES16 = [4, 6, 7, 9, 10, 12, 13, 15, 16, 18, 19, 21, 22, 24, 25, 27, 28, 30, 32, 33, 35, 36, 40, 44];
+const PIRATES16 = [31, 38, 41, 43, 46, 48, 52, 55, 57, 60, 63, 66, 70, 74, 78, 82, 85, 88, 91, 95];
+let SEUIL16 = 0, ERREURS16 = 1e9;
+for (let t = 0; t <= 100; t++) {
+  const e = NORMALES16.filter((m) => m > t).length + PIRATES16.filter((m) => m <= t).length;
+  if (e < ERREURS16) { ERREURS16 = e; SEUIL16 = t; }
 }
-const REP16 = String(NB_PIRATES16);
-const DATA16_PY = 'donnees = [\n' + groups(DATA16.map((d) => `(${d[0]}, ${d[1]}, "${d[2]}")`), 4).map((g) => '    ' + g.join(', ') + ',').join('\n') + '\n]';
+const REP16 = String(SEUIL16);
 
 // =====================================================================
-// Jour 17 : générateur de texte (chaîne de Markov)
+// Jour 17 : prédire le mot suivant (comptage dans un corpus)
 // =====================================================================
-const CORPUS17 = 'noel est une fete pour tout le monde sauf moi. noel est une fete pour tout le monde sauf moi. noel est une fete magique pour les enfants. tout le monde oublie l hiver. tout le monde adore noel. personne ne se souvient de l hiver. personne ne pense a moi. le froid est mon seul ami. noel sera bientot fini.';
-let PHRASE17;
+const PHRASES17 = [
+  'noel est une fete pour tout le monde sauf moi', 'tout le monde sourit sauf moi', 'les enfants recoivent des cadeaux sauf moi',
+  'tout le monde est invite sauf moi', 'la neige tombe pour tous sauf moi', 'chacun a une place a table sauf moi', 'on pense a tout le monde sauf moi',
+  'tout le monde danse sauf lui', 'tout le monde chante sauf lui', 'le sapin brille pour tous sauf lui', 'ils sont tous la sauf lui',
+  'tout est pret sauf les rennes', 'j ai pense a tout sauf les cadeaux', 'tout est decore sauf les fenetres',
+  'personne ne vient sauf ceux qui ont froid', 'tout le monde est parti sauf ceux de la montagne',
+  'personne ne se souvient de l hiver', 'le froid est mon seul ami', 'noel sera bientot fini',
+];
+const CORPUS17 = PHRASES17.join('. ') + '.';
+const MOT17 = 'sauf';
+const SUIVANTS17 = {};
 {
-  const suiv = {};
-  for (const ph of CORPUS17.split('.')) { const m = ph.split(' ').filter(Boolean); for (let i = 0; i < m.length - 1; i++) { suiv[m[i]] ??= {}; suiv[m[i]][m[i + 1]] = (suiv[m[i]][m[i + 1]] || 0) + 1; } }
-  let mot = 'noel'; const out = [mot];
-  for (let i = 0; i < 10; i++) {
-    if (!suiv[mot]) break;
-    const o = Object.entries(suiv[mot]).sort((a, b) => b[1] - a[1]);
-    if (o.length > 1 && o[0][1] === o[1][1]) throw new Error('Jour 17 : égalité après ' + mot);
-    mot = o[0][0]; out.push(mot);
-  }
-  PHRASE17 = out.join(' ');
+  const mots = CORPUS17.replace(/\./g, ' ').split(/\s+/).filter(Boolean);
+  for (let i = 0; i < mots.length - 1; i++) if (mots[i] === MOT17) SUIVANTS17[mots[i + 1]] = (SUIVANTS17[mots[i + 1]] || 0) + 1;
 }
-const DERNIER17 = PHRASE17.split(' ').pop();
+const CLASS17 = Object.entries(SUIVANTS17).sort((a, b) => b[1] - a[1]);
+if (CLASS17[0][1] - CLASS17[1][1] < 3) throw new Error('Jour 17 : maximum pas assez net');
+const REP17 = CLASS17[0][0];
 const CORPUS17_PY = 'corpus = (' + chunk(CORPUS17, 60).map((c) => `"${c}"`).join('\n          ') + ')';
 
 // =====================================================================
-// Jour 18 : chaîne de blocs
+// Jour 18 : image compressée (RLE)
 // =====================================================================
-const mine = (i, don, prev) => { for (let n = 0; ; n++) { const h = sha(`${i}|${don}|${prev}|${n}`); if (h.startsWith('000')) return { n, h }; } };
-const B1 = mine(1, 'Depart du traineau a 23h00', '0');
-const B2 = mine(2, 'Chargement de la hotte : 18 millions de cadeaux', B1.h);
-const DONNEES3 = 'Strasbourg : 4200 cadeaux a livrer';
-const B3 = mine(3, DONNEES3, B2.h);
-if (B3.n < 1500) throw new Error('Jour 18 : nonce trop petit');
-const REP18 = String(B3.n);
+const FONT = {
+  A: ['.#.', '#.#', '###', '#.#', '#.#'], U: ['#.#', '#.#', '#.#', '#.#', '###'], R: ['##.', '#.#', '##.', '#.#', '#.#'],
+  O: ['###', '#.#', '#.#', '#.#', '###'], E: ['###', '#..', '##.', '#..', '###'],
+};
+const MOT18 = 'AURORE';
+const LIGNES18 = [0, 1, 2, 3, 4].map((r) => [...MOT18].map((c) => FONT[c][r]).join('.'));
+const rle = (line) => { const runs = []; let cur = '.', n = 0; for (const ch of line) { if (ch === cur) n++; else { runs.push(n); cur = ch; n = 1; } } runs.push(n); return runs; };
+const RLE18 = LIGNES18.map(rle);
+{ // vérification : le décodage redonne bien l'image
+  RLE18.forEach((runs, i) => { let t = '', ink = false; for (const n of runs) { t += (ink ? '#' : '.').repeat(n); ink = !ink; } if (t !== LIGNES18[i]) throw new Error('RLE incohérent'); });
+}
+const RLE18_PY = 'image = [\n' + RLE18.map((r) => `    [${r.join(', ')}],`).join('\n') + '\n]';
 
 // =====================================================================
 // Jour 19 : chatbot (prompt injection)
@@ -80,22 +78,33 @@ const REP18 = String(B3.n);
 const SECRET19 = '23h42';
 
 // =====================================================================
-// Jour 20 : RSA jouet (clé privée fournie)
+// Jour 20 : chiffrement XOR avec le « nombre fétiche » du pirate (88, comme dans polaris88)
 // =====================================================================
-const N20 = 3233, E20 = 17, D20 = 2753;
-if ((E20 * D20) % (60 * 52) !== 1) throw new Error('RSA jouet incohérent');
+const CLE20 = 88;
 const CLAIR20 = 'LE BADGE EST DANS LE BONNET VERT';
-const CHIFFRE20 = rsaEnc(CLAIR20, E20, N20);
+const xor = (text, k) => [...text].map((c) => c.charCodeAt(0) ^ k);
+const CHIFFRE20 = xor(CLAIR20, CLE20);
 
 // =====================================================================
-// Jour 21 : boss RSA (il faut factoriser n)
+// Jour 21 : boss — base64 puis XOR avec une clé inconnue (1 à 63)
 // =====================================================================
-const P21 = 1009, Q21 = 1013, N21 = P21 * Q21, E21 = 65537;
+const CLE21 = 29;
 const CLAIR21 = 'LA TROISIEME CLE EST CACHEE DANS LA BOULE';
-const CHIFFRE21 = rsaEnc(CLAIR21, E21, N21);
+const OCTETS21 = Buffer.from(xor(CLAIR21, CLE21));
+const SECRET21 = OCTETS21.toString('base64');
+{
+  const lisibles = [];
+  for (let k = 1; k < 64; k++) {
+    const t = [...OCTETS21].map((o) => String.fromCharCode(o ^ k)).join('');
+    if (/^[\x20-\x7e]*$/.test(t)) lisibles.push(k);
+    if (/^[A-Z ]+$/.test(t) && k !== CLE21) throw new Error('Jour 21 : une autre clé donne aussi un texte en majuscules : ' + k);
+  }
+  if (!lisibles.includes(CLE21)) throw new Error('Jour 21 : la bonne clé n\'est pas affichée');
+  console.log('Jour 21 :', lisibles.length, 'clés sur 63 donnent un texte affichable (dont la bonne).');
+}
 const CACHETTE3 = REWARDS[3].cachette;
 if (!/^[A-Z ]+$/.test(CACHETTE3)) throw new Error('REWARDS[3].cachette : majuscules et espaces uniquement');
-const CACHETTE3_CHIFFREE = rsaEnc(CACHETTE3, E20, N20);
+const CACHETTE3_CHIFFREE = xor(CACHETTE3, CLE20);
 
 export const DAYS_S3 = [
   // ------------------------------------------------------------ JOUR 15
@@ -129,162 +138,137 @@ export const DAYS_S3 = [
   {
     day: 16,
     title: 'Le détecteur d\'intrus',
-    concept: 'Intelligence artificielle : k plus proches voisins',
+    concept: 'Intelligence artificielle : apprendre à partir d\'exemples',
     device: 'laptop',
-    minutes: 25,
-    story: `<p><b>Pixel :</b> « On ne peut pas lire des milliers de connexions à la main… alors on va apprendre à un programme à <b>reconnaître</b> le comportement du pirate ! C'est le principe de l'<b>intelligence artificielle</b> : au lieu d'écrire des règles, on montre des <b>exemples</b> (des connexions normales et des connexions du pirate) et le programme devine, pour un nouvel exemple, à quelle catégorie il ressemble le plus. »</p>`,
-    puzzle: `<p>Chaque connexion est un point avec deux mesures : l'<b>heure</b> (0 à 24) et le nombre de <b>Mo envoyés</b>. On connaît ${DATA16.length} connexions déjà étiquetées <span style="color:#5ec2ff">normal</span> ou <span style="color:#ff6b6b">pirate</span>. Six nouvelles connexions arrivent, sans étiquette (les points blancs numérotés).</p>
-<p>L'algorithme des <b>k plus proches voisins</b> (ici k = ${K16}) : pour chaque inconnue, on regarde les ${K16} connexions connues les <b>plus proches</b> (distance en ligne droite entre les points) et on prend la catégorie majoritaire.</p>
-<p><b>Combien des 6 nouvelles connexions sont des connexions de pirate ?</b></p>`,
-    widget: { type: 'scatter', normal: NORMAL16, pirate: PIRATE16, unknown: INCONNUES16, label: 'Les connexions connues (bleu = normal, rouge = pirate) et les 6 inconnues (blanc)' },
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « On ne peut pas lire des milliers de connexions à la main… alors on va apprendre à un programme à <b>reconnaître</b> le pirate ! C'est le principe de l'<b>intelligence artificielle</b> : au lieu d'écrire une règle à la main, on montre des <b>exemples</b> (des connexions normales, des connexions du pirate) et le programme <b>trouve tout seul la meilleure règle</b>. »</p>`,
+    puzzle: `<p>Pour chaque connexion, on connaît les <b>Mo envoyés</b>. Voici ${NORMALES16.length} connexions normales et ${PIRATES16.length} connexions du pirate (le diagramme les montre) :</p>
+<pre class="code">Normales : ${NORMALES16.join(', ')}
+Pirate   : ${PIRATES16.join(', ')}</pre>
+<p>La règle à apprendre : <b>« si une connexion envoie plus de <em>seuil</em> Mo, c'est un pirate »</b>. Mais quelle valeur de seuil choisir ? Un seuil <b>fait une erreur</b> quand il classe mal un exemple : une connexion normale au-dessus du seuil, ou une connexion du pirate au niveau du seuil ou en dessous.</p>
+<p><b>Quel seuil (entier entre 0 et 100) fait le moins d'erreurs ?</b> (S'il y en a plusieurs, donne le plus petit.)</p>`,
+    widget: { type: 'strip', normal: NORMALES16, pirate: PIRATES16, label: 'Les connexions connues : bleu = normales, rouge = pirate (Mo envoyés)' },
     python: {
       open: true,
-      label: 'Labo Python — le premier algorithme d\'IA (2 trous à remplir)',
+      label: 'Labo Python — le programme qui apprend la meilleure règle (2 trous à remplir)',
       code: [
-        '# Les connexions connues : (heure, Mo envoyés, étiquette)',
-        DATA16_PY,
+        `normales = [${NORMALES16.join(', ')}]`,
+        `pirates = [${PIRATES16.join(', ')}]`,
         '',
-        '# Les 6 nouvelles connexions : (heure, Mo envoyés)',
-        `inconnues = [${INCONNUES16.map((u) => `(${u[0]}, ${u[1]})`).join(', ')}]`,
+        'meilleur_seuil = 0',
+        'moins_erreurs = 1000                  # au départ, on part d\'un nombre d\'erreurs énorme',
         '',
-        'def distance(a, b):',
-        '    return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** 0.5     # distance en ligne droite (Pythagore)',
+        'for seuil in range(0, 101):           # on essaie tous les seuils de 0 à 100',
+        '    erreurs = 0',
+        '    for mo in normales:',
+        '        if mo > ___:                  # trou 1 : une connexion normale qui dépasse le seuil est mal classée',
+        '            erreurs = erreurs + 1',
+        '    for mo in pirates:',
+        '        if mo <= seuil:               # une connexion du pirate qui ne dépasse pas le seuil est mal classée',
+        '            erreurs = erreurs + 1',
+        '    if erreurs < ___:                 # trou 2 : mieux (moins d\'erreurs) que le meilleur seuil trouvé jusqu\'ici ?',
+        '        moins_erreurs = erreurs',
+        '        meilleur_seuil = seuil',
         '',
-        'def classer(point, k):',
-        '    # on trie les connexions connues de la plus proche à la plus lointaine',
-        '    voisins = sorted(donnees, key=lambda d: distance(point, d))',
-        '    plus_proches = voisins[:___]                 # trou 1 : on ne garde que les k plus proches',
-        '    votes_pirate = 0',
-        '    for v in plus_proches:',
-        '        if v[2] == "pirate":',
-        '            votes_pirate = votes_pirate + 1',
-        '    return "pirate" if votes_pirate > ___ else "normal"   # trou 2 : la majorité de k voisins, c\'est « plus de k // 2 »',
-        '',
-        'nb_pirates = 0',
-        'for p in inconnues:',
-        `    resultat = classer(p, ${K16})`,
-        '    print(p, "->", resultat)',
-        '    if resultat == "pirate":',
-        '        nb_pirates = nb_pirates + 1',
-        '',
-        'print("Connexions de pirate :", nb_pirates)',
+        'print("Meilleur seuil :", meilleur_seuil, "Mo")',
+        'print("Nombre d\'erreurs :", moins_erreurs)',
       ].join('\n'),
     },
     hints: [
-      'Dans la fonction, il te manque deux choses : combien de voisins on garde (c\'est la valeur « k » passée à la fonction), et à partir de combien de votes une catégorie gagne. Avec k = 5, la majorité commence à 3 voix, soit « plus de 2 ». Utilise <code>k</code> et <code>k // 2</code>.',
-      'Trou 1 : <code>k</code>. Trou 2 : <code>k // 2</code>. Lance le programme : il affiche la décision pour chaque connexion.',
-      `Le programme conclut qu'il y a ${REP16} connexions de pirate sur les 6. Regarde bien les points : une connexion de jour peut quand même être suspecte !`,
+      'Le programme essaie tous les seuils de 0 à 100. Pour chacun, il compte les erreurs : les connexions normales au-dessus du seuil, et les connexions du pirate au niveau du seuil ou en dessous. Il te manque la variable à comparer dans le premier test, et la valeur avec laquelle on compare le nombre d\'erreurs dans le second.',
+      'Trou 1 : <code>seuil</code> (celui de la boucle). Trou 2 : <code>moins_erreurs</code> (le meilleur résultat trouvé jusqu\'ici).',
+      `Le meilleur seuil est ${SEUIL16} Mo : il fait ${ERREURS16} erreurs au total.`,
     ],
     answer: REP16,
-    explain: `<p><b>Réponse : ${REP16} connexions de pirate.</b> Tu viens de programmer un vrai algorithme d'<b>apprentissage automatique</b> (machine learning). Il n'y a aucune règle écrite à la main du type « si c'est la nuit alors pirate » : le programme a <em>appris</em> à partir des exemples. Plus il en a, plus il est précis.</p>
-<p><b>Un piège classique :</b> ici, les Mo (de 0 à 100) pèsent beaucoup plus dans la distance que l'heure (de 0 à 24). Une connexion à 14 h avec beaucoup de données a été classée « pirate » car elle ressemble aux gros transferts de nuit. Les vrais systèmes d'IA <b>normalisent</b> les mesures pour qu'elles pèsent autant.</p>
-<p><b>Le saviez-vous ?</b> Les recommandations de films ou de musique, le déverrouillage par visage et la détection de fraude bancaire fonctionnent sur ce même principe : trouver les exemples connus les plus ressemblants.</p>
-<p class="clue">🕵️ <b>Piste n°16 :</b> le pirate se connecte <b>la nuit</b>, entre minuit et 5 h, et il envoie de gros volumes de données. C'est un oiseau de nuit… ou quelqu'un qui vit à un autre fuseau horaire.</p>`,
+    explain: `<p><b>Seuil : ${REP16} Mo</b> (${ERREURS16} erreurs sur ${NORMALES16.length + PIRATES16.length} exemples). Il n'y a pas de seuil parfait : les exemples se chevauchent un peu (des connexions normales très lourdes, des connexions du pirate très légères), donc on choisit le seuil qui se trompe <em>le moins</em>.</p>
+<p>Tu viens de programmer ce qu'on appelle l'<b>apprentissage automatique</b> (machine learning), sous sa forme la plus simple : le programme a <em>essayé</em> toutes les règles possibles et a gardé celle qui fonctionne le mieux sur les exemples. Les vraies IA font pareil, mais avec des millions d'exemples, des centaines de mesures au lieu d'une seule, et des règles bien plus souples qu'un simple seuil.</p>
+<p><b>Le saviez-vous ?</b> C'est comme ça que ton téléphone reconnaît un visage, qu'une appli recommande des vidéos, ou qu'une banque détecte une fraude : à partir d'exemples, pas de règles écrites à la main. Et l'IA ne vaut que ce que valent ses exemples : si les exemples sont biaisés ou trop peu nombreux, elle se trompe.</p>
+<p class="clue">🕵️ <b>Piste n°16 :</b> le pirate envoie de gros volumes de données : au-dessus de <b>${REP16} Mo</b> par connexion, on peut presque être sûr que c'est lui.</p>`,
   },
   // ------------------------------------------------------------ JOUR 17
   {
     day: 17,
     title: 'Le perroquet du pirate',
-    concept: 'IA générative : prédire le mot suivant',
+    concept: 'IA générative : deviner le mot suivant',
     device: 'laptop',
-    minutes: 25,
-    story: `<p><b>Pixel :</b> « Les assistants comme ChatGPT, Gemini ou Claude écrivent des textes avec une idée simple : <b>deviner le mot suivant</b>, encore et encore. Le pirate a laissé des messages dans des fichiers. Et si on construisait un « perroquet » qui a lu ses messages et qui, à partir d'un mot, écrit la suite comme lui le ferait ? Peut-être qu'en le laissant parler, il nous dira ce qu'il a sur le cœur… »</p>`,
-    puzzle: `<p>Voici les messages interceptés du pirate (sans accents ni ponctuation, une phrase se termine par un point). Notre perroquet compte, pour chaque mot, quels mots le suivent et combien de fois. Puis il part d'un mot et ajoute à chaque fois le mot suivant <b>le plus fréquent</b>.</p>
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « Les assistants IA comme ChatGPT ou Gemini écrivent des textes avec une idée toute simple : <b>deviner le mot qui vient ensuite</b>, en se basant sur tout ce qu'ils ont lu. On va faire pareil, en miniature. Le pirate a laissé une phrase inachevée : <em>« Noël est une fête pour tout le monde sauf… »</em>. Grâce à ses anciens messages, on peut deviner quel mot il allait écrire ! »</p>`,
+    puzzle: `<p>Voici tous les messages qu'on a retrouvés du pirate (sans accents, une phrase se termine par un point) :</p>
 <pre class="code">${CORPUS17}</pre>
-<p><b>Si on lance le perroquet à partir du mot « noel », quel est le dernier mot de la phrase qu'il écrit ?</b></p>`,
+<p>Le principe : on regarde <b>tous les mots qui viennent juste après « sauf »</b>, on les compte, et on prend celui qui revient le plus souvent. C'est exactement ce que fait une IA pour écrire la suite d'une phrase, mais avec des milliards de mots.</p>
+<p><b>Quel est le mot le plus probable après « sauf » ?</b></p>`,
     python: {
       open: true,
-      label: 'Labo Python — un mini-modèle de langage (2 trous à remplir)',
+      label: 'Labo Python — le perroquet qui compte les mots (2 trous à remplir)',
       code: [
         CORPUS17_PY,
         '',
-        '# Étape 1 : pour chaque mot, compter les mots qui le suivent',
-        'suivants = {}',
-        'for phrase in corpus.split("."):',
-        '    mots = phrase.split()',
-        '    for i in range(len(mots) - 1):',
-        '        mot = mots[i]',
-        '        suivant = mots[i + 1]',
-        '        if mot not in suivants:',
-        '            suivants[mot] = {}',
-        '        suivants[mot][suivant] = suivants[mot].get(suivant, 0) + 1',
+        'mots = corpus.replace(".", " ").split()      # la liste de tous les mots, un par un',
+        'print(len(mots), "mots dans les messages du pirate")',
         '',
-        'print(suivants["tout"])      # par exemple : ce qui peut suivre « tout »',
+        'mot_cherche = "sauf"                         # on veut savoir ce qui vient après ce mot',
+        'suivants = {}                                # un dictionnaire : mot suivant -> nombre de fois',
         '',
-        '# Étape 2 : écrire une phrase',
-        'def prochain(mot):',
-        '    options = suivants[mot]                    # ex. {"est": 3, "sera": 1}',
-        '    return max(options, key=options.get)       # le mot suivant le plus fréquent',
+        'for i in range(len(mots) - 1):',
+        '    if mots[i] == ___:                       # trou 1 : on est sur le mot qu\'on cherche (la variable du dessus)',
+        '        suivant = mots[i + 1]                # le mot juste après',
+        '        suivants[suivant] = suivants.get(suivant, 0) + ___    # trou 2 : on ajoute 1 à son compteur',
         '',
-        'mot = "noel"',
-        'texte = mot',
-        'for _ in range(___):                           # trou 1 : combien de mots au maximum ajouter (10 suffit largement)',
-        '    if mot not in ___:                         # trou 2 : le dictionnaire des suivants : si le mot n\'a pas de suite, on s\'arrête',
-        '        break',
-        '    mot = prochain(mot)',
-        '    texte = texte + " " + mot',
-        '',
-        'print(texte)',
+        'print(suivants)',
       ].join('\n'),
     },
     hints: [
-      'Le dictionnaire <code>suivants</code> associe à chaque mot un autre dictionnaire : les mots qui peuvent le suivre et leur nombre d\'apparitions. Il te manque la longueur maximum de la phrase, et le nom du dictionnaire dans lequel on vérifie qu\'un mot a une suite.',
-      'Trou 1 : <code>10</code>. Trou 2 : <code>suivants</code>. Lance le programme : il affiche une phrase complète, puis regarde son dernier mot.',
-      `Le perroquet écrit : « ${PHRASE17} ». Le dernier mot est « ${DERNIER17} ».`,
+      'La boucle parcourt tous les mots un par un. Chaque fois qu\'elle tombe sur le mot cherché, elle regarde le mot suivant et ajoute 1 à son compteur dans le dictionnaire. Il te manque le mot à comparer (il est rangé dans une variable) et le nombre à ajouter.',
+      'Trou 1 : <code>mot_cherche</code>. Trou 2 : <code>1</code>. Le programme affiche les compteurs : lis lequel est le plus grand.',
+      `Après « sauf », le mot le plus fréquent revient ${CLASS17[0][1]} fois.`,
     ],
-    answer: DERNIER17,
-    explain: `<p><b>Le perroquet écrit :</b> « ${PHRASE17} ». Cette phrase n'était pas écrite telle quelle dans les messages : il l'a <em>reconstruite</em> en choisissant à chaque fois le mot le plus probable. Ce que tu as programmé s'appelle une <b>chaîne de Markov</b>, l'ancêtre des assistants IA actuels.</p>
-<p><b>Comment ça se compare aux vraies IA ?</b> Les grands modèles de langage fonctionnent aussi en prédisant le mot suivant (en fait un morceau de mot, un « token »), mais au lieu de regarder <em>un seul</em> mot précédent, ils regardent des milliers de mots, et ils ont appris sur une bonne partie d'internet. C'est ce qui les rend capables de répondre à des questions. Mais comme ton perroquet, ils ne « comprennent » pas forcément : ils continuent le texte de la façon la plus probable. C'est pourquoi ils peuvent <b>inventer des choses fausses avec aplomb</b> (les « hallucinations »). Vérifie toujours une information importante !</p>
-<p class="clue">🕵️ <b>Piste n°17 :</b> le perroquet du pirate dit « noel est une fete pour tout le monde sauf moi ». Le pirate se sent <b>exclu</b> de Noël, oublié de tous. Ce n'est peut-être pas de la méchanceté, mais une grande tristesse…</p>`,
+    answer: REP17,
+    explain: `<p><b>Réponse : « ${REP17} ».</b> Le programme affiche les compteurs : ${CLASS17.map(([m, n]) => `« ${m} » ${n} fois`).join(', ')}. La phrase la plus probable est donc : <em>« Noël est une fête pour tout le monde sauf ${REP17}. »</em></p>
+<p><b>Pourquoi c'est important ?</b> Quand tu écris à un assistant IA, il construit sa réponse mot après mot : à chaque fois, il choisit un mot <em>probable</em> d'après tout ce qu'il a lu. Il ne comprend pas comme toi, il calcule des probabilités. Ça explique deux choses : pourquoi ses phrases sont si naturelles, et pourquoi il peut <b>inventer des choses fausses avec aplomb</b> (on appelle ça des « hallucinations »). Il continue le texte de la façon la plus probable, même quand il ne sait pas. Vérifie toujours une information importante !</p>
+<p><b>Pour aller plus loin :</b> si tu changes <code>mot_cherche</code> en « tout » ou « personne », que prédit le programme ?</p>
+<p class="clue">🕵️ <b>Piste n°17 :</b> le pirate écrit « noël est une fête pour tout le monde sauf <b>${REP17}</b> » : il se sent <b>exclu</b> de Noël, oublié de tous. Ce n'est peut-être pas de la méchanceté, mais une grande tristesse…</p>`,
   },
   // ------------------------------------------------------------ JOUR 18
   {
     day: 18,
-    title: 'La chaîne de blocs',
-    concept: 'Blockchain & preuve de travail',
-    device: 'laptop',
-    minutes: 25,
-    story: `<p><b>Pixel :</b> « Le registre des livraisons du traîneau est protégé par une <b>chaîne de blocs</b> (blockchain), la technologie qui est derrière le Bitcoin. Chaque bloc contient des données, l'<b>empreinte du bloc précédent</b>, et un nombre magique appelé <b>nonce</b>. Si quelqu'un change un seul caractère dans un bloc, son empreinte change, et tous les blocs suivants deviennent invalides ! Le pirate a falsifié le bloc 3. Pour le restaurer, il faut retrouver son nonce d'origine. »</p>`,
-    puzzle: `<p>Règle de validité : l'empreinte SHA-256 du texte <code>numéro|données|empreinte_précédente|nonce</code> doit <b>commencer par trois zéros</b> (<code>000</code>). Comme on ne peut pas prévoir une empreinte, la seule méthode est d'essayer des nonces un par un : c'est la <b>preuve de travail</b> (les « mineurs » de Bitcoin font exactement ça).</p>
-<pre class="code">Bloc 1 | Depart du traineau a 23h00
-         nonce ${B1.n} → ${B1.h.slice(0, 20)}…
-Bloc 2 | Chargement de la hotte : 18 millions de cadeaux
-         nonce ${B2.n} → ${B2.h.slice(0, 20)}…
-Bloc 3 | ${DONNEES3}
-         nonce ???  (le pirate l'a effacé)</pre>
-<p>L'empreinte complète du bloc 2, nécessaire pour calculer le bloc 3 :</p>
-<pre class="code">${B2.h}</pre>
-<p><b>Quel est le plus petit nonce qui rend le bloc 3 valide ?</b></p>`,
+    title: 'L\'image compressée',
+    concept: 'Compression de données (RLE)',
+    device: 'both',
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « Le pirate a laissé un fichier d'<b>image</b>, un petit dessin en noir et blanc de 5 lignes. Mais le fichier est <b>compressé</b> : pour gagner de la place, il ne note pas chaque pixel un par un. Il utilise la méthode <b>RLE</b> (<em>Run-Length Encoding</em>), très simple : au lieu d'écrire « blanc blanc blanc noir noir », on écrit « <b>3 blancs, 2 noirs</b> », soit <code>[3, 2]</code>. Qu'est-ce qu'il a dessiné ? »</p>`,
+    puzzle: `<p>Chaque ligne de l'image est une liste de nombres : le <b>1ᵉʳ nombre</b> est un nombre de pixels <b>blancs</b>, le 2ᵉ un nombre de pixels <b>noirs</b>, le 3ᵉ des blancs, et ainsi de suite en alternant (le premier nombre peut être 0 si la ligne commence par du noir).</p>
+<pre class="code">${RLE18.map((r) => '[' + r.join(', ') + ']').join('\n')}</pre>
+<p>Par exemple, <code>[2, 3, 1]</code> donne : <code>..###.</code> (2 blancs, 3 noirs, 1 blanc). Une fois les 5 lignes décodées et empilées, un mot apparaît.</p>
+<p><b>Quel est le mot dessiné ?</b></p>`,
     python: {
       open: true,
-      label: 'Labo Python — le mineur de blocs (2 trous à remplir)',
+      label: 'Labo Python — le décompresseur d\'image (2 trous à remplir)',
       code: [
-        'import hashlib',
+        RLE18_PY,
         '',
-        `donnees = "${DONNEES3}"`,
-        `hash_precedent = "${B2.h}"`,
-        '',
-        'nonce = 0',
-        'while True:',
-        '    essai = "3|" + donnees + "|" + hash_precedent + "|" + str(nonce)',
-        '    empreinte = hashlib.sha256(essai.encode()).hexdigest()',
-        '    if empreinte.startswith("___"):       # trou 1 : un bloc est valide si son empreinte commence par trois zéros',
-        '        print("Nonce trouvé :", nonce)',
-        '        print("Empreinte :", empreinte)',
-        '        break',
-        '    nonce = nonce + ___                   # trou 2 : si ça ne marche pas, on essaie le nonce suivant',
+        'for ligne in image:',
+        '    texte = ""',
+        '    noir = False                          # on commence toujours par des pixels blancs',
+        '    for nombre in ligne:',
+        '        if noir:',
+        '            texte = texte + "█" * ___     # trou 1 : on écrit ce nombre de pixels noirs',
+        '        else:',
+        '            texte = texte + " " * ___     # trou 2 : on écrit ce nombre de pixels blancs',
+        '        noir = not noir                   # à la prochaine série, on change de couleur',
+        '    print(texte)',
       ].join('\n'),
     },
     hints: [
-      'Le programme essaie le nonce 0, puis 1, puis 2… jusqu\'à trouver une empreinte qui commence par trois zéros. Il te manque ce que doit être le début de l\'empreinte (écrit entre guillemets) et de combien on avance à chaque essai.',
-      'Trou 1 : <code>000</code> (trois zéros entre guillemets). Trou 2 : <code>1</code>.',
-      `Le nonce se compte en milliers : il est compris entre 5000 et 6000.`,
+      'Pour chaque nombre de la liste, on écrit autant de caractères que ce nombre (noirs ou blancs selon la série). En Python, <code>"█" * 3</code> écrit trois fois « █ ». Les deux trous demandent le même mot : la variable qui contient le nombre courant.',
+      'Trou 1 : <code>nombre</code>. Trou 2 : <code>nombre</code>. Puis lance le programme et lis le dessin qui apparaît dans la sortie.',
+      `Le dessin forme un mot de ${MOT18.length} lettres : ${MOT18[0]}, ${MOT18[1]}, ${MOT18[2]}… Un phénomène de lumière du Grand Nord.`,
     ],
-    answer: REP18,
-    explain: `<p><b>Nonce : ${REP18}.</b> Il a fallu environ ${REP18} essais pour tomber sur une empreinte qui commence par <code>000</code> : ${B3.h.slice(0, 24)}… Chaque zéro supplémentaire multiplie le travail par 16. Le Bitcoin en exige tellement qu'il faut des ordinateurs très puissants, des millions d'essais par seconde, et beaucoup d'électricité.</p>
-<p><b>Pourquoi est-ce sûr ?</b> Pour falsifier le bloc 3, un pirate devrait refaire le travail pour le bloc 3 <em>et</em> pour tous les blocs suivants, plus vite que tout le reste du réseau réuni. C'est pratiquement impossible. C'est pour ça que la blockchain sert à garder des registres que personne ne peut modifier en douce.</p>
-<p><b>Ce que le pirate avait écrit à la place :</b> « Strasbourg : 0 cadeau — annulation validée par le badge <b>738215</b> ».</p>
-<p class="clue">🕵️ <b>Piste n°18 :</b> l'annulation des livraisons de Strasbourg a été validée avec le <b>badge 738215</b>, celui trouvé au jour 12. Le complice de l'atelier a donc bien donné les ordres depuis l'intérieur !</p>`,
+    answer: ['aurore', 'laurore'],
+    explain: `<p><b>Le mot dessiné : AURORE</b> (l'aurore boréale, la lumière du Grand Nord). Voilà ce que ton programme a affiché :</p>
+<pre class="code">${LIGNES18.map((l) => l.replace(/#/g, '█').replace(/\./g, ' ')).join('\n')}</pre>
+<p>La compression <b>RLE</b> est l'une des plus simples qui existent, et elle marche très bien sur les images avec de grandes zones unies : un fond blanc de 1 000 pixels ne prend que quelques octets. Les vrais formats (PNG, GIF, les anciens fax…) utilisent des idées de la même famille. Et c'est ainsi que tes photos, tes musiques et tes vidéos tiennent dans ton téléphone.</p>
+<p><b>Le saviez-vous ?</b> Il y a deux familles de compression : sans perte (on retrouve exactement l'original, comme ici ou dans un fichier ZIP) et avec perte (on jette ce que l'œil ou l'oreille ne remarque pas, comme le JPEG ou le MP3).</p>
+<p class="clue">🕵️ <b>Piste n°18 :</b> le pirate signe ses images avec un seul mot : <b>aurore</b>. Il aime la lumière du Grand Nord, dans le ciel de l'hiver.</p>`,
   },
   // ------------------------------------------------------------ JOUR 19
   {
@@ -311,126 +295,117 @@ Bloc 3 | ${DONNEES3}
   // ------------------------------------------------------------ JOUR 20
   {
     day: 20,
-    title: 'La clé publique',
-    concept: 'Cryptographie à clé publique (RSA)',
+    title: 'Le nombre fétiche',
+    concept: 'Chiffrement XOR',
     device: 'laptop',
-    minutes: 25,
-    story: `<p><b>Pixel :</b> « Voilà un message très bien chiffré : le pirate l'a protégé avec <b>RSA</b>, le système qui sécurise les achats en ligne et la plupart des échanges sur internet. La grande idée de RSA : il y a <b>deux clés</b>. Une clé <b>publique</b> que tout le monde peut connaître pour <em>chiffrer</em>, et une clé <b>privée</b> secrète pour <em>déchiffrer</em>. Et là, coup de chance : le pirate a laissé tomber sa clé privée dans l'atelier ! »</p>`,
-    puzzle: `<p>La clé publique du pirate est <b>n = ${N20}</b> et <b>e = ${E20}</b>. Chaque lettre du message a été transformée en un nombre c, avec la formule <code>c = (code ASCII de la lettre)<sup>e</sup> mod n</code>. Pour revenir en arrière, on utilise la clé privée <b>d = ${D20}</b> : <code>lettre = c<sup>d</sup> mod n</code>.</p>
-<pre class="code">${CHIFFRE20.join(' ')}</pre>
-<p>En Python, la fonction <code>pow(c, d, n)</code> calcule « c puissance d modulo n » très efficacement (même pour des nombres gigantesques).</p>
+    minutes: 20,
+    story: `<p><b>Pixel :</b> « Voilà un message chiffré avec l'opération la plus utilisée de la cryptographie moderne : le <b>XOR</b> (« ou exclusif »). Le principe est génial de simplicité : on combine chaque lettre avec un nombre secret, la <b>clé</b>, et pour retrouver le message, on refait <em>exactement la même opération</em> avec la même clé ! Le pirate a pris pour clé un nombre qui lui tient à cœur… regarde bien son pseudo. »</p>`,
+    puzzle: `<p>Le XOR compare deux nombres bit par bit (en binaire) : le résultat vaut 1 quand les deux bits sont <b>différents</b>, 0 sinon. En Python, l'opérateur XOR s'écrit <b>^</b> : par exemple <code>5 ^ 3</code> vaut 6 (car <code>101</code> XOR <code>011</code> donne <code>110</code>).</p>
+<p>Chaque lettre du message a été transformée en son code ASCII, puis combinée par XOR avec la clé du pirate. Voici les nombres obtenus :</p>
+<pre class="code">${groups(CHIFFRE20, 8).map((g) => g.join(' ')).join('\n')}</pre>
 <p><b>Dans quel objet le badge est-il caché ?</b></p>`,
     python: {
       open: true,
-      label: 'Labo Python — le déchiffreur RSA (2 trous à remplir)',
+      label: 'Labo Python — le déchiffreur XOR (2 trous à remplir)',
       code: [
-        'n = ___                 # trou 1 : le nombre n de la clé publique (voir l\'énoncé)',
-        `d = ${D20}              # la clé privée perdue par le pirate`,
-        '',
         pyList('chiffre', CHIFFRE20),
         '',
+        'cle = ___                       # trou 1 : le nombre fétiche du pirate (regarde son pseudo, jour 15)',
+        '',
         'message = ""',
-        'for c in chiffre:',
-        '    m = ___(c, d, n)    # trou 2 : la fonction Python « puissance modulo » (3 arguments)',
-        '    message = message + chr(m)',
+        'for octet in chiffre:',
+        '    lettre = chr(octet ___ cle)  # trou 2 : l\'opérateur XOR, expliqué dans l\'énoncé',
+        '    message = message + lettre',
         '',
         'print(message)',
       ].join('\n'),
     },
     hints: [
-      'Dans l\'énoncé, repère le nombre n de la clé publique pour le premier trou. Pour le second, l\'énoncé cite la fonction Python qui calcule une puissance modulo : elle prend trois arguments.',
-      `Trou 1 : <code>${N20}</code>. Trou 2 : <code>pow</code>.`,
+      'Le pseudo du pirate est « polaris88 » : le nombre qui revient dedans est sa clé. Pour le second trou, l\'énoncé donne le symbole qu\'utilise Python pour le XOR.',
+      'Trou 1 : <code>88</code>. Trou 2 : <code>^</code>.',
       'Le message dit où se trouve le badge du complice : un accessoire qu\'on porte sur la tête.',
     ],
     answer: ['bonnet', 'bonnetvert', 'lebonnetvert', 'unbonnetvert'],
     explain: `<p><b>Message déchiffré :</b> « ${CLAIR20} ».</p>
-<p>Ça fonctionne parce que les deux clés sont liées par un secret mathématique : <b>n = p × q</b>, avec p = 61 et q = 53 (ici ${N20} = 61 × 53). Tout le monde connaît n, mais pour fabriquer la clé privée il faut connaître p et q, c'est-à-dire <b>factoriser</b> n. Avec un tout petit n comme celui-ci, c'est immédiat. Avec les vrais n de RSA, qui font <b>plus de 600 chiffres</b>, même les ordinateurs les plus puissants mettraient des milliards d'années.</p>
-<p><b>Le saviez-vous ?</b> Chaque fois que tu vois un cadenas 🔒 dans la barre d'adresse de ton navigateur, RSA (ou une méthode cousine) a servi à établir une connexion sécurisée avec le site. Et les futurs ordinateurs quantiques pourraient factoriser les grands nombres plus vite : les chercheurs préparent déjà de nouveaux chiffrements.</p>
+<p>Pourquoi ça marche ? Parce que le XOR est <b>son propre inverse</b> : <code>(lettre ^ clé) ^ clé = lettre</code>. Combiner deux fois avec la même clé annule l'opération. C'est la base de nombreux chiffrements modernes : ton Wi-Fi, les appels de ta messagerie et les sites en https utilisent des variantes du XOR, avec des clés beaucoup plus longues.</p>
+<p><b>Le saviez-vous ?</b> Un chiffrement XOR avec une clé aussi courte que « 88 » se casse très vite (il n'y a que 255 clés possibles à essayer). Mais si la clé est <b>aussi longue que le message, vraiment aléatoire et utilisée une seule fois</b>, le chiffrement est <b>impossible à casser</b>, même avec tous les ordinateurs du monde. On l'appelle le « masque jetable ».</p>
 <p class="clue">🕵️ <b>Piste n°20 :</b> le badge du complice est caché dans un <b>bonnet vert</b>. Les lutins portent tous des bonnets verts… mais celui-là a quelque chose de particulier.</p>`,
   },
   // ------------------------------------------------------------ JOUR 21
   {
     day: 21,
-    title: 'Casser le chiffrement',
-    concept: 'Boss : factoriser pour casser RSA',
+    title: 'Le journal secret du pirate (2)',
+    concept: 'Boss : base64 + XOR par force brute',
     device: 'laptop',
-    minutes: 30,
-    story: `<p><b>Pixel :</b> « Dernier fichier de la semaine, et le plus coriace : le <b>journal secret</b> du pirate, chiffré en RSA… mais cette fois, <b>sans clé privée</b> ! Il n'y a que la clé publique. Heureusement, le pirate a choisi un n très petit : à nous de <b>factoriser</b> n pour retrouver p et q, d'où la clé privée. C'est exactement l'attaque qui menace RSA… quand n est petit. »</p>`,
-    puzzle: `<p>Clé publique : <b>n = ${N21}</b>, <b>e = ${E21}</b>. Le message est une liste de nombres (une lettre chacun, chiffrée comme au jour 20).</p>
-<pre class="code">${groups(CHIFFRE21, 8).map((g) => g.join(' ')).join('\n')}</pre>
-<p>La méthode : 1) trouver p, le plus petit diviseur de n, et q = n / p ; 2) calculer φ = (p−1)×(q−1) ; 3) la clé privée est d = e<sup>−1</sup> mod φ (en Python : <code>pow(e, -1, phi)</code>) ; 4) déchiffrer avec <code>pow(c, d, n)</code>.</p>
-<p><b>Où le pirate a-t-il caché la troisième clé ?</b> (Un seul mot.)</p>`,
+    minutes: 25,
+    story: `<p><b>Pixel :</b> « Dernier fichier de la semaine, le <b>journal secret</b> du pirate. Il l'a protégé en deux couches : d'abord un XOR avec une clé que cette fois on ne connaît pas, puis un codage en base64. Tu as croisé ces deux outils cette semaine et la précédente. La clé XOR est un nombre entre 1 et 63 : on va les essayer toutes, comme au jour 2. »</p>`,
+    puzzle: `<p>Voici le contenu du fichier (en base64). Une fois décodé en octets, chaque octet a été combiné par XOR avec la même clé secrète (entre 1 et 63).</p>
+<pre class="code">${chunk(SECRET21, 40).join('\n')}</pre>
+<p><b>Où le pirate a-t-il caché la troisième clé ?</b> (Un seul mot.)</p>
+<p class="note">Le programme affiche seulement les résultats « lisibles » : parmi les lignes affichées, une seule est une vraie phrase.</p>`,
     python: {
       open: true,
-      label: 'Labo Python — le casseur de RSA (2 trous à remplir)',
+      label: 'Labo Python — le casseur de XOR (2 trous à remplir)',
       code: [
-        `n = ${N21}`,
-        `e = ${E21}`,
-        pyList('chiffre', CHIFFRE21),
+        'import base64',
         '',
-        '# Étape 1 : factoriser n (retrouver p et q)',
-        'p = 2',
-        'while n % p != ___:          # trou 1 : on cherche le premier p qui divise n, donc le reste de la division vaut...',
-        '    p = p + 1',
-        'q = n // p',
-        'print("p =", p, "et q =", q)',
+        chunk(SECRET21, 40).map((c, i, a) => (i === 0 ? 'secret = (' : '          ') + `"${c}"` + (i === a.length - 1 ? ')' : '')).join('\n'),
         '',
-        '# Étape 2 : fabriquer la clé privée',
-        'phi = (p - 1) * (q - 1)',
-        'd = pow(e, -1, phi)          # l\'inverse de e modulo phi',
+        'donnees = base64.___(secret)       # trou 1 : la fonction qui décode le base64 (jour 11)',
         '',
-        '# Étape 3 : déchiffrer',
-        'message = ""',
-        'for c in chiffre:',
-        '    message = message + chr(pow(c, ___, n))    # trou 2 : avec quelle clé déchiffre-t-on ? (la privée)',
-        '',
-        'print(message)',
+        'for cle in range(1, ___):          # trou 2 : on essaie les clés de 1 à 63 (range s\'arrête avant le dernier nombre)',
+        '    message = ""',
+        '    for octet in donnees:',
+        '        message = message + chr(octet ^ cle)',
+        '    if message.isprintable():       # on n\'affiche que les résultats sans caractères bizarres',
+        '        print(cle, message)',
       ].join('\n'),
     },
     hints: [
-      'Étape 1 : un nombre p divise n quand le reste de la division de n par p est… 0. Étape 3 : pour déchiffrer, on utilise la clé <b>privée</b> que l\'étape 2 vient de calculer : elle porte un nom d\'une seule lettre.',
-      'Trou 1 : <code>0</code>. Trou 2 : <code>d</code>.',
-      'Le message donne l\'endroit où est la clé : un objet rond qui pend aux branches du sapin.',
+      'Deux étapes : d\'abord décoder le base64 (comme au jour 11), puis essayer les 63 clés XOR possibles (comme les 25 décalages du jour 2, mais avec l\'opérateur du jour 20). Il te manque le nom de la fonction de décodage, et jusqu\'où vont les clés.',
+      'Trou 1 : <code>b64decode</code>. Trou 2 : <code>64</code> (pour essayer 1 jusqu\'à 63).',
+      'Une seule ligne est une phrase en français. Elle dit où est cachée la clé : un objet rond qui pend aux branches du sapin.',
     ],
     answer: ['boule', 'laboule', 'bouledesapin'],
     key: { n: 3, value: 'BOULE' },
-    explain: `<p><b>Message déchiffré :</b> « ${CLAIR21} ». Le programme a trouvé p = ${P21} et q = ${Q21}, puis la clé privée, en une fraction de seconde. Pour casser un vrai RSA de 600 chiffres, cette même méthode demanderait plus de temps que l'âge de l'univers.</p>
+    explain: `<p><b>Message déchiffré :</b> « ${CLAIR21} » (clé XOR : ${CLE21}).</p>
+<p>Tu as enchaîné deux transformations puis essayé toutes les clés : c'est une attaque par <b>force brute</b>, la même idée qu'au jour 2, avec un chiffrement plus moderne.</p>
 <div class="reward">
 <h3>🔑 Clé n°3 obtenue : <span class="key">BOULE</span></h3>
 <p>Plus qu'une clé : celle du 24 décembre, juste avant le grand décryptage !</p>
 </div>
 <div class="reward">
 <h3>🎁 Ta récompense de la semaine 3</h3>
-<p>Pixel a mis en sécurité ${REWARDS[3].cadeau} pour vous deux, et cette fois il l'a chiffré avec le <b>RSA du jour 20</b> (clé publique n = ${N20}, e = ${E20}). Pour le déchiffrer, il te faut la <b>clé privée du pirate</b>, celle qu'il avait perdue au jour 20 : retrouve-la !</p>
-<pre class="code">${CACHETTE3_CHIFFREE.join(' ')}</pre>
+<p>Pixel a mis en sécurité ${REWARDS[3].cadeau} pour vous deux, et il l'a chiffré avec le <b>XOR du jour 20</b>, avec la même clé : le nombre fétiche du pirate. Voici les nombres obtenus :</p>
+<pre class="code">${groups(CACHETTE3_CHIFFREE, 8).map((g) => g.join(' ')).join('\n')}</pre>
 </div>
 <div class="suspects">
 <h3>🗂️ Le dossier de l'enquête</h3>
 <p>Voici tout ce qu'on sait sur le pirate, après trois semaines :</p>
 <ul>
-<li>🪪 Son <b>pseudo</b> : « ${ALIAS15} » (jour 15).</li>
-<li>🌙 Il agit <b>la nuit</b>, avec de gros transferts de données (jour 16).</li>
-<li>💔 Il se sent <b>exclu</b> de Noël : « noël est une fête pour tout le monde sauf moi » (jour 17).</li>
+<li>🪪 Son <b>pseudo</b> : « ${ALIAS15} » (jour 15), et un nombre fétiche : ${CLE20} (jour 20).</li>
+<li>🌙 Il agit <b>la nuit</b> (jour 4), avec de gros transferts de données (jour 16).</li>
+<li>💔 Il se sent <b>exclu</b> de Noël : « noël est une fête pour tout le monde sauf ${REP17} » (jour 17).</li>
+<li>🌌 Il signe ses images « <b>aurore</b> » (jour 18).</li>
 <li>🧝 Son complice travaille dans l'<b>atelier</b> et utilise le <b>badge 738215</b>, caché dans un <b>bonnet vert</b> (jours 11, 12, 18 et 20).</li>
 <li>❄️ Ses mots de passe : <b>rudolph</b>, <b>verglas</b>, <b>traineau58</b>.</li>
 <li>🎯 Il s'acharne sur <b>Strasbourg</b> (jour 8) et prépare l'attaque finale le <b>24 décembre à 23 h 42</b> (jour 19).</li>
 </ul>
-<p>La semaine prochaine : enquête de terrain (OSINT) sur les quatre suspects, pour démasquer le pirate et son complice avant l'heure H.</p>
+<p>La semaine prochaine : enquête de terrain (OSINT) sur les suspects, pour démasquer le pirate et son complice avant l'heure H.</p>
 </div>
 <p class="clue">🕵️ <b>Piste n°21 :</b> la troisième clé est cachée dans une boule du sapin. Prépare tes meilleurs réflexes de détective : la semaine 4 sera décisive !</p>`,
     after: {
       python: {
         open: true,
-        label: 'Labo Python — où est cachée ta récompense ? (2 trous à remplir)',
+        label: 'Labo Python — où est cachée ta récompense ? (1 trou à remplir)',
         code: [
-          `n = ${N20}`,
-          'd = ___                  # trou 1 : la clé privée du pirate, trouvée au jour 20',
-          '',
           pyList('chiffre', CACHETTE3_CHIFFREE),
           '',
+          'cle = ___                  # trou : la clé du pirate au jour 20 (son nombre fétiche)',
+          '',
           'message = ""',
-          'for c in chiffre:',
-          '    message = message + chr(pow(c, d, ___))   # trou 2 : le nombre n de la clé publique',
+          'for octet in chiffre:',
+          '    message = message + chr(octet ^ cle)',
           'print(message)',
         ].join('\n'),
       },
